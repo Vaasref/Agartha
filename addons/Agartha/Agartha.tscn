@@ -1,0 +1,100 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://addons/Agartha/systems/Store.gd" type="Script" id=1]
+[ext_resource path="res://addons/Agartha/systems/Timeline.gd" type="Script" id=2]
+[ext_resource path="res://addons/Agartha/systems/Persistent.gd" type="Script" id=3]
+[ext_resource path="res://addons/Agartha/Agartha.gd" type="Script" id=4]
+[ext_resource path="res://addons/Agartha/systems/Menu.gd" type="Script" id=5]
+[ext_resource path="res://addons/Agartha/systems/Ask.gd" type="Script" id=6]
+[ext_resource path="res://addons/Agartha/systems/Say.gd" type="Script" id=7]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Dialogue
+
+
+func _ready():
+	pass
+
+func frag_1():
+	fragment_start(\"frag_1\")
+	
+	say(\"\", \"frag_1 step %s\" % self.execution_stack[0].step_counter)
+	step()
+	
+	say(\"\", \"frag_1 step %s\" % self.execution_stack[0].step_counter)
+	step()
+	
+	say(\"\", \"frag_1 step %s\" % self.execution_stack[0].step_counter)
+	step()
+	
+	say(\"\", \"frag_1 step %s\" % self.execution_stack[0].step_counter)
+	step()
+	
+	say(\"\", \"frag_1 step %s\" % self.execution_stack[0].step_counter)
+	step()
+	
+	say(\"\", \"frag_1 step %s\" % self.execution_stack[0].step_counter)
+	step()
+	
+	var choice = menu([\"Entry 1\", \"Entry 2\", \"Entry 3\"])
+	
+	if(cond(choice == 0)):
+		say(\"\", \"choice 0\")
+	elif(cond(choice == 1)):
+		say(\"\", \"choice 1\")
+	else:
+		say(\"\", \"choice 2\")
+	step()
+	
+	fragment_end()
+
+
+func frag_2():
+	fragment_start(\"frag_2\")
+	
+	say(\"\", \"frag_2 step 0\")
+	step()
+	
+	say(\"\", \"frag_2step 1\")
+	step()
+	
+	say(\"\", \"frag_2step 2\")
+	step()
+	
+	say(\"\", \"frag_2step 3\")
+	step()
+	
+	say(\"\", \"frag_2step 4\")
+	step()
+	
+	say(\"\", \"frag_2step 5\")
+	step()
+	
+	fragment_end()
+"
+
+[node name="Agartha" type="Node"]
+script = ExtResource( 4 )
+
+[node name="Timeline" type="Node" parent="."]
+script = ExtResource( 2 )
+
+[node name="Store" type="Node" parent="."]
+script = ExtResource( 1 )
+
+[node name="Persistent" type="Node" parent="."]
+script = ExtResource( 3 )
+
+[node name="Say" type="Node" parent="."]
+script = ExtResource( 7 )
+
+[node name="Ask" type="Node" parent="."]
+script = ExtResource( 6 )
+
+[node name="Menu" type="Node" parent="."]
+script = ExtResource( 5 )
+
+[node name="DialogueTest" type="Node" parent="."]
+script = SubResource( 1 )
+default_fragment = "frag_1"
+autorun = true

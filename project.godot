@@ -1,0 +1,41 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Node",
+"class": "Dialogue",
+"language": "GDScript",
+"path": "res://addons/Agartha/nodes/Dialogue.gd"
+}, {
+"base": "Resource",
+"class": "StoreSave",
+"language": "GDScript",
+"path": "res://addons/Agartha/resources/StoreSave.gd"
+}, {
+"base": "Resource",
+"class": "StoreState",
+"language": "GDScript",
+"path": "res://addons/Agartha/resources/StoreState.gd"
+} ]
+_global_script_class_icons={
+"Dialogue": "",
+"StoreSave": "",
+"StoreState": ""
+}
+
+[application]
+
+config/name="Agartha"
+run/main_scene="res://Main.tscn"
+config/icon="res://addons/Agartha/icon.svg"
+
+[autoload]
+
+Agartha="*res://addons/Agartha/Agartha.tscn"
