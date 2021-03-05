@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://addons/Agartha/fonts/Hack/Hack-Regular.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/ShardEditor/ShardEditor.gd" type="Script" id=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+void fragment(){
+	COLOR = COLOR * texture(TEXTURE, UV);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 14
+font_data = ExtResource( 1 )
+
+[node name="ShardEditor" type="TextEdit"]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 3 )
+text = "#Comment
+:shard_0:
+	\"Text line without sayer.\"
+	a \"Text line with sayer.\"
+:$:   #Sequential id (will use last id and increment it)
+	\"Second shard\"
+	show stuff
+	
+	@shortcut-to-open-script-or-shard@
+"
+highlight_current_line = true
+syntax_highlighting = true
+show_line_numbers = true
+draw_tabs = true
+fold_gutter = true
+minimap_draw = true
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="text_changed" from="." to="." method="_on_text_changed"]
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]

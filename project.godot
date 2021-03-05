@@ -15,6 +15,11 @@ _global_script_classes=[ {
 "path": "res://addons/Agartha/nodes/Dialogue.gd"
 }, {
 "base": "Resource",
+"class": "ShardLibrary",
+"language": "GDScript",
+"path": "res://addons/Agartha/resources/ShardLibrary.gd"
+}, {
+"base": "Resource",
 "class": "StoreSave",
 "language": "GDScript",
 "path": "res://addons/Agartha/resources/StoreSave.gd"
@@ -26,6 +31,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "Dialogue": "",
+"ShardLibrary": "",
 "StoreSave": "",
 "StoreState": ""
 }
@@ -39,3 +45,7 @@ config/icon="res://addons/Agartha/icon.svg"
 [autoload]
 
 Agartha="*res://addons/Agartha/Agartha.tscn"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "Agartha" )

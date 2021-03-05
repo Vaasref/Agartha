@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://addons/Agartha/resources/ShardLibrary.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+shards = {
+"other_shard": [ [ 5, ":other_shard:", [ 1, ":other_shard:", "other_shard", false ] ], [ 6, "	#Totally an other shard", [ 3, "	#Totally an other shard" ] ], [ 7, "", [  ] ] ],
+"other_stuff": [ [ 1, ":other_stuff:", [ 1, ":other_stuff:", "other_stuff", false ] ], [ 2, "	\"This is an other shard child of 'other'\"", [ 4, "", "This is an other shard child of 'other'", false ] ], [ 3, "	", [  ] ] ],
+"shard": [ [ 1, ":shard:#Comment on the shard id too", [ 1, ":shard:", "shard", "#Comment on the shard id too" ] ], [ 2, "", [  ] ] ],
+"shard_0": [ [ 1, ":shard_0:", [ 1, ":shard_0:", "shard_0", false ] ], [ 2, "	 \"Text line without sayer.\"", [ 4, "", "Text line without sayer.", false ] ], [ 3, "	a \"Text line with sayer.\"", [ 4, "a", "Text line with sayer.", false ] ] ],
+"shard_0_0": [ [ 4, ":shard_0_0:", [ 1, ":shard_0_0:", "shard_0_0", false ] ], [ 5, "	a \"Saying something\"  #Comment", [ 4, "a", "Saying something", "  #Comment" ] ], [ 6, "", [  ] ], [ 7, "", [  ] ], [ 8, "", [  ] ] ],
+"shard_0_1": [ [ 9, ":shard_0_1:  #Some comment", [ 1, ":shard_0_1:", "shard_0_1", "  #Some comment" ] ], [ 10, "", [  ] ], [ 11, "", [  ] ], [ 12, "", [  ] ] ],
+"shard_1": [ [ 4, ":$:   #Sequential id (will use last id and increment it)", [ 1, ":$:", "shard_1", "   #Sequential id (will use last id and increment it)" ] ], [ 5, "	\"Second shard\"", [ 4, "", "Second shard", false ] ], [ 6, "	show stuff", [ 5, "	show stuff", "stuff", false ] ], [ 7, "	", [  ] ], [ 8, "	@shortcut-to-open-script-or-shard@", [ 2, "	@shortcut-to-open-script-or-shard@", "shortcut-to-open-script-or-shard", false ] ], [ 9, "", [  ] ] ]
+}

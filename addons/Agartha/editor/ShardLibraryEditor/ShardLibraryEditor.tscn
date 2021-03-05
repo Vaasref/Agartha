@@ -1,0 +1,173 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/ShardLibraryEditor.gd" type="Script" id=1]
+[ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/ShardTree.gd" type="Script" id=2]
+[ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/ShardEditor/ShardEditor.tscn" type="PackedScene" id=3]
+[ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/ErrorDisplay.gd" type="Script" id=5]
+[ext_resource path="res://addons/Agartha/fonts/Hack/Hack-Bold.ttf" type="DynamicFontData" id=6]
+
+[sub_resource type="GDScript" id=1]
+script/source = "tool
+extends Label
+
+
+
+func _on_open_library(library):
+	self.text = \"Editting '%s'\" % library.resource_path
+	pass # Replace with function body.
+"
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 6 )
+
+[sub_resource type="InputEventKey" id=3]
+control = true
+command = true
+pressed = true
+scancode = 83
+
+[sub_resource type="ShortCut" id=4]
+shortcut = SubResource( 3 )
+
+[node name="ShardLibraryEditor" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1014.0
+margin_bottom = 590.0
+
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer"]
+margin_right = 1004.0
+margin_bottom = 580.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+dragger_visibility = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ShardTree" type="Tree" parent="VBoxContainer/HSplitContainer"]
+margin_right = 100.0
+margin_bottom = 580.0
+rect_min_size = Vector2( 100, 0 )
+size_flags_vertical = 3
+script = ExtResource( 2 )
+
+[node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer/HSplitContainer"]
+margin_left = 112.0
+margin_right = 1004.0
+margin_bottom = 580.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HSplitContainer/VSplitContainer"]
+margin_right = 892.0
+margin_bottom = 514.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer"]
+margin_right = 892.0
+
+[node name="Label" type="Label" parent="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer"]
+margin_top = 4.0
+margin_right = 892.0
+margin_bottom = 18.0
+text = "Editting "
+align = 1
+script = SubResource( 1 )
+
+[node name="ShardEditor" parent="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 22.0
+margin_right = 892.0
+margin_bottom = 491.0
+text = ":shard_0:
+	\"Text line without sayer.\"
+	a \"Text line with sayer.\"
+:$:   #Sequential id (will use last id and increment it)
+	\"Second shard\"
+	show stuff
+	
+	@shortcut-to-open-script-or-shard@
+"
+
+[node name="ErrorDisplay" type="Label" parent="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer"]
+margin_top = 495.0
+margin_right = 892.0
+margin_bottom = 514.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.86, 0.08, 0.24, 1 )
+text = "Shard Script Error: shards must start with a Shard_ID. Line 1"
+script = ExtResource( 5 )
+
+[node name="ShorcutTabs" type="Tabs" parent="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer"]
+visible = false
+margin_top = 444.0
+margin_right = 892.0
+margin_bottom = 468.0
+drag_to_rearrange_enabled = true
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HSplitContainer/VSplitContainer"]
+margin_top = 526.0
+margin_right = 892.0
+margin_bottom = 580.0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HSplitContainer/VSplitContainer/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 885.0
+margin_bottom = 47.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/VSplitContainer/PanelContainer/MarginContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 868.0
+margin_bottom = 30.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bold" type="Button" parent="VBoxContainer/HSplitContainer/VSplitContainer/PanelContainer/MarginContainer/HBoxContainer"]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+text = "B"
+
+[node name="Italic" type="Button" parent="VBoxContainer/HSplitContainer/VSplitContainer/PanelContainer/MarginContainer/HBoxContainer"]
+visible = false
+margin_right = 17.0
+margin_bottom = 40.0
+text = "I"
+
+[node name="Save" type="Button" parent="VBoxContainer/HSplitContainer/VSplitContainer/PanelContainer/MarginContainer/HBoxContainer"]
+margin_right = 41.0
+margin_bottom = 20.0
+shortcut = SubResource( 4 )
+text = "Save"
+[connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/Label" method="_on_open_library"]
+[connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ShardEditor" method="open_shard_library"]
+[connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/ShardTree" method="_on_open_library"]
+[connection signal="item_selected" from="VBoxContainer/HSplitContainer/ShardTree" to="VBoxContainer/HSplitContainer/ShardTree" method="_on_item_selected"]
+[connection signal="open_shard" from="VBoxContainer/HSplitContainer/ShardTree" to="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ShardEditor" method="open_shard"]
+[connection signal="script_error" from="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ShardEditor" to="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ErrorDisplay" method="_on_script_error"]
+[connection signal="update_shard_library" from="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ShardEditor" to="VBoxContainer/HSplitContainer/ShardTree" method="_on_update_shard_library"]
+[connection signal="visibility_changed" from="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ErrorDisplay" to="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ErrorDisplay" method="_on_visibility_changed"]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VSplitContainer/PanelContainer/MarginContainer/HBoxContainer/Save" to="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ShardEditor" method="_on_save_button_pressed"]
