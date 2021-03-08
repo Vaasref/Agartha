@@ -46,18 +46,16 @@ func parse_shard(shard_script):
 	var script = []
 	
 	for i in lines.size():
-		script.append([i+1, lines[i], parse_line(lines[i])])
+		script.append(parse_line(lines[i]))
 	
 	var last_shard_id = ""
 	for l in script:
-		if l[2] and l[2][0] == LineType.SHARD_ID:
-			#print("Shard_ID '%s'" % l[2][2])
-			if l[2][2] == "$":
+		if l and l[0] == LineType.SHARD_ID:
+			if l[1] == "$":
 				if last_shard_id:
-					#print("Generating sequential shard from '%s'" % last_shard_id)
-					l[2][2] = generate_sequential_id(last_shard_id)
+					l[1] = generate_sequential_id(last_shard_id)
 			else:
-				last_shard_id = l[2][2]
+				last_shard_id = l[1]
 	
 	return script
 
@@ -71,6 +69,7 @@ func generate_sequential_id(previous_id:String):
 	return "%s_0" % previous_id
 
 func parse_line(line:String):
+	var output = []
 	var re = RegEx.new()
 	var result
 	var comment = false
@@ -78,45 +77,48 @@ func parse_line(line:String):
 	re.compile("([^#\\s]?)([ \\t]*(?<!\\\\)#[^\\n]*)")
 	result = re.search(line)
 	if result:
-		if not result.get_string(1):
-			return [LineType.COMMENT, result.get_string(2)]
-		line = line.substr(0, result.get_start(2))
-		comment = result.get_string(2)
+		if result.get_string(1):
+			line = line.substr(0, result.get_start(2))
+			output = [result.get_string(2).strip_edges()]
+		else:
+			output = [LineType.COMMENT, result.get_string(2)]
 	
 	var trimmed_line = line.strip_edges()
 	
-	if trimmed_line.begins_with("@"):
+	if output.size() == 2:#Check if the line is a comment line 
+		pass
+	elif trimmed_line.begins_with("@"):
 		re.compile("[\\s]*@([^@\\s]+)@[\\s]*")
 		result = re.search(line)
 		if result:
-			return [LineType.SHORTCUT, result.get_string(0), result.get_string(1), comment]
+			output = [LineType.SHORTCUT, result.get_string(1)] + output
 		else:
-			return [LineType.ERROR, LineType.SHORTCUT]#Returns and error with shortcut flavor
+			output = [LineType.ERROR, LineType.SHORTCUT]#Returns and error with shortcut flavor
 	elif trimmed_line.ends_with(":"):
 		re.compile("^:([\\w]+|\\$):[\\s]*")
 		result = re.search(line)
 		if result:
-			return [LineType.SHARD_ID, result.get_string(0), result.get_string(1), comment]
+			output = [LineType.SHARD_ID, result.get_string(1)] + output
 		else:
-			return [LineType.ERROR, LineType.SHARD_ID]#Returns and error with shard_id flavor
+			output = [LineType.ERROR, LineType.SHARD_ID]#Returns and error with shard_id flavor
 	elif trimmed_line.begins_with("show "):
 		re.compile("[\\s]*show (.*)")
 		result = re.search(line)
 		if result:
-			return [LineType.SHOW, result.get_string(0), result.get_string(1).strip_edges(), comment]
+			output = [LineType.SHOW, result.get_string(1).strip_edges()] + output
 		else:
-			return [LineType.ERROR, LineType.SHOW]#Returns and error with show flavor
+			output = [LineType.ERROR, LineType.SHOW]#Returns and error with show flavor
 	elif "\"" in trimmed_line:
 		re.compile("[\\s]*([\\w]*)[\\s]*\"(.*)\"")
 		result = re.search(line)
 		if result:
-			return [LineType.SAY, result.get_string(1), result.get_string(2), comment]
+			output = [LineType.SAY, result.get_string(1), result.get_string(2)] + output
 		else:
-			return [LineType.ERROR, LineType.SAY]#Returns and error with say flavor
+			output = [LineType.ERROR, LineType.SAY]#Returns and error with say flavor
+	elif trimmed_line:
+		output = [LineType.ERROR]#Return a general error	
 	
-	if not trimmed_line:
-		return []
-	return [LineType.ERROR]#Return a general error
+	return output
 
 
 
@@ -125,28 +127,33 @@ func compose_shard(script):
 	var output = ""
 	var comment
 	var sayer
-	for l in script:
-		if l[2]:
-			if l[2][0] != LineType.COMMENT and l[2][3]:
-				comment = "  %s" % l[2][3]
-			else:
-				comment = ""
-			
-			match l[2][0]:
-				LineType.SHARD_ID:
-					output += ":%s:%s" % [l[2][2], comment]
-				LineType.SHORTCUT:
-					output += "\t@%s@%s" % [l[2][2], comment]
-				LineType.COMMENT:
-					output += "\t%s" % l[2][1]
+	for i in script.size():
+		var l = script[i]
+		if l:
+			comment = ""
+			match l[0]:
+				LineType.SHARD_ID, LineType.SHORTCUT, LineType.SHOW:
+					if l.size() == 3:
+						comment = "  %s" % l[2]
 				LineType.SAY:
-					if l[2][1]:
-						sayer = "%s " % l[2][1]
+					if l.size() == 4:
+						comment = "  %s" % l[3]
+			
+			match l[0]:
+				LineType.SHARD_ID:
+					output += ":%s:%s" % [l[1], comment]
+				LineType.SHORTCUT:
+					output += "\t@%s@%s" % [l[1], comment]
+				LineType.COMMENT:
+					output += "\t%s" % l[1]
+				LineType.SAY:
+					if l[1]:
+						sayer = "%s " % l[1]
 					else:
 						sayer = ""
-					output += "\t%s\"%s\"%s" % [sayer, l[2][2], comment]
+					output += "\t%s\"%s\"%s" % [sayer, l[2], comment]
 				LineType.SHOW:
-					output += "\tshow %s%s" % [l[2][2], comment]
-		output += "\n"
-	
+					output += "\tshow %s%s" % [l[1], comment]
+		if i + 1 < script.size():
+			output += "\n"
 	return output

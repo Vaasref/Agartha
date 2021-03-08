@@ -1,33 +1,73 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/ShardLibraryEditor.gd" type="Script" id=1]
 [ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/ShardTree.gd" type="Script" id=2]
 [ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/ShardEditor/ShardEditor.tscn" type="PackedScene" id=3]
+[ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/ShorcutTabs.gd" type="Script" id=4]
 [ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/ErrorDisplay.gd" type="Script" id=5]
 [ext_resource path="res://addons/Agartha/fonts/Hack/Hack-Bold.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/ShortcutButton.tscn" type="PackedScene" id=7]
+[ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/FileDialog.gd" type="Script" id=8]
+[ext_resource path="res://addons/Agartha/fonts/Hack/Hack-Regular.ttf" type="DynamicFontData" id=9]
+[ext_resource path="res://addons/Agartha/fonts/Hack/Hack-Italic.ttf" type="DynamicFontData" id=10]
 
-[sub_resource type="GDScript" id=1]
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 14
+use_filter = true
+font_data = ExtResource( 9 )
+
+[sub_resource type="GDScript" id=3]
 script/source = "tool
 extends Label
 
 
 
 func _on_open_library(library):
-	self.text = \"Editting '%s'\" % library.resource_path
-	pass # Replace with function body.
+	self.text = library.resource_path.get_file()
 "
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="GDScript" id=4]
+script/source = "tool
+extends Label
+
+
+func _on_ShardEditor_update_cursor(cursor_line, cursor_column):
+	self.text = \"%4d:%3d\" % [cursor_line+1, cursor_column]
+"
+
+[sub_resource type="DynamicFont" id=5]
 font_data = ExtResource( 6 )
 
-[sub_resource type="InputEventKey" id=3]
+[sub_resource type="DynamicFont" id=6]
+font_data = ExtResource( 10 )
+
+[sub_resource type="InputEventKey" id=7]
 control = true
 command = true
 pressed = true
 scancode = 83
 
-[sub_resource type="ShortCut" id=4]
-shortcut = SubResource( 3 )
+[sub_resource type="ShortCut" id=8]
+shortcut = SubResource( 7 )
+
+[sub_resource type="GDScript" id=9]
+script/source = "tool
+extends Button
+
+func _on_open_library(library):
+	self.text = \"Save\"
+"
+
+[sub_resource type="GDScript" id=10]
+script/source = "tool
+extends Button
+
+func _on_open_library(library):
+	self.disabled = false
+"
 
 [node name="ShardLibraryEditor" type="MarginContainer"]
 anchor_right = 1.0
@@ -54,7 +94,6 @@ margin_right = 1004.0
 margin_bottom = 580.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-dragger_visibility = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -66,34 +105,16 @@ rect_min_size = Vector2( 100, 0 )
 size_flags_vertical = 3
 script = ExtResource( 2 )
 
-[node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer/HSplitContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HSplitContainer"]
 margin_left = 112.0
 margin_right = 1004.0
 margin_bottom = 580.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HSplitContainer/VSplitContainer"]
-margin_right = 892.0
-margin_bottom = 514.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer"]
-margin_right = 892.0
-
-[node name="Label" type="Label" parent="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer"]
-margin_top = 4.0
-margin_right = 892.0
-margin_bottom = 18.0
-text = "Editting "
-align = 1
-script = SubResource( 1 )
-
-[node name="ShardEditor" parent="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer" instance=ExtResource( 3 )]
+[node name="ShardEditor" parent="VBoxContainer/HSplitContainer/VBoxContainer" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 22.0
 margin_right = 892.0
-margin_bottom = 491.0
+margin_bottom = 467.0
 text = ":shard_0:
 	\"Text line without sayer.\"
 	a \"Text line with sayer.\"
@@ -104,70 +125,178 @@ text = ":shard_0:
 	@shortcut-to-open-script-or-shard@
 "
 
-[node name="ErrorDisplay" type="Label" parent="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer"]
-margin_top = 495.0
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer"]
+margin_top = 471.0
 margin_right = 892.0
-margin_bottom = 514.0
-custom_fonts/font = SubResource( 2 )
+margin_bottom = 490.0
+columns = 3
+
+[node name="ErrorDisplay" type="Label" parent="VBoxContainer/HSplitContainer/VBoxContainer/GridContainer"]
+margin_right = 740.0
+margin_bottom = 19.0
+size_flags_horizontal = 3
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.86, 0.08, 0.24, 1 )
-text = "Shard Script Error: shards must start with a Shard_ID. Line 1"
 script = ExtResource( 5 )
 
-[node name="ShorcutTabs" type="Tabs" parent="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer"]
-visible = false
-margin_top = 444.0
-margin_right = 892.0
-margin_bottom = 468.0
-drag_to_rearrange_enabled = true
+[node name="LibraryNameLabel" type="Label" parent="VBoxContainer/HSplitContainer/VBoxContainer/GridContainer"]
+margin_left = 744.0
+margin_top = 1.0
+margin_right = 824.0
+margin_bottom = 18.0
+custom_fonts/font = SubResource( 2 )
+text = "no library"
+align = 1
+script = SubResource( 3 )
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HSplitContainer/VSplitContainer"]
-margin_top = 526.0
+[node name="CursorPositionLabel" type="Label" parent="VBoxContainer/HSplitContainer/VBoxContainer/GridContainer"]
+margin_left = 828.0
+margin_top = 1.0
+margin_right = 892.0
+margin_bottom = 18.0
+custom_fonts/font = SubResource( 2 )
+text = "   1:  0"
+script = SubResource( 4 )
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/HSplitContainer/VBoxContainer"]
+margin_top = 494.0
+margin_right = 892.0
+margin_bottom = 498.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer"]
+margin_top = 502.0
+margin_right = 892.0
+margin_bottom = 502.0
+scroll_vertical_enabled = false
+
+[node name="ShorcutTabs" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer/ScrollContainer"]
+script = ExtResource( 4 )
+button = ExtResource( 7 )
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer"]
+margin_top = 506.0
 margin_right = 892.0
 margin_bottom = 580.0
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HSplitContainer/VSplitContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 885.0
-margin_bottom = 47.0
+margin_bottom = 67.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 10
 custom_constants/margin_left = 10
 custom_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/VSplitContainer/PanelContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer"]
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 868.0
-margin_bottom = 30.0
+margin_bottom = 50.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+margin_right = 537.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+
+[node name="Bold" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+custom_fonts/font = SubResource( 5 )
+disabled = true
+text = "B"
+
+[node name="Italic" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer"]
+margin_left = 44.0
+margin_right = 84.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+custom_fonts/font = SubResource( 6 )
+disabled = true
+text = "I"
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+margin_left = 541.0
+margin_right = 561.0
+margin_bottom = 40.0
+custom_constants/separation = 20
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+margin_left = 565.0
+margin_right = 858.0
+margin_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Bold" type="Button" parent="VBoxContainer/HSplitContainer/VSplitContainer/PanelContainer/MarginContainer/HBoxContainer"]
-visible = false
-margin_right = 40.0
+[node name="Save" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2"]
+margin_right = 75.0
 margin_bottom = 40.0
-rect_min_size = Vector2( 40, 40 )
-text = "B"
+hint_tooltip = "Save the current shard script into the selected library."
+shortcut = SubResource( 8 )
+text = "Save as ..."
+script = SubResource( 9 )
 
-[node name="Italic" type="Button" parent="VBoxContainer/HSplitContainer/VSplitContainer/PanelContainer/MarginContainer/HBoxContainer"]
-visible = false
-margin_right = 17.0
+[node name="Insert" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2"]
+margin_left = 79.0
+margin_right = 145.0
 margin_bottom = 40.0
-text = "I"
+hint_tooltip = "Insert a .shrd script file in the shard editor (does not save automatically)."
+text = "Insert ..."
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Save" type="Button" parent="VBoxContainer/HSplitContainer/VSplitContainer/PanelContainer/MarginContainer/HBoxContainer"]
-margin_right = 41.0
-margin_bottom = 20.0
-shortcut = SubResource( 4 )
-text = "Save"
-[connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/Label" method="_on_open_library"]
-[connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ShardEditor" method="open_shard_library"]
+[node name="Export" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2"]
+margin_left = 149.0
+margin_right = 217.0
+margin_bottom = 40.0
+hint_tooltip = "Export current shard library as a .shrd script file."
+disabled = true
+text = "Export ..."
+script = SubResource( 10 )
+
+[node name="Import" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2"]
+margin_left = 221.0
+margin_right = 293.0
+margin_bottom = 40.0
+hint_tooltip = "Import a .shrd script file as a shard library."
+text = "Import ..."
+
+[node name="FileDialog" type="FileDialog" parent="."]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1014.0
+margin_bottom = 590.0
+resizable = true
+dialog_hide_on_ok = true
+filters = PoolStringArray( "*.shrd ; Shard script" )
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2/Save" method="_on_open_library"]
+[connection signal="open_library" from="." to="FileDialog" method="_on_open_library"]
+[connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" method="open_shard_library"]
 [connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/ShardTree" method="_on_open_library"]
+[connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VBoxContainer/GridContainer/LibraryNameLabel" method="_on_open_library"]
 [connection signal="item_selected" from="VBoxContainer/HSplitContainer/ShardTree" to="VBoxContainer/HSplitContainer/ShardTree" method="_on_item_selected"]
-[connection signal="open_shard" from="VBoxContainer/HSplitContainer/ShardTree" to="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ShardEditor" method="open_shard"]
-[connection signal="script_error" from="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ShardEditor" to="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ErrorDisplay" method="_on_script_error"]
-[connection signal="update_shard_library" from="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ShardEditor" to="VBoxContainer/HSplitContainer/ShardTree" method="_on_update_shard_library"]
-[connection signal="visibility_changed" from="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ErrorDisplay" to="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ErrorDisplay" method="_on_visibility_changed"]
-[connection signal="pressed" from="VBoxContainer/HSplitContainer/VSplitContainer/PanelContainer/MarginContainer/HBoxContainer/Save" to="VBoxContainer/HSplitContainer/VSplitContainer/VBoxContainer/ShardEditor" method="_on_save_button_pressed"]
+[connection signal="open_shard" from="VBoxContainer/HSplitContainer/ShardTree" to="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" method="open_shard"]
+[connection signal="cursor_changed" from="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" to="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" method="_on_cursor_changed"]
+[connection signal="save_new_library" from="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" to="FileDialog" method="_on_save_new_library"]
+[connection signal="script_error" from="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" to="VBoxContainer/HSplitContainer/VBoxContainer/GridContainer/ErrorDisplay" method="_on_script_error"]
+[connection signal="update_cursor" from="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" to="VBoxContainer/HSplitContainer/VBoxContainer/GridContainer/CursorPositionLabel" method="_on_ShardEditor_update_cursor"]
+[connection signal="update_shard_library" from="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" to="VBoxContainer/HSplitContainer/ShardTree" method="_on_update_shard_library"]
+[connection signal="update_shortcuts" from="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" to="VBoxContainer/HSplitContainer/VBoxContainer/ScrollContainer/ShorcutTabs" method="_on_update_shortcuts"]
+[connection signal="use_shortcut" from="VBoxContainer/HSplitContainer/VBoxContainer/ScrollContainer/ShorcutTabs" to="." method="_on_use_shortcut"]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2/Save" to="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" method="_on_save_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2/Insert" to="FileDialog" method="_on_Insert_pressed"]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2/Export" to="FileDialog" method="_on_Export_pressed"]
+[connection signal="pressed" from="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2/Import" to="FileDialog" method="_on_Import_pressed"]
+[connection signal="file_selected" from="FileDialog" to="FileDialog" method="_on_file_selected"]
+[connection signal="files_selected" from="FileDialog" to="FileDialog" method="_on_files_selected"]
+[connection signal="insert_shard_script" from="FileDialog" to="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" method="_on_insert_shard_script"]

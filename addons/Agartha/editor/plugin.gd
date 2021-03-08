@@ -10,10 +10,19 @@ var shard_library_editor_instance
 
 func _enter_tree():
 	shard_library_editor_instance = ShardLibraryEditor.instance()
-	# Add the main panel to the editor's main viewport.
+	shard_library_editor_instance.connect("use_shortcut", self, "_on_use_shortcut")
 	get_editor_interface().get_editor_viewport().add_child(shard_library_editor_instance)
-	# Hide the main panel. Very much required.
+	
 	make_visible(false)
+
+func _on_use_shortcut(shortcut:String):
+	if shortcut.is_abs_path():
+		get_editor_interface().select_file(shortcut)
+		match shortcut.get_extension():
+			"tscn":
+				get_editor_interface().open_scene_from_path(shortcut)
+			_:
+				get_editor_interface().inspect_object(load(shortcut))
 
 
 func _exit_tree():
@@ -26,9 +35,12 @@ func has_main_screen():
 
 func handles(object):
 	if object is ShardLibrary:
-		shard_library_editor_instance.open_library(object)
 		return true
 	return false
+	
+func edit(object):
+	if object is ShardLibrary:
+		shard_library_editor_instance.open_library(object)
 
 var hidden_list:Array
 

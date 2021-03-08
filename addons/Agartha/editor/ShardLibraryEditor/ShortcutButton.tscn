@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "tool
+extends Button
+
+signal use_shortcut(shortcut)
+
+
+func _on_pressed():
+	if self.has_meta(\"shortcut\"):
+		emit_signal(\"use_shortcut\", self.get_meta(\"shortcut\"))
+"
+
+[node name="ShortcutButton" type="Button"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="." to="." method="_on_pressed"]

@@ -6,12 +6,11 @@ class_name ShardLibrary
 export var shards:Dictionary = {}
 
 
-func get_shards(shard_id):
+func get_shards(shard_id:String=""):
 	var output = []
-	var ids = get_childs_ids(shard_id)
+	var ids = get_children_ids(shard_id)
 	
 	for id in ids:
-		print("Concatenating '%s'" %id)
 		output += shards[id]
 	
 	return output
@@ -21,7 +20,7 @@ func get_tree():
 
 func get_branch(shard_id_root):
 	var output = []
-	var shards = get_childs_ids(shard_id_root)
+	var shards = get_children_ids(shard_id_root)
 	var branches = {}
 	for i in shards.size():
 		if shards[i] == shard_id_root:
@@ -34,7 +33,7 @@ func get_branch(shard_id_root):
 		branches[b] = get_branch(b)
 	return branches
 
-func get_childs_ids(shard_id, trimmed:bool = false):
+func get_children_ids(shard_id, trimmed:bool = false):
 	var output = []
 	for s in shards.keys():
 		if s.begins_with(shard_id):
@@ -57,11 +56,9 @@ const LineType_names:Array = ["Error", "Shard_ID", "Shortcut", "Comment", "Say",
 func save_script(script):
 	if not script is Array:
 		return
-	print("Saving shard script.")
 	var shard_ids = []
 	for i in script.size():
-		#print(script[i])
-		if script[i][2] and script[i][2][0] == LineType.SHARD_ID:
+		if script[i] and script[i][0] == LineType.SHARD_ID:
 			shard_ids.append(i)
 	for i in shard_ids.size():
 		if i + 1 == shard_ids.size():
@@ -72,8 +69,7 @@ func save_script(script):
 func save_shard(script, start, end):
 	if not script is Array or end >= script.size() and start > end:
 		return
-	var shard_id = script[start][2][2]
-	print("Saving shard \"%s\"" % shard_id)
+	var shard_id = script[start][1]
 	var shard_script = []
 	for i in range(start, end):
 		shard_script.append(script[i].duplicate(true))
