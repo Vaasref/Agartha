@@ -127,7 +127,6 @@ func init_properties():
 	print("Initializing Agartha settings.")
 	_init_properties(properties_infos)
 	for p in ProjectSettings.get_property_list():
-		print(p.name)
 	ProjectSettings.set_order(properties_infos.keys()[0], 1)
 
 func _init_properties(properties_infos:Dictionary):
