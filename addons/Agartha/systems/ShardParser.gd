@@ -1,34 +1,6 @@
 tool
 extends Node
 
-const sample = "#Comment\n" \
-+"shard_0:\n"\
-+"	\"Text line without sayer.\"\n"\
-+"	a \"Text line with sayer.\"\n"\
-+"$:   #Sequential id (will use last id and increment it)\n"\
-+"	\"Second shard\"\n"\
-+"	show stuff\n"\
-+"	@shortcut-to-open-script-or-shard\n"\
-+"	\"Not a \\#comment\"\n"\
-+"	\"Not a \\@shortcut\"\n"\
-+"	Bad line formatting\n"\
-+"	Also bad formatting\"\n"\
-+"	\"Still bad formatting\n"\
-
-func _ready():
-	#var text = sample
-	#print("Shard Script: \n%s\n\n" % sample)
-	#var script = [null, text]
-	#split_script(script)
-	#print(script)
-
-	#text = remove_comments(text)
-	#text = remove_shortcuts(text)
-	#print("Shard Script without comments: \"\n%s\n\"\n" % text)
-	#var script = [null, text]
-	#split_script(script)
-	pass
-
 
 enum LineType {
 	ERROR,
