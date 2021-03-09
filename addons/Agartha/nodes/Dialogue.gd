@@ -209,6 +209,9 @@ func condition(condition):
 
 ################# Dialogue actions
 
+func shard(shard_id:String, shard_library:Resource=null):
+	pass
+
 func say(character, text:String, parameters:Dictionary={}):
 	if _is_preactive():
 		Agartha.Say.call_deferred("action",character, text, parameters)

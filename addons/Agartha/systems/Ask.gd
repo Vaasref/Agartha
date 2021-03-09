@@ -3,6 +3,7 @@ extends Node
 
 func action(default_answer, parameters:Dictionary={}):
 	Agartha.Timeline.block("ask")
+	parameters = Agartha.Settings.get_parameter_list("agartha/dialogues/actions_default_parameters/ask", parameters)
 	Agartha.emit_signal("ask", default_answer, parameters)
 
 

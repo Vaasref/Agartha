@@ -2,7 +2,7 @@ extends Node
 
 var persistent_state:StoreState = StoreState.new()
 
-var path = "res://saves/persistent.tres"
+const path = "res://saves/persistent.tres"
 
 
 func init():
@@ -26,3 +26,6 @@ func set_value(name, value):
 
 func get_value(name):
 	return persistent_state.get(name)
+
+func has_value(name):
+	return persistent_state.has(name)

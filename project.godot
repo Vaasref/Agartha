@@ -36,6 +36,18 @@ _global_script_class_icons={
 "StoreState": ""
 }
 
+[agartha]
+
+dialogues/actions_default_parameters/say={
+
+}
+dialogues/actions_default_parameters/ask={
+
+}
+dialogues/actions_default_parameters/menu={
+
+}
+
 [application]
 
 config/name="Agartha"

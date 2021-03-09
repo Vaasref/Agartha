@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/ShardLibraryEditor.gd" type="Script" id=1]
 [ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/ShardTree.gd" type="Script" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/FileDialog.gd" type="Script" id=8]
 [ext_resource path="res://addons/Agartha/fonts/Hack/Hack-Regular.ttf" type="DynamicFontData" id=9]
 [ext_resource path="res://addons/Agartha/fonts/Hack/Hack-Italic.ttf" type="DynamicFontData" id=10]
+[ext_resource path="res://addons/Agartha/systems/Settings.gd" type="Script" id=11]
 
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 6 )
@@ -82,6 +83,9 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Settings" type="Node" parent="."]
+script = ExtResource( 11 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_left = 10.0
@@ -279,11 +283,11 @@ script = ExtResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VBoxContainer/GridContainer/LibraryNameLabel" method="_on_open_library"]
 [connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2/Save" method="_on_open_library"]
 [connection signal="open_library" from="." to="FileDialog" method="_on_open_library"]
 [connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" method="open_shard_library"]
 [connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/ShardTree" method="_on_open_library"]
-[connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VBoxContainer/GridContainer/LibraryNameLabel" method="_on_open_library"]
 [connection signal="item_selected" from="VBoxContainer/HSplitContainer/ShardTree" to="VBoxContainer/HSplitContainer/ShardTree" method="_on_item_selected"]
 [connection signal="open_shard" from="VBoxContainer/HSplitContainer/ShardTree" to="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" method="open_shard"]
 [connection signal="cursor_changed" from="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" to="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" method="_on_cursor_changed"]
