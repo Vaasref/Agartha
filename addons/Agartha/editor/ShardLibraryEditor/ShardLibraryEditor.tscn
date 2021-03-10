@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/ShardLibraryEditor.gd" type="Script" id=1]
 [ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/ShardTree.gd" type="Script" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://addons/Agartha/fonts/Hack/Hack-Regular.ttf" type="DynamicFontData" id=9]
 [ext_resource path="res://addons/Agartha/fonts/Hack/Hack-Italic.ttf" type="DynamicFontData" id=10]
 [ext_resource path="res://addons/Agartha/systems/Settings.gd" type="Script" id=11]
+[ext_resource path="res://addons/Agartha/editor/ShardLibraryEditor/RTLButtonCopy.gd" type="Script" id=12]
 
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 6 )
@@ -43,18 +44,24 @@ func _on_ShardEditor_update_cursor(cursor_line, cursor_column):
 font_data = ExtResource( 6 )
 
 [sub_resource type="DynamicFont" id=6]
+use_filter = true
+font_data = ExtResource( 9 )
+
+[sub_resource type="StyleBoxEmpty" id=7]
+
+[sub_resource type="DynamicFont" id=8]
 font_data = ExtResource( 10 )
 
-[sub_resource type="InputEventKey" id=7]
+[sub_resource type="InputEventKey" id=9]
 control = true
 command = true
 pressed = true
 scancode = 83
 
-[sub_resource type="ShortCut" id=8]
-shortcut = SubResource( 7 )
+[sub_resource type="ShortCut" id=10]
+shortcut = SubResource( 9 )
 
-[sub_resource type="GDScript" id=9]
+[sub_resource type="GDScript" id=11]
 script/source = "tool
 extends Button
 
@@ -62,7 +69,7 @@ func _on_open_library(library):
 	self.text = \"Save\"
 "
 
-[sub_resource type="GDScript" id=10]
+[sub_resource type="GDScript" id=12]
 script/source = "tool
 extends Button
 
@@ -211,16 +218,63 @@ margin_right = 40.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
 custom_fonts/font = SubResource( 5 )
-disabled = true
 text = "B"
 
-[node name="Italic" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer"]
+[node name="Strikethrough" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer"]
 margin_left = 44.0
 margin_right = 84.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
 custom_fonts/font = SubResource( 6 )
-disabled = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer/Strikethrough"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_vertical = 2
+mouse_filter = 2
+custom_styles/normal = SubResource( 7 )
+custom_fonts/normal_font = SubResource( 6 )
+bbcode_enabled = true
+bbcode_text = "[center][s]S[/s][/center]"
+text = "S"
+fit_content_height = true
+script = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Underline" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer"]
+margin_left = 88.0
+margin_right = 128.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+custom_fonts/font = SubResource( 6 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer/Underline"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_vertical = 2
+mouse_filter = 2
+custom_styles/normal = SubResource( 7 )
+custom_fonts/normal_font = SubResource( 6 )
+bbcode_enabled = true
+bbcode_text = "[center][u]U[/u][/center]"
+text = "U"
+fit_content_height = true
+script = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Italic" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer"]
+margin_left = 132.0
+margin_right = 172.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+custom_fonts/font = SubResource( 8 )
 text = "I"
 
 [node name="VSeparator" type="VSeparator" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
@@ -241,9 +295,9 @@ __meta__ = {
 margin_right = 75.0
 margin_bottom = 40.0
 hint_tooltip = "Save the current shard script into the selected library."
-shortcut = SubResource( 8 )
+shortcut = SubResource( 10 )
 text = "Save as ..."
-script = SubResource( 9 )
+script = SubResource( 11 )
 
 [node name="Insert" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2"]
 margin_left = 79.0
@@ -262,7 +316,7 @@ margin_bottom = 40.0
 hint_tooltip = "Export current shard library as a .shrd script file."
 disabled = true
 text = "Export ..."
-script = SubResource( 10 )
+script = SubResource( 12 )
 
 [node name="Import" type="Button" parent="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2"]
 margin_left = 221.0
