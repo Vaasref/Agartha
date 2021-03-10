@@ -8,7 +8,9 @@ enum LineType {
 	SHORTCUT,
 	COMMENT,
 	SAY,
-	SHOW
+	SHOW,
+	HIDE,
+	PLAY
 }
 const LineType_names:Array = ["Error", "Shard_ID", "Shortcut", "Comment", "Say", "Show"]
 
@@ -79,7 +81,21 @@ func parse_line(line:String):
 		if result:
 			output = [LineType.SHOW, result.get_string(1).strip_edges()] + output
 		else:
-			output = [LineType.ERROR, LineType.SHOW]#Returns and error with show flavor
+			output = [LineType.ERROR, LineType.SHOW]#Returns and error with show flavor	
+	elif trimmed_line.begins_with("hide "):
+		re.compile("[\\s]*hide (.*)")
+		result = re.search(line)
+		if result:
+			output = [LineType.HIDE, result.get_string(1).strip_edges()] + output
+		else:
+			output = [LineType.ERROR, LineType.HIDE]#Returns and error with hide flavor
+	elif trimmed_line.begins_with("play "):
+		re.compile("[\\s]*play (.*)")
+		result = re.search(line)
+		if result:
+			output = [LineType.PLAY, result.get_string(1).strip_edges()] + output
+		else:
+			output = [LineType.ERROR, LineType.PLAY]#Returns and error with play flavor
 	elif "\"" in trimmed_line:
 		re.compile("[\\s]*([\\w]*)[\\s]*\"(.*)\"")
 		result = re.search(line)
@@ -104,7 +120,7 @@ func compose_shard(script):
 		if l:
 			comment = ""
 			match l[0]:
-				LineType.SHARD_ID, LineType.SHORTCUT, LineType.SHOW:
+				LineType.SHARD_ID, LineType.SHORTCUT, LineType.SHOW, LineType.HIDE, LineType.PLAY:
 					if l.size() == 3:
 						comment = "  %s" % l[2]
 				LineType.SAY:
@@ -126,6 +142,10 @@ func compose_shard(script):
 					output += "\t%s\"%s\"%s" % [sayer, l[2], comment]
 				LineType.SHOW:
 					output += "\tshow %s%s" % [l[1], comment]
+				LineType.HIDE:
+					output += "\thide %s%s" % [l[1], comment]
+				LineType.PLAY:
+					output += "\tplay %s%s" % [l[1], comment]
 		if i + 1 < script.size():
 			output += "\n"
 	return output

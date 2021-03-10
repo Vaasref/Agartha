@@ -26,6 +26,8 @@ func update_colors():
 	self.add_color_region("\"", "\"", Color.mediumseagreen)
 	self.add_color_region("#", "", Color.indianred)
 	self.add_keyword_color("show", Color.lightskyblue)
+	self.add_keyword_color("hide", Color.lightskyblue)
+	self.add_keyword_color("play", Color.lightskyblue)
 
 
 func _on_visibility_changed():
@@ -64,6 +66,16 @@ func update_text(script):
 					if l[1]:
 						self.add_keyword_color(l[1], Color.palevioletred)
 				ShardParser.LineType.SHOW:
+					if l.size() == 3:
+						self.add_color_region(" "+l[1], " ", Color.cyan)
+					else:
+						self.add_color_region(" "+l[1], " ", Color.cyan, true)
+				ShardParser.LineType.HIDE:
+					if l.size() == 3:
+						self.add_color_region(" "+l[1], " ", Color.cyan)
+					else:
+						self.add_color_region(" "+l[1], " ", Color.cyan, true)
+				ShardParser.LineType.PLAY:
 					if l.size() == 3:
 						self.add_color_region(" "+l[1], " ", Color.cyan)
 					else:
