@@ -27,10 +27,11 @@ func _restore(state):
 
 func _step():
 	if execution_mode == ExecMode.Regular:
-		execution_stack[0].step_counter += 1
-		self._store_step()
-		semaph.post()
-	
+		if execution_stack:
+			execution_stack[0].step_counter += 1
+			self._store_step()
+			semaph.post()
+		
 
 
 func _store_step(origin:bool=false):
@@ -114,10 +115,18 @@ func _ready():
 	Agartha.connect("start_dialogue", self, '_start_dialogue')
 	if autorun:
 		if default_fragment:
-			Agartha.emit_signal('start_dialogue', name, default_fragment)
+			Agartha.start_dialogue(name, default_fragment)
 			#self.call_deferred("_store_step", true)
 		else:
 			push_error("Autorun Dialogue is missing a default fragment.")
+
+
+func start(fragment_name:String=""):
+	if fragment_name:
+		Agartha.emit_signal('start_dialogue', name, fragment_name)
+	elif default_fragment:
+		Agartha.emit_signal('start_dialogue', name, default_fragment)
+
 
 func _start_dialogue(dialogue_name, fragment_name):
 	if dialogue_name:
@@ -209,9 +218,9 @@ func condition(condition):
 
 ################# Dialogue actions
 
-func shard(shard_id:String, shard_library:Resource=null):
+func shard(shard_id:String, exact_id:bool=true, shard_library:Resource=null):
 	if _is_preactive():
-		var shard = Agartha.ShardLibrarian.get_shard(shard_id)
+		var shard = Agartha.ShardLibrarian.get_shard(shard_id, exact_id)
 		for l in shard:
 			if _is_preactive():
 				if l:

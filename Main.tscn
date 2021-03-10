@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://MenuEntry.tscn" type="PackedScene" id=1]
 
@@ -35,7 +35,7 @@ script/source = "extends VBoxContainer
 export var menu_entry:PackedScene
 
 func _ready():
-	Agartha.connect(\"menu\", self, \"_on_menu\")
+	var _o = Agartha.connect(\"menu\", self, \"_on_menu\")
 
 func _step():
 	clear_children()
@@ -70,7 +70,7 @@ script/source = "extends PanelContainer
 
 
 func _ready():
-	Agartha.connect(\"say\", self, \"_on_say\")
+	var _o = Agartha.connect(\"say\", self, \"_on_say\")
 
 func _on_say(_character, _text, _params):
 	print(\"say %s :   '%s'\" % [_character, _text])
@@ -86,7 +86,7 @@ script/source = "extends Label
 
 
 func _ready():
-	Agartha.connect(\"say\", self, \"_on_say\")
+	var _o = Agartha.connect(\"say\", self, \"_on_say\")
 	self.visible = false
 
 func _on_say(character, _text, _params):
@@ -103,24 +103,92 @@ script/source = "extends RichTextLabel
 
 
 func _ready():
-	Agartha.connect(\"say\", self, \"_on_say\")
+	var _o = Agartha.connect(\"say\", self, \"_on_say\")
 
 func _on_say(_character, text, _params):
 	self.text = text
+"
+
+[sub_resource type="GDScript" id=9]
+script/source = "extends Dialogue
+
+
+func _ready():
+	pass
+
+func frag_1():
+	fragment_start(\"frag_1\")
+	
+	shard(\"test_shard\", false)
+	
+	say(\"\", \"frag_1 step %s\" % self.execution_stack[0].step_counter)
+	step()
+	
+	say(\"\", \"frag_1 step %s\" % self.execution_stack[0].step_counter)
+	step()
+	
+	say(\"\", \"frag_1 step %s\" % self.execution_stack[0].step_counter)
+	step()
+	
+	say(\"\", \"frag_1 step %s\" % self.execution_stack[0].step_counter)
+	step()
+	
+	say(\"\", \"frag_1 step %s\" % self.execution_stack[0].step_counter)
+	step()
+	
+	say(\"\", \"frag_1 step %s\" % self.execution_stack[0].step_counter)
+	step()
+	
+	var choice = menu([\"Entry 1\", \"Entry 2\", \"Entry 3\"])
+	
+	if(cond(choice == 0)):
+		say(\"\", \"choice 0\")
+	elif(cond(choice == 1)):
+		say(\"\", \"choice 1\")
+	else:
+		say(\"\", \"choice 2\")
+	step()
+	
+	fragment_end()
+
+
+func frag_2():
+	fragment_start(\"frag_2\")
+	
+	say(\"\", \"frag_2 step 0\")
+	step()
+	
+	say(\"\", \"frag_2step 1\")
+	step()
+	
+	say(\"\", \"frag_2step 2\")
+	step()
+	
+	say(\"\", \"frag_2step 3\")
+	step()
+	
+	say(\"\", \"frag_2step 4\")
+	step()
+	
+	say(\"\", \"frag_2step 5\")
+	step()
+	
+	fragment_end()
 "
 
 [node name="Main" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {
-"_edit_use_anchors_": false
+"_edit_use_anchors_": false,
+"_edit_vertical_guides_": [ 51.1864 ]
 }
 
 [node name="Button" type="Button" parent="."]
-margin_left = 81.8153
-margin_top = 160.408
-margin_right = 121.815
-margin_bottom = 180.408
+margin_left = 50.127
+margin_top = 161.467
+margin_right = 90.127
+margin_bottom = 181.467
 text = "Step"
 script = SubResource( 1 )
 __meta__ = {
@@ -128,10 +196,10 @@ __meta__ = {
 }
 
 [node name="Button2" type="Button" parent="."]
-margin_left = 80.6929
-margin_top = 201.939
-margin_right = 149.693
-margin_bottom = 221.939
+margin_left = 50.127
+margin_top = 208.296
+margin_right = 119.127
+margin_bottom = 228.296
 text = "Roll back"
 script = SubResource( 2 )
 __meta__ = {
@@ -139,10 +207,10 @@ __meta__ = {
 }
 
 [node name="Button3" type="Button" parent="."]
-margin_left = 80.6929
-margin_top = 238.98
-margin_right = 149.693
-margin_bottom = 258.98
+margin_left = 50.127
+margin_top = 250.634
+margin_right = 137.127
+margin_bottom = 270.634
 text = "Roll forward"
 script = SubResource( 3 )
 __meta__ = {
@@ -154,6 +222,8 @@ anchor_left = 0.2
 anchor_top = 0.2
 anchor_right = 0.8
 anchor_bottom = 0.6
+margin_top = 1.05945
+margin_bottom = 1.05945
 script = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -197,6 +267,11 @@ margin_right = 624.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 0, 100 )
 script = SubResource( 8 )
+
+[node name="DialogueTest" type="Node" parent="."]
+script = SubResource( 9 )
+default_fragment = "frag_1"
+autorun = true
 [connection signal="pressed" from="Button" to="Button" method="_on_pressed"]
 [connection signal="pressed" from="Button2" to="Button2" method="_on_pressed"]
 [connection signal="pressed" from="Button3" to="Button3" method="_on_pressed"]

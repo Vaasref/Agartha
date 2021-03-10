@@ -42,6 +42,11 @@ func _ready():
 	ShardLibrarian.init()
 	History.init()
 
+
+func start_dialogue(dialogue_name:String, fragment_name:String):
+	self.call_deferred('emit_signal', 'start_dialogue', dialogue_name, fragment_name)
+
+
 func step():
 	Timeline.next_step()
 
