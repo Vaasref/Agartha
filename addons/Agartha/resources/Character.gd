@@ -1,12 +1,29 @@
 extends Resource
-class_name StoreState
+class_name Character
 
 export var properties:Dictionary = {}
 
+export var name:String
+export var tag:String
+export var color:Color = Color.white setget _set_color
+
+export var show_parameters:Dictionary = {}
+export var say_parameters:Dictionary = {}
+
+export var name_format:String = "{name}"
+export var name_format_bbcode:String = "[color=#{color}]{name}[/color]"
 
 
-func _init():
+func _init(_name:String="", _tag:String="", _color=null):
 	properties = {}
+	show_parameters = {}
+	say_parameters = {}
+	if _name:
+		name = _name
+	if _tag:
+		tag = _tag
+	if _color:
+		color = _color
 
 
 func has(property):
@@ -14,8 +31,18 @@ func has(property):
 
 
 func _to_string():
-	var output = "(StoreState:%s)%s" % [self.get_instance_id(), properties]
-	return output
+	return name_format.format({'name':name, 'color':color}).format(properties)
+
+
+func bbcode():
+	return name_format_bbcode.format({'name':name, 'color':color}).format(properties)
+
+
+func _set_color(value):
+	if value is String:
+		color = Color(value)
+	elif value is Color:
+		color = Color(value.r, value.g. value.b, value.a)
 
 
 ## Setget magic and duplicate
@@ -44,3 +71,4 @@ func duplicate(_deep:bool=true):
 		if properties[p] is Object and properties[p].has_method('duplicate'):
 			output.properties[p] =  properties[p].duplicate(true)
 	return output
+
