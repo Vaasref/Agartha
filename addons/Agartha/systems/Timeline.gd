@@ -42,7 +42,35 @@ func call_for_restoring():
 	get_tree().get_root().propagate_call("_restore", [Agartha.Store.get_current_state()])
 
 
+###### Skipping system
 
+enum SkipPriority {
+	SEEN, # Only skip seen text
+	UNSEEN, # Skip un-important unseen text
+	INPUT, # Skip even after requiring input (ask and menu), but only un-important
+	IMPORTANT, # Skip important seen text, this level is given as an example
+	KEY # Skip key text, this level is given as an example
+}
+
+var skip_priority:int = 0
+
+func start_skipping(priority:int):
+	skip_priority = priority
+	$SkipDelay.wait_time = Agartha.Settings.get("agartha/dialogues/skip_delay")
+	$SkipDelay.start()
+
+
+func end_skipping():
+	$SkipDelay.stop()
+
+
+func skip_stop(stop_priority:int):
+	if skip_priority < stop_priority:
+		 end_skipping()
+
+
+func _skip():
+	Agartha.step()
 
 
 ###### Blocker system

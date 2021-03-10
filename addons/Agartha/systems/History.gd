@@ -20,7 +20,9 @@ func log_text_line(character, text_line:String):
 	if character is Character:
 		character_tag = character.tag
 	var entry = "%s-%s" % [character_tag, text_line.sha256_text()]
-	seen_lines[entry] = true
+	if not seen_lines.has(entry):
+		seen_lines[entry] = true
+		Agartha.Timeline.skip_stop(Agartha.Timeline.SkipPriority.UNSEEN)
 	update_persistent()
 
 
