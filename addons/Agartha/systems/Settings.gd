@@ -147,6 +147,21 @@ const properties_infos:Dictionary = {
 		"hint_string": "0.05, 0.2, or_greater",
 		"default": 0.1
 	},
+	"agartha/dialogues/actions_default_parameters/show": {
+		"type": TYPE_DICTIONARY,
+		"hint": PROPERTY_HINT_DIR,
+		"default": {}
+	},
+	"agartha/dialogues/actions_default_parameters/hide": {
+		"type": TYPE_DICTIONARY,
+		"hint": PROPERTY_HINT_DIR,
+		"default": {}
+	},
+	"agartha/dialogues/actions_default_parameters/play": {
+		"type": TYPE_DICTIONARY,
+		"hint": PROPERTY_HINT_DIR,
+		"default": {}
+	},
 	"agartha/dialogues/actions_default_parameters/say": {
 		"type": TYPE_DICTIONARY,
 		"hint": PROPERTY_HINT_DIR,

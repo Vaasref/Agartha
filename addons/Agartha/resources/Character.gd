@@ -8,6 +8,7 @@ export var tag:String
 export var color:Color = Color.white setget _set_color
 
 export var show_parameters:Dictionary = {}
+export var hide_parameters:Dictionary = {}
 export var say_parameters:Dictionary = {}
 
 export var name_format:String = "{name}"
@@ -17,6 +18,7 @@ export var name_format_bbcode:String = "[color=#{color}]{name}[/color]"
 func _init(_name:String="", _tag:String="", _color=null):
 	properties = {}
 	show_parameters = {}
+	hide_parameters = {}
 	say_parameters = {}
 	if _name:
 		name = _name

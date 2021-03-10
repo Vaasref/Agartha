@@ -10,11 +10,17 @@ onready var MarkupParser:Node = get_node("MarkupParser")
 onready var ShardLibrarian:Node = get_node("ShardLibrarian")
 onready var History:Node = get_node("History")
 
+onready var Show_Hide:Node = get_node("Show_Hide")
 onready var Say:Node = get_node("Say")
 onready var Ask:Node = get_node("Ask")
 onready var Menu:Node = get_node("Menu")
 
 signal start_dialogue(dialogue_name, fragment_name)
+
+signal show(tag, parameters)
+signal hide(tag, parameters)
+
+signal play(tag, parameters)
 
 signal say(character, text, parameters)
 

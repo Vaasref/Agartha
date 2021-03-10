@@ -210,7 +210,34 @@ func condition(condition):
 ################# Dialogue actions
 
 func shard(shard_id:String, shard_library:Resource=null):
-	pass
+	if _is_preactive():
+		var shard = Agartha.ShardLibrarian.get_shard(shard_id)
+		for l in shard:
+			if _is_preactive():
+				if l:
+					match l[0]:
+						Agartha.ShardParser.LineType.SAY:
+							say(l[1], l[2])
+							step()
+						Agartha.ShardParser.LineType.SHOW:
+							show(l[1])
+						Agartha.ShardParser.LineType.HIDE:
+							hide(l[1])
+						Agartha.ShardParser.LineType.PLAY:
+							print("play %s" % l[1])
+			else:
+				break
+
+
+func show(tag:String, parameters:Dictionary={}):
+	if _is_preactive():
+		Agartha.Show_Hide.call_deferred("action_show", tag, parameters)
+
+
+func hide(tag:String, parameters:Dictionary={}):
+	if _is_preactive():
+		Agartha.Show_Hide.call_deferred("action_hide", tag, parameters)
+
 
 func say(character, text:String, parameters:Dictionary={}):
 	if _is_preactive():

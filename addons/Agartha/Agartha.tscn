@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://addons/Agartha/systems/Store.gd" type="Script" id=1]
 [ext_resource path="res://addons/Agartha/systems/Timeline.gd" type="Script" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://addons/Agartha/systems/ShardLibrarian.gd" type="Script" id=11]
 [ext_resource path="res://addons/Agartha/systems/MarkupParser.gd" type="Script" id=12]
 [ext_resource path="res://addons/Agartha/systems/History.gd" type="Script" id=13]
+[ext_resource path="res://addons/Agartha/systems/Show_Hide.gd" type="Script" id=14]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Dialogue
@@ -109,6 +110,9 @@ script = ExtResource( 11 )
 
 [node name="History" type="Node" parent="."]
 script = ExtResource( 13 )
+
+[node name="Show_Hide" type="Node" parent="."]
+script = ExtResource( 14 )
 
 [node name="Say" type="Node" parent="."]
 script = ExtResource( 7 )
