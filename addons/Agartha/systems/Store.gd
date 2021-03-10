@@ -1,5 +1,8 @@
 extends Node
 
+var save_folder_path:String
+var save_extension:String
+
 var stack_size_max:int = 5
 
 var state_stack:Array = []
@@ -7,12 +10,18 @@ var current_state_id:int = 0
 var current_state:Array = []
 
 func init(default_state=null):
+	var compress_saves = Agartha.Settings.get("agartha/paths/saves/compressed_permanent_data_file")
+	if compress_saves:
+		save_extension = ".res"
+	else:
+		save_extension = ".tres"
+	save_folder_path = Agartha.Settings.get_user_path("agartha/paths/saves/permanent_data_folder")
 	if default_state:
 		current_state = [default_state.duplicate(), null]
 	else:
 		current_state = [StoreState.new(), null]
 	state_stack.push_front(current_state)
-	finish_step()# Using this fuction here for its semantic
+	finish_step()# Using this function here for its semantic
 
 
 func store_current_state():
@@ -70,15 +79,15 @@ func prune_back_stack():
 func save_store(save_name):
 	var save = StoreSave.new()
 	save.state_stack = self.state_stack
-	
-	var path = "res://saves/%s.tres"%save_name
+
+	var path = "%s%s%s" % [save_folder_path, save_name, save_extension]
 	
 	if ResourceSaver.save(path, save) != OK:
 		push_error("Error when saving '%s'" % save_name)
 
 
 func load_store(save_name):
-	var path = "res://saves/%s.tres" % save_name
+	var path = "%s%s%s" % [save_folder_path, save_name, save_extension]
 	var save = load(path) as StoreSave
 	
 	self.state_stack = []
