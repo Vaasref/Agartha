@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Resource",
+"class": "Character",
+"language": "GDScript",
+"path": "res://addons/Agartha/resources/Character.gd"
+}, {
 "base": "Node",
 "class": "Dialogue",
 "language": "GDScript",
@@ -30,6 +35,7 @@ _global_script_classes=[ {
 "path": "res://addons/Agartha/resources/StoreState.gd"
 } ]
 _global_script_class_icons={
+"Character": "",
 "Dialogue": "",
 "ShardLibrary": "",
 "StoreSave": "",
@@ -47,6 +53,8 @@ dialogues/actions_default_parameters/ask={
 dialogues/actions_default_parameters/menu={
 
 }
+paths/saves/compressed_savefiles=false
+paths/saves/compressed_permanent_data_file=false
 
 [application]
 

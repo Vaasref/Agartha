@@ -3,10 +3,12 @@ extends Node
 onready var Timeline:Node = get_node("Timeline")
 onready var Store:Node = get_node("Store")
 onready var Persistent:Node = get_node("Persistent")
-onready var ShardParser:Node = get_node("ShardParser")
-onready var Tag:Node = get_node("Tag")
 onready var Settings:Node = get_node("Settings")
+onready var Tag:Node = get_node("Tag")
+onready var ShardParser:Node = get_node("ShardParser")
+onready var MarkupParser:Node = get_node("MarkupParser")
 onready var ShardLibrarian:Node = get_node("ShardLibrarian")
+onready var History:Node = get_node("History")
 
 onready var Say:Node = get_node("Say")
 onready var Ask:Node = get_node("Ask")
@@ -30,7 +32,9 @@ func _ready():
 	Store.init()
 	Persistent.init()
 	Settings.init()
+	MarkupParser.test()
 	ShardLibrarian.init()
+	History.init()
 
 func step():
 	Timeline.next_step()
