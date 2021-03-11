@@ -83,3 +83,12 @@ func save_shard(script, start, end):
 	for i in range(start, end):
 		shard_script.append(script[i].duplicate(true))
 	self.shards[shard_id] = shard_script
+
+
+func remove_shard(shard_id, exact:bool=false):
+	if exact:
+		self.shards.erase(shard_id)
+	else:
+		for s in self.shards.keys():
+			if s.begins_with(shard_id):
+				self.shards.erase(s)
