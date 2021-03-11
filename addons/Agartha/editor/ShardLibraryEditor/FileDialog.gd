@@ -5,6 +5,7 @@ var ShardParser = preload("res://addons/Agartha/systems/ShardParser.gd")
 var parser = ShardParser.new()
 
 signal insert_shard_script(script)
+signal new_shard_library(new_library)
 
 var shard_library
 
@@ -21,7 +22,7 @@ var current_mode:int
 const shard_filter:Array = ["*.shrd ; Shard script"]
 const library_filter:Array = ["*.tres ; Godot resource"]
 
-func _on_open_library(library):
+func _on_open_library(library, _clear_editor):
 	self.shard_library = library
 
 
@@ -96,6 +97,7 @@ func save_library(library_path):
 	var error = ResourceSaver.save(library_path, temp_new_library)
 	if error:
 		push_error("Error when saving new shard library.")
+	self.emit_signal("new_shard_library", load(library_path) as ShardLibrary)
 
 
 

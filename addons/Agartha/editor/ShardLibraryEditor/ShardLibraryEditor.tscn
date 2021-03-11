@@ -27,7 +27,7 @@ extends Label
 
 
 
-func _on_open_library(library):
+func _on_open_library(library, _clear_editor):
 	self.text = library.resource_path.get_file()
 "
 
@@ -65,7 +65,7 @@ shortcut = SubResource( 9 )
 script/source = "tool
 extends Button
 
-func _on_open_library(library):
+func _on_open_library(library, _clear_editor):
 	self.text = \"Save\"
 "
 
@@ -339,9 +339,9 @@ __meta__ = {
 }
 [connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VBoxContainer/GridContainer/LibraryNameLabel" method="_on_open_library"]
 [connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2/Save" method="_on_open_library"]
-[connection signal="open_library" from="." to="FileDialog" method="_on_open_library"]
 [connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" method="open_shard_library"]
 [connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/ShardTree" method="_on_open_library"]
+[connection signal="open_library" from="." to="FileDialog" method="_on_open_library"]
 [connection signal="item_selected" from="VBoxContainer/HSplitContainer/ShardTree" to="VBoxContainer/HSplitContainer/ShardTree" method="_on_item_selected"]
 [connection signal="open_shard" from="VBoxContainer/HSplitContainer/ShardTree" to="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" method="open_shard"]
 [connection signal="cursor_changed" from="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" to="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" method="_on_cursor_changed"]
@@ -358,3 +358,4 @@ __meta__ = {
 [connection signal="file_selected" from="FileDialog" to="FileDialog" method="_on_file_selected"]
 [connection signal="files_selected" from="FileDialog" to="FileDialog" method="_on_files_selected"]
 [connection signal="insert_shard_script" from="FileDialog" to="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" method="_on_insert_shard_script"]
+[connection signal="new_shard_library" from="FileDialog" to="." method="_on_new_shard_library"]

@@ -15,8 +15,10 @@ func get_shards(shard_id:String=""):
 	
 	return output
 
+
 func get_tree():
 	return get_branch("")
+
 
 func get_branch(shard_id_root):
 	var output = []
@@ -33,6 +35,7 @@ func get_branch(shard_id_root):
 		branches[b] = get_branch(b)
 	return branches
 
+
 func get_children_ids(shard_id, trimmed:bool = false):
 	var output = []
 	for s in shards.keys():
@@ -43,15 +46,20 @@ func get_children_ids(shard_id, trimmed:bool = false):
 				output.append(s)
 	return output
 
+
 enum LineType {
 	ERROR,
 	SHARD_ID,#aka label
 	SHORTCUT,
 	COMMENT,
 	SAY,
-	SHOW
+	SHOW,
+	HIDE,
+	PLAY,
+	HALT
 }
-const LineType_names:Array = ["Error", "Shard_ID", "Shortcut", "Comment", "Say", "Show"]
+const LineType_names:Array = ["Error", "Shard_ID", "Shortcut", "Comment", "Say", "Show", "Hide", "Play", "Halt"]
+
 
 func save_script(script):
 	if not script is Array:
@@ -65,6 +73,7 @@ func save_script(script):
 			save_shard(script, shard_ids[i], script.size())
 		else:
 			save_shard(script, shard_ids[i], shard_ids[i+1])
+
 
 func save_shard(script, start, end):
 	if not script is Array or end >= script.size() and start > end:

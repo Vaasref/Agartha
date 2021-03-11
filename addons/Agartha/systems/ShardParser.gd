@@ -10,9 +10,10 @@ enum LineType {
 	SAY,
 	SHOW,
 	HIDE,
-	PLAY
+	PLAY,
+	HALT
 }
-const LineType_names:Array = ["Error", "Shard_ID", "Shortcut", "Comment", "Say", "Show"]
+const LineType_names:Array = ["Error", "Shard_ID", "Shortcut", "Comment", "Say", "Show", "Hide", "Play", "Halt"]
 
 
 func parse_shard(shard_script):
@@ -62,8 +63,8 @@ func parse_line(line:String):
 	if output.size() == 2:#Check if the line is a comment line 
 		pass
 	elif trimmed_line.begins_with("@"):
-		re.compile("[\\s]*@([^@\\s]+)@[\\s]*")
-		result = re.search(line)
+		re.compile("@([^@\\s]+)@")
+		result = re.search(trimmed_line)
 		if result:
 			output = [LineType.SHORTCUT, result.get_string(1)] + output
 		else:
@@ -76,29 +77,36 @@ func parse_line(line:String):
 		else:
 			output = [LineType.ERROR, LineType.SHARD_ID]#Returns and error with shard_id flavor
 	elif trimmed_line.begins_with("show "):
-		re.compile("[\\s]*show (.*)")
-		result = re.search(line)
+		re.compile("[\\s]*show((?: +[\\w]+)+)$")
+		result = re.search(trimmed_line)
 		if result:
 			output = [LineType.SHOW, result.get_string(1).strip_edges()] + output
 		else:
 			output = [LineType.ERROR, LineType.SHOW]#Returns and error with show flavor	
 	elif trimmed_line.begins_with("hide "):
-		re.compile("[\\s]*hide (.*)")
-		result = re.search(line)
+		re.compile("hide((?: +[\\w]+)+)$")
+		result = re.search(trimmed_line)
 		if result:
 			output = [LineType.HIDE, result.get_string(1).strip_edges()] + output
 		else:
 			output = [LineType.ERROR, LineType.HIDE]#Returns and error with hide flavor
 	elif trimmed_line.begins_with("play "):
-		re.compile("[\\s]*play (.*)")
-		result = re.search(line)
+		re.compile("play((?: +[\\w]+)+)$")
+		result = re.search(trimmed_line)
 		if result:
 			output = [LineType.PLAY, result.get_string(1).strip_edges()] + output
 		else:
 			output = [LineType.ERROR, LineType.PLAY]#Returns and error with play flavor
+	elif trimmed_line.begins_with("halt "):
+		re.compile("halt[\\s]+([0-9]+)$")
+		result = re.search(trimmed_line)
+		if result:
+			output = [LineType.HALT, int(result.get_string(1))] + output
+		else:
+			output = [LineType.ERROR, LineType.HALT]#Returns and error with halt flavor
 	elif "\"" in trimmed_line:
-		re.compile("[\\s]*([\\w]*)[\\s]*\"(.*)\"")
-		result = re.search(line)
+		re.compile("^([a-zA-Z_][\\w]*|)[\\s]*\"(.*)\"$")
+		result = re.search(trimmed_line)
 		if result:
 			output = [LineType.SAY, result.get_string(1), result.get_string(2)] + output
 		else:
@@ -120,7 +128,7 @@ func compose_shard(script):
 		if l:
 			comment = ""
 			match l[0]:
-				LineType.SHARD_ID, LineType.SHORTCUT, LineType.SHOW, LineType.HIDE, LineType.PLAY:
+				LineType.SHARD_ID, LineType.SHORTCUT, LineType.SHOW, LineType.HIDE, LineType.PLAY, LineType.HALT:
 					if l.size() == 3:
 						comment = "  %s" % l[2]
 				LineType.SAY:
@@ -146,6 +154,8 @@ func compose_shard(script):
 					output += "\thide %s%s" % [l[1], comment]
 				LineType.PLAY:
 					output += "\tplay %s%s" % [l[1], comment]
+				LineType.HALT:
+					output += "\thalt %d%s" % [l[1], comment]
 		if i + 1 < script.size():
 			output += "\n"
 	return output

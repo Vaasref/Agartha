@@ -23,11 +23,12 @@ func update_colors():
 	self.clear_colors()
 	self.add_color_region("@", "@", Color.goldenrod)
 	self.add_color_region(":", ":", Color.mediumorchid)
-	self.add_color_region("\"", "\"", Color.mediumseagreen)
+	self.add_color_region("\"", "\"", Color.yellowgreen)
 	self.add_color_region("#", "", Color.indianred)
 	self.add_keyword_color("show", Color.lightskyblue)
 	self.add_keyword_color("hide", Color.lightskyblue)
-	self.add_keyword_color("play", Color.lightskyblue)
+	self.add_keyword_color("play", Color.palegreen)
+	self.add_keyword_color("halt", Color.plum)
 
 
 func _on_visibility_changed():
@@ -66,20 +67,17 @@ func update_text(script):
 					if l[1]:
 						self.add_keyword_color(l[1], Color.palevioletred)
 				ShardParser.LineType.SHOW:
-					if l.size() == 3:
-						self.add_color_region(" "+l[1], " ", Color.cyan)
-					else:
-						self.add_color_region(" "+l[1], " ", Color.cyan, true)
+					for w in l[1].split(" "):
+						if not w.is_valid_integer() and  not self.has_keyword_color(w):
+							self.add_keyword_color(w, Color.paleturquoise)
 				ShardParser.LineType.HIDE:
-					if l.size() == 3:
-						self.add_color_region(" "+l[1], " ", Color.cyan)
-					else:
-						self.add_color_region(" "+l[1], " ", Color.cyan, true)
+					for w in l[1].split(" "):
+						if not w.is_valid_integer() and  not self.has_keyword_color(w):
+							self.add_keyword_color(w, Color.paleturquoise)
 				ShardParser.LineType.PLAY:
-					if l.size() == 3:
-						self.add_color_region(" "+l[1], " ", Color.cyan)
-					else:
-						self.add_color_region(" "+l[1], " ", Color.cyan, true)
+					for w in l[1].split(" "):
+						if not w.is_valid_integer() and  not self.has_keyword_color(w):
+							self.add_keyword_color(w, Color.paleturquoise)
 				ShardParser.LineType.SHARD_ID:
 					shard_started = true
 				ShardParser.LineType.SHORTCUT:
@@ -91,8 +89,9 @@ func update_text(script):
 
 var shard_library:ShardLibrary
 
-func open_shard_library(library):
-	self.text = ""
+func open_shard_library(library, _clear_editor):
+	if _clear_editor:
+		self.text = ""
 	shard_library = library
 
 
