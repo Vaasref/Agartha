@@ -54,7 +54,11 @@ enum SkipPriority {
 
 var skip_priority:int = 0
 
+signal skip_change(active, _priority)
+
+
 func start_skipping(priority:int):
+	self.emit_signal('skip_change', true, priority)
 	skip_priority = priority
 	$SkipDelay.wait_time = Agartha.Settings.get("agartha/dialogues/skip_delay")
 	$SkipDelay.start()
@@ -62,6 +66,7 @@ func start_skipping(priority:int):
 
 func end_skipping():
 	$SkipDelay.stop()
+	self.emit_signal('skip_change', false, 0)
 
 
 func skip_stop(stop_priority:int):

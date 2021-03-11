@@ -234,6 +234,8 @@ func shard(shard_id:String, exact_id:bool=true, shard_library:Resource=null):
 							hide(l[1])
 						Agartha.ShardParser.LineType.PLAY:
 							print("play %s" % l[1])
+						Agartha.ShardParser.LineType.HALT:
+							halt(l[1])
 			else:
 				break
 
@@ -246,6 +248,11 @@ func show(tag:String, parameters:Dictionary={}):
 func hide(tag:String, parameters:Dictionary={}):
 	if _is_preactive():
 		Agartha.Show_Hide.call_deferred("action_hide", tag, parameters)
+
+
+func halt(priority:int):
+	if _is_preactive():
+		Agartha.Timeline.call_deferred("skip_stop", priority)
 
 
 func say(character, text:String, parameters:Dictionary={}):

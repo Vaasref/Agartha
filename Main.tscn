@@ -24,9 +24,25 @@ func _on_pressed():
 script/source = "extends Button
 
 
+func _ready():
+	self.call_deferred(\"connect_to_timeline\")
+
+func connect_to_timeline():
+	Agartha.Timeline.connect(\"skip_change\", self, \"_on_skip_change\")
+
+func _on_skip_change(active, _priority):
+	self.pressed = active
 
 func _on_pressed():
 	Agartha.Timeline.roll(-1)
+
+
+func _on_toggled(button_pressed):
+	if button_pressed:
+		Agartha.Timeline.start_skipping(0)
+	else:
+		Agartha.Timeline.end_skipping()
+	
 "
 
 [sub_resource type="GDScript" id=4]
@@ -217,6 +233,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Button4" type="Button" parent="."]
+margin_left = 50.127
+margin_top = 297.634
+margin_right = 137.127
+margin_bottom = 317.634
+toggle_mode = true
+text = "Skip"
+script = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_left = 0.2
 anchor_top = 0.2
@@ -275,3 +303,4 @@ autorun = true
 [connection signal="pressed" from="Button" to="Button" method="_on_pressed"]
 [connection signal="pressed" from="Button2" to="Button2" method="_on_pressed"]
 [connection signal="pressed" from="Button3" to="Button3" method="_on_pressed"]
+[connection signal="toggled" from="Button4" to="Button4" method="_on_toggled"]
