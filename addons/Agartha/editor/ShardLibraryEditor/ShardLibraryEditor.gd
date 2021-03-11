@@ -4,6 +4,11 @@ extends MarginContainer
 signal open_library(library, _clear_editor)
 signal use_shortcut(shortcut)
 
+var base_control:Control
+
+func _ready():
+	$VBoxContainer/HSplitContainer/ShardTree.base_control = base_control
+
 func open_library(library:ShardLibrary):
 	self.emit_signal("open_library", library, true)
 

@@ -114,6 +114,10 @@ margin_right = 100.0
 margin_bottom = 580.0
 rect_min_size = Vector2( 100, 0 )
 size_flags_vertical = 3
+columns = 2
+allow_reselect = true
+allow_rmb_select = true
+select_mode = 1
 script = ExtResource( 2 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HSplitContainer"]
@@ -338,11 +342,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 [connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VBoxContainer/GridContainer/LibraryNameLabel" method="_on_open_library"]
+[connection signal="open_library" from="." to="FileDialog" method="_on_open_library"]
 [connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer2/Save" method="_on_open_library"]
 [connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" method="open_shard_library"]
 [connection signal="open_library" from="." to="VBoxContainer/HSplitContainer/ShardTree" method="_on_open_library"]
-[connection signal="open_library" from="." to="FileDialog" method="_on_open_library"]
+[connection signal="button_pressed" from="VBoxContainer/HSplitContainer/ShardTree" to="VBoxContainer/HSplitContainer/ShardTree" method="_on_item_button_pressed"]
+[connection signal="item_rmb_selected" from="VBoxContainer/HSplitContainer/ShardTree" to="VBoxContainer/HSplitContainer/ShardTree" method="_on_item_rmb_selected"]
 [connection signal="item_selected" from="VBoxContainer/HSplitContainer/ShardTree" to="VBoxContainer/HSplitContainer/ShardTree" method="_on_item_selected"]
+[connection signal="nothing_selected" from="VBoxContainer/HSplitContainer/ShardTree" to="VBoxContainer/HSplitContainer/ShardTree" method="_on_nothing_selected"]
 [connection signal="open_shard" from="VBoxContainer/HSplitContainer/ShardTree" to="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" method="open_shard"]
 [connection signal="cursor_changed" from="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" to="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" method="_on_cursor_changed"]
 [connection signal="save_new_library" from="VBoxContainer/HSplitContainer/VBoxContainer/ShardEditor" to="FileDialog" method="_on_save_new_library"]

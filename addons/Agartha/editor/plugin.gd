@@ -10,6 +10,7 @@ var shard_library_editor_instance
 
 func _enter_tree():
 	shard_library_editor_instance = ShardLibraryEditor.instance()
+	shard_library_editor_instance.base_control = get_editor_interface().get_base_control()
 	shard_library_editor_instance.connect("use_shortcut", self, "_on_use_shortcut")
 	get_editor_interface().get_editor_viewport().add_child(shard_library_editor_instance)
 	
