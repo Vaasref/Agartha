@@ -4,6 +4,7 @@ onready var Timeline:Node = get_node("Timeline")
 onready var Store:Node = get_node("Store")
 onready var Persistent:Node = get_node("Persistent")
 onready var Settings:Node = get_node("Settings")
+onready var StageManager:Node = get_node("StageManager")
 onready var Tag:Node = get_node("Tag")
 onready var ShardParser:Node = get_node("ShardParser")
 onready var MarkupParser:Node = get_node("MarkupParser")
@@ -30,14 +31,18 @@ signal ask_return(return_value)
 signal menu(entries, parameters)
 signal menu_return(return_value)
 
+signal loading(progress)# progress can be either a float or a RIL. IF float, NAN is for undefined loading, [0:1[ represent the progress and 1 that the loading is finished.
+
 
 var store = null setget ,get_store
 
+var stage:Node
 
 func _ready():
 	Store.init()
 	Persistent.init()
 	Settings.init()
+	StageManager.init()
 	MarkupParser.test()
 	ShardLibrarian.init()
 	History.init()

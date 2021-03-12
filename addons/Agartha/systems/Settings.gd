@@ -177,6 +177,11 @@ const properties_infos:Dictionary = {
 		"hint": PROPERTY_HINT_NONE,
 		"default": {}
 	},
+	"agartha/paths/scenes/scene_aliases": {
+		"type": TYPE_DICTIONARY,
+		"hint": PROPERTY_HINT_NONE,
+		"default": {},
+	},
 	"agartha/paths/saves/saves_folder": {
 		"type": TYPE_STRING,
 		"hint": PROPERTY_HINT_DIR,
