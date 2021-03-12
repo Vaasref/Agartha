@@ -74,7 +74,11 @@ func hide(tag:String, parameters:Dictionary):
 	var radical = tag.split(" ", false, 2)[1]
 	var dict_to_hide = Agartha.Tag.get_node_dict(tag)
 	var nodes_to_hide = []
-	var new_shown = shown[radical].duplicate()
+	var new_shown
+	if radical in shown:
+		new_shown = shown[radical].duplicate()
+	else:
+		new_shown = {}
 	for t in dict_to_hide.keys():
 		new_shown.erase(t)
 		nodes_to_hide += dict_to_hide[t]
@@ -84,13 +88,20 @@ func hide(tag:String, parameters:Dictionary):
 		shown.erase(radical)
 	
 	var family = Agartha.Tag.get(radical)
-	for n in family:
-		if n:
-			if n in nodes_to_hide:
-				if n.has_method("_hide"):
-					n.call("_hide", tag, parameters)
-				elif n.has_method("hide"):
-					n.call("hide")
+	if family is Array:
+		for n in family:
+			if n:
+				if n in nodes_to_hide:
+					if n.has_method("_hide"):
+						n.call("_hide", tag, parameters)
+					elif n.has_method("hide"):
+						n.call("hide")
+	else:
+		if family in nodes_to_hide:
+			if family.has_method("_hide"):
+				family.call("_hide", tag, parameters)
+			elif family.has_method("hide"):
+				family.call("hide")
 	
 	
 	
