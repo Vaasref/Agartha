@@ -29,7 +29,10 @@ func _set(property, value):
 	if not property_list:
 		_init_property_list()
 	if not property in property_list:
-		self['properties'][property] = value
+		if value:
+			self['properties'][property] = value
+		else:
+			var _o = self['properties'].erase(property)
 		return true
 
 const property_list = {}
@@ -40,6 +43,7 @@ func _init_property_list():
 func duplicate(_deep:bool=true):
 	var output = .duplicate(true)
 	output.script = self.script
+	output.properties = self.properties.duplicate()
 	for p in properties.keys():
 		if properties[p] is Object and properties[p].has_method('duplicate'):
 			output.properties[p] =  properties[p].duplicate(true)
