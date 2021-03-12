@@ -46,7 +46,6 @@ func restore_state(id:int, post_step:bool=false):
 		push_warning("Invalid store state ID : %s" % id)
 		return
 	if post_step:
-		print("Stack %s" % [state_stack])
 		current_state = [state_stack[id][1].duplicate(), state_stack[id][1].duplicate()]#Restore from the origin
 	else:
 		current_state = [state_stack[id][0].duplicate(), state_stack[id][1].duplicate()]#Restore as stored
