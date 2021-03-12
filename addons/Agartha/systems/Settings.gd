@@ -149,32 +149,32 @@ const properties_infos:Dictionary = {
 	},
 	"agartha/dialogues/actions_default_parameters/show": {
 		"type": TYPE_DICTIONARY,
-		"hint": PROPERTY_HINT_DIR,
+		"hint": PROPERTY_HINT_NONE,
 		"default": {}
 	},
 	"agartha/dialogues/actions_default_parameters/hide": {
 		"type": TYPE_DICTIONARY,
-		"hint": PROPERTY_HINT_DIR,
+		"hint": PROPERTY_HINT_NONE,
 		"default": {}
 	},
 	"agartha/dialogues/actions_default_parameters/play": {
 		"type": TYPE_DICTIONARY,
-		"hint": PROPERTY_HINT_DIR,
+		"hint": PROPERTY_HINT_NONE,
 		"default": {}
 	},
 	"agartha/dialogues/actions_default_parameters/say": {
 		"type": TYPE_DICTIONARY,
-		"hint": PROPERTY_HINT_DIR,
+		"hint": PROPERTY_HINT_NONE,
 		"default": {}
 	},
 	"agartha/dialogues/actions_default_parameters/ask": {
 		"type": TYPE_DICTIONARY,
-		"hint": PROPERTY_HINT_DIR,
+		"hint": PROPERTY_HINT_NONE,
 		"default": {}
 	},
 	"agartha/dialogues/actions_default_parameters/menu": {
 		"type": TYPE_DICTIONARY,
-		"hint": PROPERTY_HINT_DIR,
+		"hint": PROPERTY_HINT_NONE,
 		"default": {}
 	},
 	"agartha/paths/saves/saves_folder": {
