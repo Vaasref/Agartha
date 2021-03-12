@@ -28,6 +28,10 @@ func place_item_in_tree(parent, branch, id):
 	var id_split = id.split("_")
 	tree_item.set_text(0, id_split[id_split.size()-1])
 	tree_item.set_meta("shard_id", id)
+	if id in library.shards:
+		tree_item.set_icon(0, base_control.get_icon("Script", "EditorIcons"))
+	else:
+		tree_item.set_custom_color(0, Color.silver)
 	tree_item.add_button(1, base_control.get_icon("Remove", "EditorIcons"), -1, true, "Delete shard and children.")
 	for b in branch.keys():
 		place_item_in_tree(tree_item, branch[b], b)
