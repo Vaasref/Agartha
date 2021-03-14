@@ -1,10 +1,6 @@
 extends Node
 
 
-func test():
-	Agartha.store.set("variable_0", "a variable")
-	print(parse_text("This is< a text with {variable_0} in> it.<>"))
-
 
 func parse_text(text:String, store=null):
 	var output = text

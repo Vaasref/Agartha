@@ -43,7 +43,6 @@ func _ready():
 	Persistent.init()
 	Settings.init()
 	StageManager.init()
-	MarkupParser.test()
 	ShardLibrarian.init()
 	History.init()
 
