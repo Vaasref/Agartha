@@ -1,0 +1,38 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Dialogue
+
+
+func _ready():
+	pass
+
+func test_frag_0():
+	say('', \"This is the TestScene1, TestDialogue1, test_frag_0 first step.\")
+	step()
+	
+	say('', \"This dialogue is not using shards.\")
+	step()
+	
+	say('', \"And this is the last step.\")
+	step()
+"
+
+[node name="TestScene1" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TestDialogue1" type="Node" parent="."]
+script = SubResource( 1 )
+default_fragment = "test_frag_0"
+
+[node name="Label" type="Label" parent="."]
+margin_left = 434.672
+margin_top = 138.591
+margin_right = 507.672
+margin_bottom = 152.591
+text = "TestScene1"

@@ -1,8 +1,30 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://MenuEntry.tscn" type="PackedScene" id=1]
 
 [sub_resource type="GDScript" id=1]
+script/source = "extends Control
+
+
+func _ready():
+	Agartha.stage = self
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Button
+
+
+
+
+func start_test_scene_0():
+	Agartha.StageManager.change_scene(\"res://scenes/TestScene0.tscn\")
+
+
+func _on_pressed():
+	self.call_deferred('start_test_scene_0')
+"
+
+[sub_resource type="GDScript" id=3]
 script/source = "extends Button
 
 
@@ -11,7 +33,7 @@ func _on_pressed():
 	Agartha.step()
 "
 
-[sub_resource type="GDScript" id=2]
+[sub_resource type="GDScript" id=4]
 script/source = "extends Button
 
 
@@ -20,7 +42,7 @@ func _on_pressed():
 	Agartha.Timeline.roll(1)
 "
 
-[sub_resource type="GDScript" id=3]
+[sub_resource type="GDScript" id=5]
 script/source = "extends Button
 
 
@@ -28,7 +50,7 @@ func _ready():
 	self.call_deferred(\"connect_to_timeline\")
 
 func connect_to_timeline():
-	Agartha.Timeline.connect(\"skip_change\", self, \"_on_skip_change\")
+	var _o = Agartha.Timeline.connect(\"skip_change\", self, \"_on_skip_change\")
 
 func _on_skip_change(active, _priority):
 	self.pressed = active
@@ -45,7 +67,7 @@ func _on_toggled(button_pressed):
 	
 "
 
-[sub_resource type="GDScript" id=4]
+[sub_resource type="GDScript" id=6]
 script/source = "extends VBoxContainer
 
 export var menu_entry:PackedScene
@@ -78,10 +100,10 @@ func remove_child(node):
 		.remove_child(node)
 "
 
-[sub_resource type="StyleBoxFlat" id=5]
+[sub_resource type="StyleBoxFlat" id=7]
 bg_color = Color( 0, 0, 0, 0.333333 )
 
-[sub_resource type="GDScript" id=6]
+[sub_resource type="GDScript" id=8]
 script/source = "extends PanelContainer
 
 
@@ -96,7 +118,7 @@ func _step():
 	self.visible = false
 "
 
-[sub_resource type="GDScript" id=7]
+[sub_resource type="GDScript" id=9]
 script/source = "extends Label
 
 
@@ -113,7 +135,7 @@ func _on_say(character, _text, _params):
 		self.visible = false
 "
 
-[sub_resource type="GDScript" id=8]
+[sub_resource type="GDScript" id=10]
 script/source = "extends RichTextLabel
 
 
@@ -125,16 +147,23 @@ func _on_say(_character, text, _params):
 	self.text = text
 "
 
-[sub_resource type="GDScript" id=9]
+[sub_resource type="GDScript" id=11]
 script/source = "extends Dialogue
 
 
 func _ready():
 	pass
 
-func frag_1():
-	fragment_start(\"frag_1\")
+func frag_test_show_hide():
+	shard(\"test_show_hide\")
 	
+	call_fragment(\"frag_1\")
+	
+	say(\"\", \"Little say after the called frag returns\")
+	step()
+
+
+func frag_1():
 	shard(\"test_shard\", false)
 	
 	say(\"\", \"frag_1 step %s\" % self.execution_stack[0].step_counter)
@@ -164,12 +193,8 @@ func frag_1():
 	else:
 		say(\"\", \"choice 2\")
 	step()
-	
-	fragment_end()
-
 
 func frag_2():
-	fragment_start(\"frag_2\")
 	
 	say(\"\", \"frag_2 step 0\")
 	step()
@@ -188,16 +213,34 @@ func frag_2():
 	
 	say(\"\", \"frag_2step 5\")
 	step()
-	
-	fragment_end()
 "
 
 [node name="Main" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {
+"_edit_horizontal_guides_": [ 150.346 ],
 "_edit_use_anchors_": false,
 "_edit_vertical_guides_": [ 51.1864 ]
+}
+
+[node name="Stage" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StartButton" type="Button" parent="Stage"]
+margin_left = 418.294
+margin_top = 65.5159
+margin_right = 536.294
+margin_bottom = 85.5159
+text = "Start TestScene0"
+script = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
 }
 
 [node name="Button" type="Button" parent="."]
@@ -206,7 +249,7 @@ margin_top = 161.467
 margin_right = 90.127
 margin_bottom = 181.467
 text = "Step"
-script = SubResource( 1 )
+script = SubResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -217,7 +260,7 @@ margin_top = 208.296
 margin_right = 119.127
 margin_bottom = 228.296
 text = "Roll back"
-script = SubResource( 2 )
+script = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -228,7 +271,7 @@ margin_top = 250.634
 margin_right = 137.127
 margin_bottom = 270.634
 text = "Roll forward"
-script = SubResource( 3 )
+script = SubResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -240,7 +283,7 @@ margin_right = 137.127
 margin_bottom = 317.634
 toggle_mode = true
 text = "Skip"
-script = SubResource( 3 )
+script = SubResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -252,8 +295,10 @@ anchor_right = 0.8
 anchor_bottom = 0.6
 margin_top = 1.05945
 margin_bottom = 1.05945
-script = SubResource( 4 )
+script = SubResource( 6 )
 __meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true,
 "_edit_use_anchors_": false
 }
 menu_entry = ExtResource( 1 )
@@ -263,9 +308,11 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_vertical = 0
-custom_styles/panel = SubResource( 5 )
-script = SubResource( 6 )
+custom_styles/panel = SubResource( 7 )
+script = SubResource( 8 )
 __meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true,
 "_edit_use_anchors_": false
 }
 
@@ -288,18 +335,85 @@ visible = false
 margin_right = 1010.0
 margin_bottom = 14.0
 text = "Character"
-script = SubResource( 7 )
+script = SubResource( 9 )
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer"]
 margin_right = 624.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 0, 100 )
-script = SubResource( 8 )
+script = SubResource( 10 )
+
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Blue" type="ColorRect" parent="Control" groups=[
+"# blue",
+"tagged",
+]]
+margin_left = 224.266
+margin_top = 150.346
+margin_right = 264.266
+margin_bottom = 190.346
+color = Color( 0.141176, 0.105882, 0.717647, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Red" type="ColorRect" parent="Control" groups=[
+"# $",
+"tagged",
+]]
+margin_left = 289.782
+margin_top = 150.346
+margin_right = 329.782
+margin_bottom = 190.346
+color = Color( 0.556863, 0.0313726, 0.0313726, 1 )
+
+[node name="Green" type="ColorRect" parent="Control" groups=[
+"# $",
+"tagged",
+]]
+margin_left = 362.857
+margin_top = 150.346
+margin_right = 402.857
+margin_bottom = 190.346
+color = Color( 0.0901961, 0.647059, 0.203922, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Blue 2" type="ColorRect" parent="Control" groups=[
+"# blue green",
+"tagged",
+]]
+margin_left = 224.266
+margin_top = 208.296
+margin_right = 264.266
+margin_bottom = 248.296
+color = Color( 0, 0.701961, 0.701961, 1 )
+
+[node name="Blue 3" type="ColorRect" parent="Control" groups=[
+"# blue violet",
+"tagged",
+]]
+margin_left = 224.266
+margin_top = 270.634
+margin_right = 264.266
+margin_bottom = 310.634
+rect_pivot_offset = Vector2( 20, 20 )
+color = Color( 0.203922, 0.0784314, 0.482353, 1 )
 
 [node name="DialogueTest" type="Node" parent="."]
-script = SubResource( 9 )
-default_fragment = "frag_1"
-autorun = true
+script = SubResource( 11 )
+default_fragment = "frag_test_show_hide"
+[connection signal="pressed" from="Stage/StartButton" to="Stage/StartButton" method="_on_pressed"]
 [connection signal="pressed" from="Button" to="Button" method="_on_pressed"]
 [connection signal="pressed" from="Button2" to="Button2" method="_on_pressed"]
 [connection signal="pressed" from="Button3" to="Button3" method="_on_pressed"]

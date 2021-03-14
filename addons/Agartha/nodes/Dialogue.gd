@@ -178,12 +178,13 @@ func call_fragment(fragment_name:String):
 
 
 func start_dialogue(dialogue_name, fragment_name, scene_id:String=""):
-	if scene_id:
-		var ok = Agartha.StageManager.change_scene
-		if ok:
+	if is_running():
+		if scene_id:
+			var ok = Agartha.StageManager.change_scene(scene_id)
+			if ok:
+				Agartha.start_dialogue(dialogue_name, fragment_name)
+		else:
 			Agartha.start_dialogue(dialogue_name, fragment_name)
-	else:
-		Agartha.start_dialogue(dialogue_name, fragment_name)
 
 
 func cond(condition):#Shorhand

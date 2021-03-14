@@ -52,8 +52,9 @@ func init():
 			if aliases[k] is PackedScene:
 				scenes[k] = aliases[k]
 			elif aliases[k] is String:
-				if aliases[k].is_abs_path() and aliases[k].get_extension() == ".tscn":
+				if aliases[k].is_abs_path() and aliases[k].get_extension() == "tscn":
 					scenes[k] = aliases[k]
+	lazy_preload_scenes(scenes)
 
 
 func lazy_preload_scenes(scenes):

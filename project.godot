@@ -55,6 +55,10 @@ dialogues/actions_default_parameters/menu={
 }
 paths/saves/compressed_savefiles=false
 paths/saves/compressed_permanent_data_file=false
+paths/scenes/scene_aliases={
+"TestScene0": "res://scenes/TestScene0.tscn",
+"TestScene1": "res://scenes/TestScene1.tscn"
+}
 
 [application]
 
