@@ -1,6 +1,7 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://MenuEntry.tscn" type="PackedScene" id=1]
+[ext_resource path="res://template/GameUI/MenuEntry.tscn" type="PackedScene" id=1]
+[ext_resource path="res://template/MainMenu/MainMenu.tscn" type="PackedScene" id=2]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
@@ -25,129 +26,6 @@ func _on_pressed():
 "
 
 [sub_resource type="GDScript" id=3]
-script/source = "extends Button
-
-
-
-func _on_pressed():
-	Agartha.step()
-"
-
-[sub_resource type="GDScript" id=4]
-script/source = "extends Button
-
-
-
-func _on_pressed():
-	Agartha.Timeline.roll(1)
-"
-
-[sub_resource type="GDScript" id=5]
-script/source = "extends Button
-
-
-func _ready():
-	self.call_deferred(\"connect_to_timeline\")
-
-func connect_to_timeline():
-	var _o = Agartha.Timeline.connect(\"skip_change\", self, \"_on_skip_change\")
-
-func _on_skip_change(active, _priority):
-	self.pressed = active
-
-func _on_pressed():
-	Agartha.Timeline.roll(-1)
-
-
-func _on_toggled(button_pressed):
-	if button_pressed:
-		Agartha.Timeline.start_skipping(0)
-	else:
-		Agartha.Timeline.end_skipping()
-	
-"
-
-[sub_resource type="GDScript" id=6]
-script/source = "extends VBoxContainer
-
-export var menu_entry:PackedScene
-
-func _ready():
-	var _o = Agartha.connect(\"menu\", self, \"_on_menu\")
-
-func _step():
-	clear_children()
-
-func _restore(_state):
-	clear_children()
-
-func _on_menu(choices, _params):
-	clear_children()
-	var i = 0
-	for e in choices:
-		var entry = menu_entry.instance()
-		entry.set_text(e)
-		entry.choice = i
-		self.add_child(entry)
-		i += 1
-
-func clear_children():
-	for c in self.get_children():
-		self.call_deferred('remove_child', c)
-
-func remove_child(node):
-	if node in self.get_children():
-		.remove_child(node)
-"
-
-[sub_resource type="StyleBoxFlat" id=7]
-bg_color = Color( 0, 0, 0, 0.333333 )
-
-[sub_resource type="GDScript" id=8]
-script/source = "extends PanelContainer
-
-
-func _ready():
-	var _o = Agartha.connect(\"say\", self, \"_on_say\")
-
-func _on_say(_character, _text, _params):
-	print(\"say %s :   '%s'\" % [_character, _text])
-	self.visible = true
-
-func _step():
-	self.visible = false
-"
-
-[sub_resource type="GDScript" id=9]
-script/source = "extends Label
-
-
-
-func _ready():
-	var _o = Agartha.connect(\"say\", self, \"_on_say\")
-	self.visible = false
-
-func _on_say(character, _text, _params):
-	if character:
-		self.text = character
-		self.visible = true
-	else:
-		self.visible = false
-"
-
-[sub_resource type="GDScript" id=10]
-script/source = "extends RichTextLabel
-
-
-
-func _ready():
-	var _o = Agartha.connect(\"say\", self, \"_on_say\")
-
-func _on_say(_character, text, _params):
-	self.text = text
-"
-
-[sub_resource type="GDScript" id=11]
 script/source = "extends Dialogue
 
 
@@ -215,6 +93,129 @@ func frag_2():
 	step()
 "
 
+[sub_resource type="GDScript" id=4]
+script/source = "extends VBoxContainer
+
+export var menu_entry:PackedScene
+
+func _ready():
+	var _o = Agartha.connect(\"menu\", self, \"_on_menu\")
+
+func _step():
+	clear_children()
+
+func _restore(_state):
+	clear_children()
+
+func _on_menu(choices, _params):
+	clear_children()
+	var i = 0
+	for e in choices:
+		var entry = menu_entry.instance()
+		entry.set_text(e)
+		entry.choice = i
+		self.add_child(entry)
+		i += 1
+
+func clear_children():
+	for c in self.get_children():
+		self.call_deferred('remove_child', c)
+
+func remove_child(node):
+	if node in self.get_children():
+		.remove_child(node)
+"
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0, 0, 0, 0.333333 )
+
+[sub_resource type="GDScript" id=6]
+script/source = "extends PanelContainer
+
+
+func _ready():
+	var _o = Agartha.connect(\"say\", self, \"_on_say\")
+
+func _on_say(_character, _text, _params):
+	print(\"say %s :   '%s'\" % [_character, _text])
+	self.visible = true
+
+func _step():
+	self.visible = false
+"
+
+[sub_resource type="GDScript" id=7]
+script/source = "extends Label
+
+
+
+func _ready():
+	var _o = Agartha.connect(\"say\", self, \"_on_say\")
+	self.visible = false
+
+func _on_say(character, _text, _params):
+	if character:
+		self.text = character
+		self.visible = true
+	else:
+		self.visible = false
+"
+
+[sub_resource type="GDScript" id=8]
+script/source = "extends RichTextLabel
+
+
+
+func _ready():
+	var _o = Agartha.connect(\"say\", self, \"_on_say\")
+
+func _on_say(_character, text, _params):
+	self.text = text
+"
+
+[sub_resource type="GDScript" id=9]
+script/source = "extends Button
+
+
+
+func _on_pressed():
+	Agartha.step()
+"
+
+[sub_resource type="GDScript" id=10]
+script/source = "extends Button
+
+
+
+func _on_pressed():
+	Agartha.Timeline.roll(1)
+"
+
+[sub_resource type="GDScript" id=11]
+script/source = "extends Button
+
+
+func _ready():
+	self.call_deferred(\"connect_to_timeline\")
+
+func connect_to_timeline():
+	var _o = Agartha.Timeline.connect(\"skip_change\", self, \"_on_skip_change\")
+
+func _on_skip_change(active, _priority):
+	self.pressed = active
+
+func _on_pressed():
+	Agartha.Timeline.roll(-1)
+
+
+func _on_toggled(button_pressed):
+	if button_pressed:
+		Agartha.Timeline.start_skipping(0)
+	else:
+		Agartha.Timeline.end_skipping()
+	
+"
+
 [node name="Main" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -225,125 +226,27 @@ __meta__ = {
 }
 
 [node name="Stage" type="Control" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="StartButton" type="Button" parent="Stage"]
-margin_left = 418.294
-margin_top = 65.5159
-margin_right = 536.294
-margin_bottom = 85.5159
+margin_left = 341.983
+margin_top = 107.61
+margin_right = 849.983
+margin_bottom = 127.61
 text = "Start TestScene0"
 script = SubResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" type="Button" parent="."]
-margin_left = 50.127
-margin_top = 161.467
-margin_right = 90.127
-margin_bottom = 181.467
-text = "Step"
-script = SubResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Button2" type="Button" parent="."]
-margin_left = 50.127
-margin_top = 208.296
-margin_right = 119.127
-margin_bottom = 228.296
-text = "Roll back"
-script = SubResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Button3" type="Button" parent="."]
-margin_left = 50.127
-margin_top = 250.634
-margin_right = 137.127
-margin_bottom = 270.634
-text = "Roll forward"
-script = SubResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Button4" type="Button" parent="."]
-margin_left = 50.127
-margin_top = 297.634
-margin_right = 137.127
-margin_bottom = 317.634
-toggle_mode = true
-text = "Skip"
-script = SubResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-anchor_left = 0.2
-anchor_top = 0.2
-anchor_right = 0.8
-anchor_bottom = 0.6
-margin_top = 1.05945
-margin_bottom = 1.05945
-script = SubResource( 6 )
-__meta__ = {
-"_edit_group_": true,
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-menu_entry = ExtResource( 1 )
-
-[node name="Panel" type="PanelContainer" parent="."]
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_vertical = 0
-custom_styles/panel = SubResource( 7 )
-script = SubResource( 8 )
-__meta__ = {
-"_edit_group_": true,
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel"]
-margin_right = 1024.0
-margin_bottom = 140.0
-custom_constants/margin_right = 200
-custom_constants/margin_top = 20
-custom_constants/margin_left = 200
-custom_constants/margin_bottom = 20
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
-margin_left = 200.0
-margin_top = 20.0
-margin_right = 824.0
-margin_bottom = 120.0
-
-[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
-visible = false
-margin_right = 1010.0
-margin_bottom = 14.0
-text = "Character"
-script = SubResource( 9 )
-
-[node name="RichTextLabel" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer"]
-margin_right = 624.0
-margin_bottom = 100.0
-rect_min_size = Vector2( 0, 100 )
-script = SubResource( 10 )
-
 [node name="Control" type="Control" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -411,10 +314,119 @@ rect_pivot_offset = Vector2( 20, 20 )
 color = Color( 0.203922, 0.0784314, 0.482353, 1 )
 
 [node name="DialogueTest" type="Node" parent="."]
-script = SubResource( 11 )
+script = SubResource( 3 )
 default_fragment = "frag_test_show_hide"
+
+[node name="GameScreen" type="Control" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameScreen"]
+anchor_left = 0.2
+anchor_top = 0.2
+anchor_right = 0.8
+anchor_bottom = 0.6
+script = SubResource( 4 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+menu_entry = ExtResource( 1 )
+
+[node name="Panel" type="PanelContainer" parent="GameScreen"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+custom_styles/panel = SubResource( 5 )
+script = SubResource( 6 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="GameScreen/Panel"]
+margin_right = 1280.0
+margin_bottom = 140.0
+custom_constants/margin_right = 200
+custom_constants/margin_top = 20
+custom_constants/margin_left = 200
+custom_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameScreen/Panel/MarginContainer"]
+margin_left = 200.0
+margin_top = 20.0
+margin_right = 1080.0
+margin_bottom = 120.0
+
+[node name="Label" type="Label" parent="GameScreen/Panel/MarginContainer/VBoxContainer"]
+visible = false
+margin_right = 1010.0
+margin_bottom = 14.0
+text = "Character"
+script = SubResource( 7 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GameScreen/Panel/MarginContainer/VBoxContainer"]
+margin_right = 880.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 0, 100 )
+script = SubResource( 8 )
+
+[node name="Button" type="Button" parent="GameScreen"]
+margin_left = 50.127
+margin_top = 161.467
+margin_right = 90.127
+margin_bottom = 181.467
+text = "Step"
+script = SubResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button2" type="Button" parent="GameScreen"]
+margin_left = 50.127
+margin_top = 208.296
+margin_right = 119.127
+margin_bottom = 228.296
+text = "Roll back"
+script = SubResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button3" type="Button" parent="GameScreen"]
+margin_left = 50.127
+margin_top = 250.634
+margin_right = 137.127
+margin_bottom = 270.634
+text = "Roll forward"
+script = SubResource( 11 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button4" type="Button" parent="GameScreen"]
+margin_left = 50.127
+margin_top = 297.634
+margin_right = 137.127
+margin_bottom = 317.634
+toggle_mode = true
+text = "Skip"
+script = SubResource( 11 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MainMenu" parent="." instance=ExtResource( 2 )]
 [connection signal="pressed" from="Stage/StartButton" to="Stage/StartButton" method="_on_pressed"]
-[connection signal="pressed" from="Button" to="Button" method="_on_pressed"]
-[connection signal="pressed" from="Button2" to="Button2" method="_on_pressed"]
-[connection signal="pressed" from="Button3" to="Button3" method="_on_pressed"]
-[connection signal="toggled" from="Button4" to="Button4" method="_on_toggled"]
+[connection signal="pressed" from="GameScreen/Button" to="GameScreen/Button" method="_on_pressed"]
+[connection signal="pressed" from="GameScreen/Button2" to="GameScreen/Button2" method="_on_pressed"]
+[connection signal="pressed" from="GameScreen/Button3" to="GameScreen/Button3" method="_on_pressed"]
+[connection signal="toggled" from="GameScreen/Button4" to="GameScreen/Button4" method="_on_toggled"]

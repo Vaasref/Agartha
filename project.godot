@@ -19,6 +19,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/Agartha/nodes/Dialogue.gd"
 }, {
+"base": "Button",
+"class": "SaveSlot",
+"language": "GDScript",
+"path": "res://template/MainMenu/SaveSlot.gd"
+}, {
 "base": "Resource",
 "class": "ShardLibrary",
 "language": "GDScript",
@@ -37,6 +42,7 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "Character": "",
 "Dialogue": "",
+"SaveSlot": "",
 "ShardLibrary": "",
 "StoreSave": "",
 "StoreState": ""
@@ -53,12 +59,12 @@ dialogues/actions_default_parameters/ask={
 dialogues/actions_default_parameters/menu={
 
 }
-paths/saves/compressed_savefiles=false
-paths/saves/compressed_permanent_data_file=false
 paths/scenes/scene_aliases={
 "TestScene0": "res://scenes/TestScene0.tscn",
 "TestScene1": "res://scenes/TestScene1.tscn"
 }
+saves/compatibility/compatibility_code="8950d"
+saves/compress_savefiles=false
 
 [application]
 
@@ -69,6 +75,11 @@ config/icon="res://addons/Agartha/icon.svg"
 [autoload]
 
 Agartha="*res://addons/Agartha/Agartha.tscn"
+
+[display]
+
+window/size/width=1280
+window/size/height=720
 
 [editor_plugins]
 
