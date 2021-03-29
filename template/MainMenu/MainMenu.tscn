@@ -149,16 +149,16 @@ func _on_visibility_changed():
 		return_button.visible = true
 "
 
-[sub_resource type="StyleBoxEmpty" id=30]
+[sub_resource type="StyleBoxEmpty" id=17]
 
-[sub_resource type="DynamicFont" id=31]
+[sub_resource type="DynamicFont" id=18]
 size = 24
 outline_size = 1
 outline_color = Color( 0, 0, 0, 0.333333 )
 use_filter = true
 font_data = ExtResource( 2 )
 
-[sub_resource type="GDScript" id=18]
+[sub_resource type="GDScript" id=19]
 script/source = "tool
 extends LineEdit
 
@@ -191,7 +191,7 @@ func _on_text_changed(new_text):
 			Agartha.Persistent.set_value(\"save_page_%d\" % page, null)
 "
 
-[sub_resource type="GDScript" id=29]
+[sub_resource type="GDScript" id=20]
 script/source = "tool
 extends GridContainer
 
@@ -326,6 +326,8 @@ func _on_page_change(_page):#This func is to be used for synching the load and s
 	update_page(_page, false)
 "
 
+[sub_resource type="StyleBoxEmpty" id=21]
+
 [sub_resource type="StyleBoxEmpty" id=22]
 
 [sub_resource type="StyleBoxEmpty" id=23]
@@ -334,30 +336,28 @@ func _on_page_change(_page):#This func is to be used for synching the load and s
 
 [sub_resource type="StyleBoxEmpty" id=25]
 
-[sub_resource type="StyleBoxEmpty" id=26]
-
-[sub_resource type="DynamicFont" id=27]
+[sub_resource type="DynamicFont" id=26]
 size = 22
 outline_size = 1
 outline_color = Color( 0, 0, 0, 0.4 )
 use_filter = true
 font_data = ExtResource( 2 )
 
-[sub_resource type="Theme" id=28]
-default_font = SubResource( 27 )
+[sub_resource type="Theme" id=27]
+default_font = SubResource( 26 )
 Button/colors/font_color = Color( 0.5184, 0.72, 0.4176, 1 )
 Button/colors/font_color_disabled = Color( 0.645, 0.75, 0.5925, 0.266667 )
 Button/colors/font_color_hover = Color( 0.654902, 0.788235, 0.584314, 1 )
 Button/colors/font_color_pressed = Color( 0.966667, 1, 0.95, 1 )
 Button/constants/hseparation = 2
 Button/fonts/font = null
-Button/styles/disabled = SubResource( 22 )
-Button/styles/focus = SubResource( 23 )
-Button/styles/hover = SubResource( 24 )
-Button/styles/normal = SubResource( 25 )
-Button/styles/pressed = SubResource( 26 )
+Button/styles/disabled = SubResource( 21 )
+Button/styles/focus = SubResource( 22 )
+Button/styles/hover = SubResource( 23 )
+Button/styles/normal = SubResource( 24 )
+Button/styles/pressed = SubResource( 25 )
 
-[sub_resource type="GDScript" id=20]
+[sub_resource type="GDScript" id=28]
 script/source = "tool
 extends Button
 
@@ -382,7 +382,7 @@ func _on_page_change(page):
 		self.pressed = false
 "
 
-[sub_resource type="ButtonGroup" id=21]
+[sub_resource type="ButtonGroup" id=29]
 
 [node name="MainMenu" type="Control" groups=[
 "main_menu",
@@ -407,7 +407,7 @@ __meta__ = {
 [node name="BackgroundShade" type="ColorRect" parent="." groups=[
 "background_shade",
 ]]
-anchor_right = 1.0
+anchor_right = 0.25
 anchor_bottom = 1.0
 color = Color( 0, 0, 0, 0.4 )
 __meta__ = {
@@ -532,6 +532,7 @@ align = 0
 [node name="ReturnButton" type="Button" parent="SideMenu" groups=[
 "return_button",
 ]]
+visible = false
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -567,7 +568,6 @@ __meta__ = {
 }
 
 [node name="TitleScreen" type="Control" parent="ScreenContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = SubResource( 11 )
@@ -606,6 +606,7 @@ align = 1
 script = SubResource( 15 )
 
 [node name="SaveScreen" type="Control" parent="ScreenContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = SubResource( 16 )
@@ -618,10 +619,10 @@ anchor_bottom = 0.15
 margin_top = -10.0
 grow_horizontal = 2
 focus_mode = 1
-custom_styles/read_only = SubResource( 30 )
-custom_styles/focus = SubResource( 30 )
-custom_styles/normal = SubResource( 30 )
-custom_fonts/font = SubResource( 31 )
+custom_styles/read_only = SubResource( 17 )
+custom_styles/focus = SubResource( 17 )
+custom_styles/normal = SubResource( 17 )
+custom_fonts/font = SubResource( 18 )
 custom_colors/font_color = Color( 0.756863, 0.878431, 0.694118, 1 )
 custom_colors/font_color_uneditable = Color( 0.756863, 0.878431, 0.694118, 1 )
 text = "Page 1"
@@ -629,7 +630,7 @@ align = 1
 expand_to_text_length = true
 placeholder_text = "Page 1"
 placeholder_alpha = 1.0
-script = SubResource( 18 )
+script = SubResource( 19 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -643,11 +644,14 @@ margin_right = -10.0
 custom_constants/vseparation = 20
 custom_constants/hseparation = 10
 columns = 3
-script = SubResource( 29 )
+script = SubResource( 20 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+save_mode = true
+page = 1
 save_slot = ExtResource( 5 )
+rows = 2
 
 [node name="PageList" type="HBoxContainer" parent="ScreenContainer/SaveScreen"]
 anchor_left = 0.5
@@ -656,7 +660,7 @@ anchor_right = 0.5
 anchor_bottom = 0.85
 margin_top = 10.0
 grow_horizontal = 2
-theme = SubResource( 28 )
+theme = SubResource( 27 )
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -667,17 +671,19 @@ margin_left = 9.0
 margin_right = 21.0
 margin_bottom = 31.0
 text = "<"
-script = SubResource( 20 )
+script = SubResource( 28 )
 page_increment = -1
+page_number = 1
 
 [node name="QuickPage" type="Button" parent="ScreenContainer/SaveScreen/PageList"]
 margin_left = 25.0
 margin_right = 42.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "Q"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 0
 
 [node name="NumberPage1" type="Button" parent="ScreenContainer/SaveScreen/PageList"]
@@ -686,18 +692,21 @@ margin_right = 58.0
 margin_bottom = 31.0
 toggle_mode = true
 pressed = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "1"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
+page_number = 1
 
 [node name="NumberPage2" type="Button" parent="ScreenContainer/SaveScreen/PageList"]
 margin_left = 62.0
 margin_right = 74.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "2"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 2
 
 [node name="NumberPage3" type="Button" parent="ScreenContainer/SaveScreen/PageList"]
@@ -705,9 +714,10 @@ margin_left = 78.0
 margin_right = 90.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "3"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 3
 
 [node name="NumberPage4" type="Button" parent="ScreenContainer/SaveScreen/PageList"]
@@ -715,9 +725,10 @@ margin_left = 94.0
 margin_right = 106.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "4"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 4
 
 [node name="NumberPage5" type="Button" parent="ScreenContainer/SaveScreen/PageList"]
@@ -725,9 +736,10 @@ margin_left = 110.0
 margin_right = 122.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "5"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 5
 
 [node name="NumberPage6" type="Button" parent="ScreenContainer/SaveScreen/PageList"]
@@ -735,9 +747,10 @@ margin_left = 126.0
 margin_right = 138.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "6"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 6
 
 [node name="NumberPage7" type="Button" parent="ScreenContainer/SaveScreen/PageList"]
@@ -745,9 +758,10 @@ margin_left = 142.0
 margin_right = 154.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "7"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 7
 
 [node name="NumberPage8" type="Button" parent="ScreenContainer/SaveScreen/PageList"]
@@ -755,9 +769,10 @@ margin_left = 158.0
 margin_right = 170.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "8"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 8
 
 [node name="NumberPage9" type="Button" parent="ScreenContainer/SaveScreen/PageList"]
@@ -765,9 +780,10 @@ margin_left = 174.0
 margin_right = 186.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "9"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 9
 
 [node name="NextPage" type="Button" parent="ScreenContainer/SaveScreen/PageList"]
@@ -775,8 +791,9 @@ margin_left = 190.0
 margin_right = 202.0
 margin_bottom = 31.0
 text = ">"
-script = SubResource( 20 )
+script = SubResource( 28 )
 page_increment = 1
+page_number = 1
 
 [node name="LoadScreen" type="Control" parent="ScreenContainer"]
 visible = false
@@ -792,10 +809,10 @@ anchor_bottom = 0.15
 margin_top = -10.0
 grow_horizontal = 2
 focus_mode = 1
-custom_styles/read_only = SubResource( 30 )
-custom_styles/focus = SubResource( 30 )
-custom_styles/normal = SubResource( 30 )
-custom_fonts/font = SubResource( 31 )
+custom_styles/read_only = SubResource( 17 )
+custom_styles/focus = SubResource( 17 )
+custom_styles/normal = SubResource( 17 )
+custom_fonts/font = SubResource( 18 )
 custom_colors/font_color = Color( 0.756863, 0.878431, 0.694118, 1 )
 custom_colors/font_color_uneditable = Color( 0.756863, 0.878431, 0.694118, 1 )
 text = "Page 1"
@@ -803,7 +820,7 @@ align = 1
 expand_to_text_length = true
 placeholder_text = "Page 1"
 placeholder_alpha = 1.0
-script = SubResource( 18 )
+script = SubResource( 19 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -817,12 +834,14 @@ margin_right = -10.0
 custom_constants/vseparation = 20
 custom_constants/hseparation = 10
 columns = 3
-script = SubResource( 29 )
+script = SubResource( 20 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 save_mode = false
+page = 1
 save_slot = ExtResource( 5 )
+rows = 2
 
 [node name="PageList" type="HBoxContainer" parent="ScreenContainer/LoadScreen"]
 anchor_left = 0.5
@@ -831,7 +850,7 @@ anchor_right = 0.5
 anchor_bottom = 0.85
 margin_top = 10.0
 grow_horizontal = 2
-theme = SubResource( 28 )
+theme = SubResource( 27 )
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -841,17 +860,19 @@ __meta__ = {
 margin_right = 12.0
 margin_bottom = 31.0
 text = "<"
-script = SubResource( 20 )
+script = SubResource( 28 )
 page_increment = -1
+page_number = 1
 
 [node name="AutoPage" type="Button" parent="ScreenContainer/LoadScreen/PageList"]
 margin_left = 34.0
 margin_right = 51.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "A"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = -1
 
 [node name="QuickPage" type="Button" parent="ScreenContainer/LoadScreen/PageList"]
@@ -859,9 +880,10 @@ margin_left = 34.0
 margin_right = 51.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "Q"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 0
 
 [node name="NumberPage1" type="Button" parent="ScreenContainer/LoadScreen/PageList"]
@@ -870,18 +892,21 @@ margin_right = 67.0
 margin_bottom = 31.0
 toggle_mode = true
 pressed = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "1"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
+page_number = 1
 
 [node name="NumberPage2" type="Button" parent="ScreenContainer/LoadScreen/PageList"]
 margin_left = 71.0
 margin_right = 83.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "2"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 2
 
 [node name="NumberPage3" type="Button" parent="ScreenContainer/LoadScreen/PageList"]
@@ -889,9 +914,10 @@ margin_left = 87.0
 margin_right = 99.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "3"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 3
 
 [node name="NumberPage4" type="Button" parent="ScreenContainer/LoadScreen/PageList"]
@@ -899,9 +925,10 @@ margin_left = 103.0
 margin_right = 115.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "4"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 4
 
 [node name="NumberPage5" type="Button" parent="ScreenContainer/LoadScreen/PageList"]
@@ -909,9 +936,10 @@ margin_left = 119.0
 margin_right = 131.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "5"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 5
 
 [node name="NumberPage6" type="Button" parent="ScreenContainer/LoadScreen/PageList"]
@@ -919,9 +947,10 @@ margin_left = 135.0
 margin_right = 147.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "6"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 6
 
 [node name="NumberPage7" type="Button" parent="ScreenContainer/LoadScreen/PageList"]
@@ -929,9 +958,10 @@ margin_left = 151.0
 margin_right = 163.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "7"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 7
 
 [node name="NumberPage8" type="Button" parent="ScreenContainer/LoadScreen/PageList"]
@@ -939,9 +969,10 @@ margin_left = 167.0
 margin_right = 179.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "8"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 8
 
 [node name="NumberPage9" type="Button" parent="ScreenContainer/LoadScreen/PageList"]
@@ -949,9 +980,10 @@ margin_left = 183.0
 margin_right = 195.0
 margin_bottom = 31.0
 toggle_mode = true
-group = SubResource( 21 )
+group = SubResource( 29 )
 text = "9"
-script = SubResource( 20 )
+script = SubResource( 28 )
+page_increment = 0
 page_number = 9
 
 [node name="NextPage" type="Button" parent="ScreenContainer/LoadScreen/PageList"]
@@ -959,49 +991,32 @@ margin_left = 199.0
 margin_right = 211.0
 margin_bottom = 31.0
 text = ">"
-script = SubResource( 20 )
+script = SubResource( 28 )
 page_increment = 1
+page_number = 1
 [connection signal="pressed" from="SideMenu/ScreenList/SaveButton" to="SideMenu/ScreenList/SaveButton" method="_on_pressed"]
 [connection signal="pressed" from="SideMenu/ScreenList/LoadButton" to="SideMenu/ScreenList/LoadButton" method="_on_pressed"]
 [connection signal="pressed" from="SideMenu/ReturnButton" to="SideMenu/ReturnButton" method="_on_pressed"]
-[connection signal="tab_changed" from="ScreenContainer" to="SideMenu/SeparationBar" method="_on_screen_changed"]
 [connection signal="tab_changed" from="ScreenContainer" to="SideMenu/ScreenTitle" method="_on_screen_changed"]
+[connection signal="tab_changed" from="ScreenContainer" to="SideMenu/SeparationBar" method="_on_screen_changed"]
 [connection signal="visibility_changed" from="ScreenContainer/TitleScreen" to="ScreenContainer/TitleScreen" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="ScreenContainer/SaveScreen" to="ScreenContainer/SaveScreen" method="_on_visibility_changed"]
 [connection signal="text_changed" from="ScreenContainer/SaveScreen/PageLabel" to="ScreenContainer/SaveScreen/PageLabel" method="_on_text_changed"]
 [connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageLabel" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/SaveSlotsGrid" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage3" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/PreviousPage" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage9" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage2" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/QuickPage" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage3" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage4" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NextPage" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage7" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage6" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage8" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage9" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage1" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage4" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage5" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage6" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage7" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage8" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NextPage" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/SaveSlotsGrid" method="_on_page_change"]
 [connection signal="visibility_changed" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/SaveSlotsGrid" method="_on_visibility_changed"]
-[connection signal="mouse_entered" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot" method="_on_mouse_exited"]
-[connection signal="pressed" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot" method="_on_pressed"]
-[connection signal="mouse_entered" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot2" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot2" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot2" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot2" method="_on_mouse_exited"]
-[connection signal="pressed" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot2" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot2" method="_on_pressed"]
-[connection signal="mouse_entered" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot3" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot3" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot3" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot3" method="_on_mouse_exited"]
-[connection signal="pressed" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot3" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot3" method="_on_pressed"]
-[connection signal="mouse_entered" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot4" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot4" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot4" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot4" method="_on_mouse_exited"]
-[connection signal="pressed" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot4" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot4" method="_on_pressed"]
-[connection signal="mouse_entered" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot5" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot5" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot5" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot5" method="_on_mouse_exited"]
-[connection signal="pressed" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot5" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot5" method="_on_pressed"]
-[connection signal="mouse_entered" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot6" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot6" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot6" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot6" method="_on_mouse_exited"]
-[connection signal="pressed" from="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot6" to="ScreenContainer/SaveScreen/SaveSlotsGrid/SaveSlot6" method="_on_pressed"]
 [connection signal="increment_page" from="ScreenContainer/SaveScreen/PageList/PreviousPage" to="ScreenContainer/SaveScreen/SaveSlotsGrid" method="_on_increment_page"]
 [connection signal="pressed" from="ScreenContainer/SaveScreen/PageList/PreviousPage" to="ScreenContainer/SaveScreen/PageList/PreviousPage" method="_on_pressed"]
 [connection signal="set_page" from="ScreenContainer/SaveScreen/PageList/PreviousPage" to="ScreenContainer/SaveScreen/SaveSlotsGrid" method="_on_set_page"]
@@ -1040,21 +1055,21 @@ page_increment = 1
 [connection signal="set_page" from="ScreenContainer/SaveScreen/PageList/NextPage" to="ScreenContainer/SaveScreen/SaveSlotsGrid" method="_on_set_page"]
 [connection signal="visibility_changed" from="ScreenContainer/LoadScreen" to="ScreenContainer/LoadScreen" method="_on_visibility_changed"]
 [connection signal="text_changed" from="ScreenContainer/LoadScreen/PageLabel" to="ScreenContainer/LoadScreen/PageLabel" method="_on_text_changed"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/SaveSlotsGrid" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageLabel" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/AutoPage" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage2" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage3" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage4" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage8" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage6" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage1" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage5" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/PreviousPage" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/QuickPage" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage9" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage7" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage4" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/AutoPage" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage1" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage6" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage3" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NextPage" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage9" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/PreviousPage" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage2" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/QuickPage" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage5" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/SaveSlotsGrid" method="_on_page_change"]
 [connection signal="visibility_changed" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/SaveSlotsGrid" method="_on_visibility_changed"]
 [connection signal="increment_page" from="ScreenContainer/LoadScreen/PageList/PreviousPage" to="ScreenContainer/LoadScreen/SaveSlotsGrid" method="_on_increment_page"]
 [connection signal="pressed" from="ScreenContainer/LoadScreen/PageList/PreviousPage" to="ScreenContainer/LoadScreen/PageList/PreviousPage" method="_on_pressed"]
