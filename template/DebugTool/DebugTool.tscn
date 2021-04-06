@@ -26,7 +26,6 @@ script/source = "extends PanelContainer
 export var stack_entry_blank:PackedScene
 
 var dialogue:Dialogue
-
 func _ready():
 	var _o = Agartha.connect(\"start_dialogue\", self, '_on_start_dialogue')
 	_o = Agartha.connect(\"scene_changed\", self, '_on_scene_changed')
@@ -36,7 +35,7 @@ func _process(_delta):
 	update_dialogue()
 
 func _on_scene_changed(scene_name):
-	$ExecInfo/SceneName/Value.text = scene_name
+	$VBoxContainer/ExecInfo/SceneName/Value.text = scene_name
 
 func _on_start_dialogue(_dialogue_name, _fragment_name):
 	call_deferred(\"get_dialogue\")
@@ -51,27 +50,27 @@ func get_dialogue():
 
 func update_dialogue(clear:bool=false):
 	if dialogue:
-		$ExecInfo/DialogueName/Value.text = dialogue.name
-		$ExecInfo/DefaultFragment/Value.text = dialogue.default_fragment
-		$ExecInfo/Autorun.pressed = dialogue.autorun
+		$VBoxContainer/ExecInfo/DialogueName/Value.text = dialogue.name
+		$VBoxContainer/ExecInfo/DefaultFragment/Value.text = dialogue.default_fragment
+		$VBoxContainer/ExecInfo/Autorun.pressed = dialogue.autorun
 		if clear:
 			clear_stack()
 			for i in dialogue.execution_stack.size():
 				var entry = stack_entry_blank.instance().init(i, dialogue.execution_stack[i])
-				$EntryList.add_child(entry)
+				$VBoxContainer/EntryList.add_child(entry)
 		else:
-			while $EntryList.get_children().size() < dialogue.execution_stack.size():
+			while $VBoxContainer/EntryList.get_children().size() < dialogue.execution_stack.size():
 				var entry = stack_entry_blank.instance()
-				$EntryList.add_child(entry)
-			while $EntryList.get_children().size() > dialogue.execution_stack.size():
-				$EntryList.remove_child($EntryList.get_children()[0])
+				$VBoxContainer/EntryList.add_child(entry)
+			while $VBoxContainer/EntryList.get_children().size() > dialogue.execution_stack.size():
+				$VBoxContainer/EntryList.remove_child($VBoxContainer/EntryList.get_children()[0])
 			for i in dialogue.execution_stack.size():
-				$EntryList.get_child(i).init(i, dialogue.execution_stack[i])
+				$VBoxContainer/EntryList.get_child(i).init(i, dialogue.execution_stack[i])
 
 
 func clear_stack():
-	for c in $EntryList.get_children():
-		$EntryList.remove_child(c)
+	for c in $VBoxContainer/EntryList.get_children():
+		$VBoxContainer/EntryList.remove_child(c)
 "
 
 [sub_resource type="StyleBoxFlat" id=4]
