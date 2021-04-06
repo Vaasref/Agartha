@@ -20,7 +20,7 @@ content_margin_bottom = 10.0
 bg_color = Color( 0, 0, 0, 0.2 )
 
 [sub_resource type="GDScript" id=3]
-script/source = "extends Panel
+script/source = "extends PanelContainer
 
 
 export var stack_entry_blank:PackedScene
