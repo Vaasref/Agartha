@@ -1,0 +1,62 @@
+[gd_scene load_steps=4 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Dialogue
+
+
+func test_fragment():
+	say(\"\", \"Dialogue 1.\")
+	step()
+	say(\"\", \"Extra step()\")
+	step()
+	say(\"\", \"Starting Dialogue 2.\")
+	step()
+	start_dialogue(\"Dialogue2\")
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Dialogue
+
+
+func test_fragment():
+	say(\"\", \"Dialogue 2.\")
+	step()
+	say(\"\", \"Calling second_test_fragement.\")
+	step()
+	call_fragment(\"second_test_fragment\")
+
+func second_test_fragment():
+	say(\"\", \"Starting Dialogue 3.\")
+	step()
+	start_dialogue(\"Dialogue3\")
+"
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Dialogue
+
+
+func test_fragment():
+	say(\"\", \"Dialogue 3.\\nStarting Dialogue 1.\")
+	step()
+	start_dialogue(\"Dialogue1\")
+"
+
+[node name="DialogueJumpTest" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Dialogue1" type="Node" parent="."]
+script = SubResource( 1 )
+default_fragment = "test_fragment"
+autorun = true
+
+[node name="Dialogue2" type="Node" parent="."]
+script = SubResource( 2 )
+default_fragment = "test_fragment"
+
+[node name="Dialogue3" type="Node" parent="."]
+script = SubResource( 3 )
+default_fragment = "test_fragment"

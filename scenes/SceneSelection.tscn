@@ -1,0 +1,57 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/DialogueJumpTest.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/ShowHideTest.tscn" type="PackedScene" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "tool
+extends Button
+
+export var scene:PackedScene setget _set_scene
+
+func _set_scene(value:PackedScene):
+	scene = value
+	if value:
+		text = value.resource_path.get_basename().get_file().capitalize()
+
+func _pressed():
+	self.call_deferred(\"change_scene\")
+	
+func change_scene():
+	if not Engine.editor_hint:
+		Agartha.StageManager.change_scene(scene.resource_path)
+"
+
+[node name="SceneSelection" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_left = 0.3
+anchor_top = 0.2
+anchor_right = 0.7
+anchor_bottom = 0.7
+custom_constants/separation = 9
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+margin_right = 512.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
+text = "Dialogue Jump Test"
+script = SubResource( 1 )
+scene = ExtResource( 1 )
+
+[node name="Button2" type="Button" parent="VBoxContainer"]
+margin_top = 39.0
+margin_right = 512.0
+margin_bottom = 69.0
+rect_min_size = Vector2( 0, 30 )
+text = "Show Hide Test"
+script = SubResource( 1 )
+scene = ExtResource( 2 )
