@@ -60,8 +60,9 @@ dialogues/actions_default_parameters/menu={
 
 }
 paths/scenes/scene_aliases={
-"TestScene0": "res://scenes/TestScene0.tscn",
-"TestScene1": "res://scenes/TestScene1.tscn"
+"DialogueJumpTest": "res://scenes/DialogueJumpTest.tscn",
+"SceneSelection": "res://scenes/SceneSelection.tscn",
+"ShowHideTest": "res://scenes/ShowHideTest.tscn"
 }
 saves/compatibility/compatibility_code="8950d"
 saves/compress_savefiles=false
