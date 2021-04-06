@@ -1,0 +1,59 @@
+[gd_scene load_steps=3 format=2]
+
+[sub_resource type="StyleBoxFlat" id=2]
+content_margin_left = 5.0
+content_margin_right = 5.0
+content_margin_top = 5.0
+content_margin_bottom = 2.0
+bg_color = Color( 0, 0, 0, 0.4 )
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends PanelContainer
+
+
+
+func init(entry_index, stack_entry):
+	$Container/EntryIndex.text = \"%02d\" % entry_index
+	if 'fragment_name' in stack_entry:
+		$Container/FragmentName.text = stack_entry.fragment_name
+	if 'step_counter' in stack_entry:
+		$Container/Step.text = \"%03d\" % stack_entry.step_counter
+	return self
+"
+
+[node name="StackEntry" type="PanelContainer"]
+margin_right = 384.0
+margin_bottom = 28.0
+mouse_filter = 2
+custom_styles/panel = SubResource( 2 )
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Container" type="HBoxContainer" parent="."]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 379.0
+margin_bottom = 26.0
+mouse_filter = 2
+
+[node name="EntryIndex" type="Label" parent="Container"]
+margin_top = 3.0
+margin_right = 16.0
+margin_bottom = 17.0
+text = "00"
+
+[node name="FragmentName" type="Label" parent="Container"]
+margin_left = 20.0
+margin_top = 3.0
+margin_right = 346.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+
+[node name="Step" type="Label" parent="Container"]
+margin_left = 350.0
+margin_top = 3.0
+margin_right = 374.0
+margin_bottom = 17.0
+text = "000"

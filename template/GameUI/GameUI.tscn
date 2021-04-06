@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://template/GameUI/MenuEntry.tscn" type="PackedScene" id=1]
+[ext_resource path="res://template/DebugTool/DebugTool.tscn" type="PackedScene" id=2]
 
-[sub_resource type="GDScript" id=4]
+[sub_resource type="GDScript" id=1]
 script/source = "extends VBoxContainer
 
 export var menu_entry:PackedScene
@@ -35,10 +36,10 @@ func remove_child(node):
 		.remove_child(node)
 "
 
-[sub_resource type="StyleBoxFlat" id=5]
+[sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0, 0, 0, 0.333333 )
 
-[sub_resource type="GDScript" id=6]
+[sub_resource type="GDScript" id=3]
 script/source = "extends PanelContainer
 
 
@@ -53,7 +54,7 @@ func _step():
 	self.visible = false
 "
 
-[sub_resource type="GDScript" id=7]
+[sub_resource type="GDScript" id=4]
 script/source = "extends Label
 
 
@@ -70,7 +71,7 @@ func _on_say(character, _text, _params):
 		self.visible = false
 "
 
-[sub_resource type="GDScript" id=8]
+[sub_resource type="GDScript" id=5]
 script/source = "extends RichTextLabel
 
 
@@ -82,7 +83,7 @@ func _on_say(_character, text, _params):
 	self.text = text
 "
 
-[sub_resource type="GDScript" id=9]
+[sub_resource type="GDScript" id=6]
 script/source = "extends Button
 
 
@@ -91,7 +92,7 @@ func _on_pressed():
 	Agartha.step()
 "
 
-[sub_resource type="GDScript" id=10]
+[sub_resource type="GDScript" id=7]
 script/source = "extends Button
 
 
@@ -100,8 +101,8 @@ func _on_pressed():
 	Agartha.Timeline.roll(1)
 "
 
-[sub_resource type="GDScript" id=11]
-script/source = "extends CheckButton
+[sub_resource type="GDScript" id=8]
+script/source = "extends BaseButton
 
 
 func _ready():
@@ -138,8 +139,9 @@ anchor_left = 0.2
 anchor_top = 0.15
 anchor_right = 0.8
 anchor_bottom = 0.7
+mouse_filter = 2
 alignment = 1
-script = SubResource( 4 )
+script = SubResource( 1 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_lock_": true,
@@ -152,8 +154,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_vertical = 0
-custom_styles/panel = SubResource( 5 )
-script = SubResource( 6 )
+mouse_filter = 2
+custom_styles/panel = SubResource( 2 )
+script = SubResource( 3 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_lock_": true,
@@ -163,6 +166,7 @@ __meta__ = {
 [node name="MarginContainer" type="MarginContainer" parent="DialogueLinePanel"]
 margin_right = 1280.0
 margin_bottom = 140.0
+mouse_filter = 2
 custom_constants/margin_right = 200
 custom_constants/margin_top = 20
 custom_constants/margin_left = 200
@@ -173,23 +177,27 @@ margin_left = 200.0
 margin_top = 20.0
 margin_right = 1080.0
 margin_bottom = 120.0
+mouse_filter = 2
 
 [node name="Speaker" type="Label" parent="DialogueLinePanel/MarginContainer/VBoxContainer"]
 visible = false
 margin_right = 1010.0
 margin_bottom = 14.0
 text = "Character"
-script = SubResource( 7 )
+script = SubResource( 4 )
 
 [node name="DialogueLine" type="RichTextLabel" parent="DialogueLinePanel/MarginContainer/VBoxContainer"]
 margin_right = 880.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 0, 100 )
-script = SubResource( 8 )
+script = SubResource( 5 )
+
+[node name="DebugTool" parent="." instance=ExtResource( 2 )]
 
 [node name="TestButtons" type="VBoxContainer" parent="."]
 margin_left = 50.0
 margin_top = 200.0
+mouse_filter = 2
 alignment = 1
 __meta__ = {
 "_edit_group_": true,
@@ -200,7 +208,7 @@ __meta__ = {
 margin_right = 106.0
 margin_bottom = 20.0
 text = "Step"
-script = SubResource( 9 )
+script = SubResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -210,7 +218,7 @@ margin_top = 24.0
 margin_right = 106.0
 margin_bottom = 44.0
 text = "Roll back"
-script = SubResource( 10 )
+script = SubResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -220,7 +228,7 @@ margin_top = 48.0
 margin_right = 106.0
 margin_bottom = 68.0
 text = "Roll forward"
-script = SubResource( 11 )
+script = SubResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -230,7 +238,7 @@ margin_top = 72.0
 margin_right = 106.0
 margin_bottom = 112.0
 text = "Skip"
-script = SubResource( 11 )
+script = SubResource( 8 )
 [connection signal="pressed" from="TestButtons/StepButton" to="TestButtons/StepButton" method="_on_pressed"]
 [connection signal="pressed" from="TestButtons/RollbackButton" to="TestButtons/RollbackButton" method="_on_pressed"]
 [connection signal="pressed" from="TestButtons/RollforwardButton" to="TestButtons/RollforwardButton" method="_on_pressed"]
