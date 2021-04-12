@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://template/DebugTool/StackEntry.tscn" type="PackedScene" id=1]
 
@@ -31,7 +31,47 @@ script/source = "extends SpinBox
 
 
 func _ready():
-	pass
+	update_value()
+
+func _step():
+	if visible:
+		update_value()
+
+func _restore(_state):
+	if visible:
+		update_value()
+
+func update_value():
+	self.value = Agartha.Store.stack_size_max
+
+
+func _on_value_changed(value):
+	Agartha.Store.stack_size_max = value
+"
+
+[sub_resource type="GDScript" id=8]
+script/source = "extends SpinBox
+
+
+func _ready():
+	update_value()
+
+func _step():
+	if visible:
+		update_value()
+
+func _restore(_state):
+	if visible:
+		update_value()
+
+func update_value():
+	self.min_value = 0
+	self.max_value = Agartha.Store.state_stack.size()-1
+	self.value = Agartha.Store.current_state_id
+
+
+func _on_value_changed(value):
+	Agartha.Timeline.roll(value-Agartha.Store.current_state_id)
 "
 
 [sub_resource type="GDScript" id=5]
@@ -198,7 +238,9 @@ content_margin_top = 10.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 1.41418
+margin_top = 1.41422
 margin_right = 1.41418
+margin_bottom = 1.41418
 mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -216,7 +258,7 @@ __meta__ = {
 [node name="DETButton" type="CheckBox" parent="ToolButtons"]
 margin_left = 978.0
 margin_right = 1159.0
-margin_bottom = 40.0
+margin_bottom = 30.0
 text = "Dialogue Execution Tool"
 flat = true
 script = SubResource( 1 )
@@ -225,7 +267,7 @@ tool_node_path = NodePath("../../ScrollContainer/HBoxContainer/DialogueExecTool"
 [node name="SBButton" type="CheckBox" parent="ToolButtons"]
 margin_left = 1163.0
 margin_right = 1280.0
-margin_bottom = 40.0
+margin_bottom = 30.0
 text = "Store Browser"
 flat = true
 script = SubResource( 1 )
@@ -257,6 +299,7 @@ __meta__ = {
 }
 
 [node name="StoreBrowser" type="PanelContainer" parent="ScrollContainer/HBoxContainer"]
+visible = false
 margin_right = 500.0
 margin_bottom = 432.0
 rect_min_size = Vector2( 500, 0 )
@@ -303,9 +346,14 @@ __meta__ = {
 }
 
 [node name="SpinBox" type="SpinBox" parent="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/StoreStackLength"]
+margin_left = 36.0
 margin_top = 18.0
-margin_right = 147.0
+margin_right = 110.0
 margin_bottom = 42.0
+size_flags_horizontal = 4
+min_value = 1.0
+value = 1.0
+allow_greater = true
 script = SubResource( 4 )
 
 [node name="CurrentState" type="VBoxContainer" parent="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo"]
@@ -322,9 +370,12 @@ __meta__ = {
 }
 
 [node name="SpinBox" type="SpinBox" parent="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/CurrentState"]
+margin_left = 4.0
 margin_top = 18.0
-margin_right = 83.0
+margin_right = 78.0
 margin_bottom = 42.0
+size_flags_horizontal = 4
+script = SubResource( 8 )
 
 [node name="Button" type="Button" parent="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer"]
 margin_top = 76.0
@@ -475,4 +526,6 @@ __meta__ = {
 [node name="StackEntry" parent="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer/EntryList" instance=ExtResource( 1 )]
 margin_right = 255.0
 margin_bottom = 21.0
+[connection signal="value_changed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/StoreStackLength/SpinBox" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/StoreStackLength/SpinBox" method="_on_value_changed"]
+[connection signal="value_changed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/CurrentState/SpinBox" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/CurrentState/SpinBox" method="_on_value_changed"]
 [connection signal="pressed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/Button" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/ScrollContainer/StoreTree" method="_on_pressed"]
