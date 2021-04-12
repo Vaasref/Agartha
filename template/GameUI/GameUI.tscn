@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://template/GameUI/MenuEntry.tscn" type="PackedScene" id=1]
 [ext_resource path="res://template/DebugTool/DebugTool.tscn" type="PackedScene" id=2]
@@ -88,8 +88,12 @@ script/source = "extends Button
 
 
 
-func _on_pressed():
+func _pressed():
 	Agartha.step()
+
+func _unhandled_input(event):
+	if event.is_action_pressed(\"agartha_step\"):
+		_pressed()
 "
 
 [sub_resource type="GDScript" id=7]
@@ -97,8 +101,25 @@ script/source = "extends Button
 
 
 
-func _on_pressed():
+func _pressed():
 	Agartha.Timeline.roll(1)
+
+func _unhandled_input(event):
+	if event.is_action_pressed(\"agartha_roll_back\"):
+		_pressed()
+"
+
+[sub_resource type="GDScript" id=10]
+script/source = "extends BaseButton
+
+
+
+func _pressed():
+	Agartha.Timeline.roll(-1)
+
+func _unhandled_input(event):
+	if event.is_action_pressed(\"agartha_roll_forward\"):
+		_pressed()
 "
 
 [sub_resource type="GDScript" id=8]
@@ -114,24 +135,39 @@ func connect_to_timeline():
 func _on_skip_change(active, _priority):
 	self.pressed = active
 
-func _on_pressed():
-	Agartha.Timeline.roll(-1)
-
-
-func _on_toggled(button_pressed):
+func _toggled(button_pressed):
 	if button_pressed:
 		Agartha.Timeline.start_skipping(0)
 	else:
 		Agartha.Timeline.end_skipping()
 	
+func _unhandled_input(event):
+	if event.is_action_pressed(\"agartha_skip_toggle\"):
+		_toggled(not self.pressed)
+	elif event.is_action_pressed(\"agartha_skip\"):
+		_toggled(true)
+	elif event.is_action_released(\"agartha_skip\"):
+		_toggled(false)
 "
 
 [sub_resource type="GDScript" id=9]
 script/source = "extends Button
 
 
+
 func _pressed():
 	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = true
+	pass
+"
+
+[sub_resource type="GDScript" id=11]
+script/source = "extends Button
+
+
+
+func _pressed():
+	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = true
+	get_tree().get_nodes_in_group(\"screen_container\")[0].current_tab = 2
 	pass
 "
 
@@ -204,7 +240,7 @@ script = SubResource( 5 )
 
 [node name="DebugTool" parent="." instance=ExtResource( 2 )]
 
-[node name="TestButtons" type="VBoxContainer" parent="."]
+[node name="ControlButtons" type="VBoxContainer" parent="."]
 margin_left = 50.0
 margin_top = 200.0
 mouse_filter = 2
@@ -214,49 +250,74 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="StepButton" type="Button" parent="TestButtons"]
+[node name="StepButton" type="Button" parent="ControlButtons"]
 margin_right = 106.0
 margin_bottom = 20.0
+focus_mode = 0
+enabled_focus_mode = 0
 text = "Step"
 script = SubResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RollbackButton" type="Button" parent="TestButtons"]
+[node name="RollbackButton" type="Button" parent="ControlButtons"]
 margin_top = 24.0
 margin_right = 106.0
 margin_bottom = 44.0
+focus_mode = 0
+enabled_focus_mode = 0
 text = "Roll back"
 script = SubResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RollforwardButton" type="Button" parent="TestButtons"]
+[node name="RollforwardButton" type="Button" parent="ControlButtons"]
 margin_top = 48.0
 margin_right = 106.0
 margin_bottom = 68.0
+focus_mode = 0
+enabled_focus_mode = 0
 text = "Roll forward"
-script = SubResource( 8 )
+script = SubResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SkipButton" type="CheckButton" parent="TestButtons"]
+[node name="SkipButton" type="CheckButton" parent="ControlButtons"]
 margin_top = 72.0
 margin_right = 106.0
 margin_bottom = 112.0
+focus_mode = 0
+enabled_focus_mode = 0
 text = "Skip"
 script = SubResource( 8 )
 
-[node name="Menu" type="Button" parent="TestButtons"]
+[node name="Menu" type="Button" parent="ControlButtons"]
+visible = false
 margin_top = 116.0
 margin_right = 106.0
 margin_bottom = 136.0
+focus_mode = 0
+enabled_focus_mode = 0
 text = "Menu"
 script = SubResource( 9 )
-[connection signal="pressed" from="TestButtons/StepButton" to="TestButtons/StepButton" method="_on_pressed"]
-[connection signal="pressed" from="TestButtons/RollbackButton" to="TestButtons/RollbackButton" method="_on_pressed"]
-[connection signal="pressed" from="TestButtons/RollforwardButton" to="TestButtons/RollforwardButton" method="_on_pressed"]
-[connection signal="toggled" from="TestButtons/SkipButton" to="TestButtons/SkipButton" method="_on_toggled"]
+
+[node name="Save" type="Button" parent="ControlButtons"]
+margin_top = 116.0
+margin_right = 106.0
+margin_bottom = 136.0
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Save"
+script = SubResource( 11 )
+
+[node name="Load" type="Button" parent="ControlButtons"]
+margin_top = 140.0
+margin_right = 106.0
+margin_bottom = 160.0
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Load"
+script = SubResource( 11 )
