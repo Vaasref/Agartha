@@ -199,6 +199,7 @@ script = SubResource( 4 )
 margin_right = 880.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 0, 100 )
+mouse_filter = 2
 script = SubResource( 5 )
 
 [node name="DebugTool" parent="." instance=ExtResource( 2 )]
