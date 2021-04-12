@@ -1,0 +1,118 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://addons/Agartha/fonts/Hack/Hack-Regular.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 0.533333 )
+
+[sub_resource type="DynamicFont" id=3]
+font_data = ExtResource( 2 )
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends RichTextLabel
+
+
+func _ready():
+	pass
+
+
+func _on_eval(input, output):
+	self.text = \"%s\\n%s\\n> %s\" % [self.text, input, output]
+
+"
+
+[sub_resource type="StyleBoxFlat" id=4]
+content_margin_left = 5.0
+content_margin_right = 5.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color( 0, 0, 0, 0.4 )
+border_width_left = 2
+border_width_top = 2
+border_color = Color( 0.219608, 0.368627, 0.164706, 1 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+content_margin_left = 5.0
+content_margin_right = 5.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color( 0, 0, 0, 0.4 )
+
+[sub_resource type="GDScript" id=6]
+script/source = "extends LineEdit
+
+onready var expr = Expression.new()
+
+signal eval(input, output)
+
+
+func _ready():
+	init_singletons()
+
+const singletons:Dictionary = {}
+
+func init_singletons():
+	for p in ProjectSettings.get_property_list():
+		if p.name.begins_with(\"autoload/\"):
+			var singleton = p.name.trim_prefix(\"autoload/\")
+			singletons[singleton] = get_node(\"/root/%s\" % singleton)
+	return self
+
+
+func _on_text_entered(new_text):
+	var error = expr.parse(new_text, singletons.keys())
+	if error != OK:
+		emit_signal(\"eval\", new_text, \"Error: %s\"%expr.get_error_text())
+		return
+	var result = expr.execute(singletons.values(), Agartha.store, true)
+	if not expr.has_execute_failed():
+		emit_signal(\"eval\", new_text, result)
+"
+
+[node name="Console" type="PanelContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VSplitContainer" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+margin_right = 1280.0
+margin_bottom = 679.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 5
+custom_constants/margin_top = 10
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/MarginContainer"]
+margin_left = 5.0
+margin_top = 10.0
+margin_right = 1275.0
+margin_bottom = 674.0
+size_flags_vertical = 3
+custom_fonts/normal_font = SubResource( 3 )
+custom_colors/default_color = Color( 0.862745, 0.862745, 0.862745, 1 )
+text = "If you don't know what to type here, that means you should probably not use the console."
+scroll_following = true
+script = SubResource( 2 )
+
+[node name="LineInput" type="LineEdit" parent="VBoxContainer"]
+margin_top = 691.0
+margin_right = 1280.0
+margin_bottom = 720.0
+custom_styles/focus = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+custom_fonts/font = SubResource( 3 )
+script = SubResource( 6 )
+[connection signal="eval" from="VBoxContainer/LineInput" to="VBoxContainer/MarginContainer/RichTextLabel" method="_on_eval"]
+[connection signal="text_entered" from="VBoxContainer/LineInput" to="VBoxContainer/LineInput" method="_on_text_entered"]

@@ -1,12 +1,16 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://template/DebugTool/StackEntry.tscn" type="PackedScene" id=1]
+[ext_resource path="res://template/DebugTool/Console/Console.tscn" type="PackedScene" id=2]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Button
 
 export var tool_node_path:NodePath
 onready var tool_node:Control = get_node(tool_node_path)
+
+func _ready():
+	_toggled(self.pressed)
 
 func _toggled(button_pressed):
 	tool_node.visible = button_pressed
@@ -259,8 +263,8 @@ __meta__ = {
 }
 
 [node name="DETButton" type="CheckBox" parent="ToolButtons"]
-margin_left = 978.0
-margin_right = 1159.0
+margin_left = 895.0
+margin_right = 1076.0
 margin_bottom = 30.0
 text = "Dialogue Execution Tool"
 flat = true
@@ -268,13 +272,22 @@ script = SubResource( 1 )
 tool_node_path = NodePath("../../ScrollContainer/HBoxContainer/DialogueExecTool")
 
 [node name="SBButton" type="CheckBox" parent="ToolButtons"]
-margin_left = 1163.0
-margin_right = 1280.0
+margin_left = 1080.0
+margin_right = 1197.0
 margin_bottom = 30.0
 text = "Store Browser"
 flat = true
 script = SubResource( 1 )
 tool_node_path = NodePath("../../ScrollContainer/HBoxContainer/StoreBrowser")
+
+[node name="ConButton" type="CheckBox" parent="ToolButtons"]
+margin_left = 1201.0
+margin_right = 1280.0
+margin_bottom = 30.0
+text = "Console"
+flat = true
+script = SubResource( 1 )
+tool_node_path = NodePath("../../Console")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 anchor_left = 1.0
@@ -529,6 +542,10 @@ __meta__ = {
 [node name="StackEntry" parent="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer/EntryList" instance=ExtResource( 1 )]
 margin_right = 255.0
 margin_bottom = 21.0
+
+[node name="Console" parent="." instance=ExtResource( 2 )]
+visible = false
+anchor_right = 0.5
 [connection signal="value_changed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/StoreStackLength/SpinBox" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/StoreStackLength/SpinBox" method="_on_value_changed"]
 [connection signal="value_changed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/CurrentState/SpinBox" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/CurrentState/SpinBox" method="_on_value_changed"]
 [connection signal="pressed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/Button" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/ScrollContainer/StoreTree" method="_on_pressed"]
