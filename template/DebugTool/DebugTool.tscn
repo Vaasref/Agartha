@@ -45,6 +45,10 @@ func _step():
 	if visible:
 		build_store_tree()
 
+func _restore(_state):
+	if visible:
+		build_store_tree()
+
 func _on_pressed():
 	build_store_tree()
 
@@ -93,7 +97,10 @@ func build_store_tree():
 	var s = Agartha.Store.state_stack
 	for i in s.size():
 		var state = create_item(state_stack)
-		state.set_text(0, \"%d\" % i)
+		if i == Agartha.Store.current_state_id:
+			state.set_text(0, \"%d  (current)\" % i)
+		else:
+			state.set_text(0, \"%d\" % i)
 		state.set_collapsed(true)
 		var pre_state = create_item(state)
 		var post_state = create_item(state)
