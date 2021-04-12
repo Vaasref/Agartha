@@ -211,20 +211,21 @@ func update_dialogue(clear:bool=false):
 		$VBoxContainer/ExecInfo/DefaultFragment/Value.text = dialogue.default_fragment
 		$VBoxContainer/ExecInfo/Autorun.pressed = dialogue.autorun
 		var entry_list = $VBoxContainer/EntryList
+		var tmp_exec_stack = dialogue.execution_stack.duplicate(true)
 		if clear:
 			clear_stack()
-			for i in dialogue.execution_stack.size():
-				var entry = stack_entry_blank.instance().init(i, dialogue.execution_stack[i])
+			for i in tmp_exec_stack.size():
+				var entry = stack_entry_blank.instance().init(i, tmp_exec_stack[i])
 				entry_list.add_child(entry)
 		else:
-			while entry_list.get_children().size() < dialogue.execution_stack.size():
+			while entry_list.get_children().size() < tmp_exec_stack.size():
 				var entry = stack_entry_blank.instance()
 				entry_list.add_child(entry)
-			while entry_list.get_children().size() > dialogue.execution_stack.size():
+			while entry_list.get_children().size() > tmp_exec_stack.size():
 				entry_list.remove_child(entry_list.get_children()[0])
-			for i in dialogue.execution_stack.size():
-				if entry_list.get_child_count() > i and entry_list.get_child(i):
-					entry_list.get_child(i).init(i, dialogue.execution_stack[i])
+			
+			for i in tmp_exec_stack.size():
+				entry_list.get_child(i).init(i, tmp_exec_stack[i])
 
 
 func clear_stack():
