@@ -210,25 +210,27 @@ func update_dialogue(clear:bool=false):
 		$VBoxContainer/ExecInfo/DialogueName/Value.text = dialogue.name
 		$VBoxContainer/ExecInfo/DefaultFragment/Value.text = dialogue.default_fragment
 		$VBoxContainer/ExecInfo/Autorun.pressed = dialogue.autorun
+		var entry_list = $VBoxContainer/EntryList
 		if clear:
 			clear_stack()
 			for i in dialogue.execution_stack.size():
 				var entry = stack_entry_blank.instance().init(i, dialogue.execution_stack[i])
-				$VBoxContainer/EntryList.add_child(entry)
+				entry_list.add_child(entry)
 		else:
-			while $VBoxContainer/EntryList.get_children().size() < dialogue.execution_stack.size():
+			while entry_list.get_children().size() < dialogue.execution_stack.size():
 				var entry = stack_entry_blank.instance()
-				$VBoxContainer/EntryList.add_child(entry)
-			while $VBoxContainer/EntryList.get_children().size() > dialogue.execution_stack.size():
-				$VBoxContainer/EntryList.remove_child($VBoxContainer/EntryList.get_children()[0])
+				entry_list.add_child(entry)
+			while entry_list.get_children().size() > dialogue.execution_stack.size():
+				entry_list.remove_child(entry_list.get_children()[0])
 			for i in dialogue.execution_stack.size():
-				if $VBoxContainer/EntryList.get_child(i):
-					$VBoxContainer/EntryList.get_child(i).init(i, dialogue.execution_stack[i])
+				if entry_list.get_child_count() > i and entry_list.get_child(i):
+					entry_list.get_child(i).init(i, dialogue.execution_stack[i])
 
 
 func clear_stack():
-	for c in $VBoxContainer/EntryList.get_children():
-		$VBoxContainer/EntryList.remove_child(c)
+	var entry_list = $VBoxContainer/EntryList
+	for c in entry_list.get_children():
+		entry_list.remove_child(c)
 "
 
 [sub_resource type="StyleBoxEmpty" id=7]
