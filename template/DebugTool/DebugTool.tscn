@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://template/DebugTool/StackEntry.tscn" type="PackedScene" id=1]
 [ext_resource path="res://template/DebugTool/Console/Console.tscn" type="PackedScene" id=2]
@@ -53,7 +53,7 @@ func _on_value_changed(value):
 	Agartha.Store.stack_size_max = value
 "
 
-[sub_resource type="GDScript" id=8]
+[sub_resource type="GDScript" id=5]
 script/source = "extends SpinBox
 
 
@@ -78,7 +78,7 @@ func _on_value_changed(value):
 	Agartha.Timeline.roll(value-Agartha.Store.current_state_id)
 "
 
-[sub_resource type="GDScript" id=5]
+[sub_resource type="GDScript" id=6]
 script/source = "extends Tree
 
 
@@ -180,7 +180,7 @@ func build_recursive_item(parent_item, object):
 	
 "
 
-[sub_resource type="GDScript" id=6]
+[sub_resource type="GDScript" id=7]
 script/source = "extends PanelContainer
 
 
@@ -238,18 +238,30 @@ func clear_stack():
 		entry_list.remove_child(c)
 "
 
-[sub_resource type="StyleBoxEmpty" id=7]
+[sub_resource type="GDScript" id=8]
+script/source = "extends OptionButton
+
+
+func _ready():
+	add_item(\"Pre-step\")
+	add_item(\"Post-step\")
+	select(Agartha.Timeline.roll_mode)
+
+func _on_item_selected(index):
+	Agartha.Timeline.roll_mode = index
+"
+
+[sub_resource type="StyleBoxEmpty" id=9]
 content_margin_top = 10.0
 
 [node name="DebugTool" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 1.41418
-margin_top = 1.41422
-margin_right = 1.41418
-margin_bottom = 1.41418
+margin_top = 0.665074
+margin_bottom = 0.665039
 mouse_filter = 2
 __meta__ = {
+"_edit_lock_": true,
 "_edit_use_anchors_": false
 }
 
@@ -259,6 +271,7 @@ margin_bottom = 30.0
 mouse_filter = 2
 alignment = 2
 __meta__ = {
+"_edit_lock_": true,
 "_edit_use_anchors_": false
 }
 
@@ -304,6 +317,7 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer"]
+visible = false
 margin_right = 500.0
 margin_bottom = 432.0
 mouse_filter = 2
@@ -391,7 +405,7 @@ margin_top = 18.0
 margin_right = 78.0
 margin_bottom = 42.0
 size_flags_horizontal = 4
-script = SubResource( 8 )
+script = SubResource( 5 )
 
 [node name="Button" type="Button" parent="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer"]
 margin_top = 76.0
@@ -413,23 +427,22 @@ rect_clip_content = false
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 2
-script = SubResource( 5 )
+script = SubResource( 6 )
 
 [node name="DialogueExecTool" type="PanelContainer" parent="ScrollContainer/HBoxContainer"]
-visible = false
 margin_left = 225.0
 margin_right = 500.0
-margin_bottom = 432.0
+margin_bottom = 431.0
 mouse_filter = 2
 custom_styles/panel = SubResource( 2 )
-script = SubResource( 6 )
+script = SubResource( 7 )
 stack_entry_blank = ExtResource( 1 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/HBoxContainer/DialogueExecTool"]
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 265.0
-margin_bottom = 422.0
+margin_bottom = 421.0
 custom_constants/separation = 5
 __meta__ = {
 "_edit_use_anchors_": false
@@ -444,7 +457,7 @@ text = "Dialogue Execution Tool"
 [node name="ExecInfo" type="GridContainer" parent="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer"]
 margin_top = 29.0
 margin_right = 255.0
-margin_bottom = 123.0
+margin_bottom = 171.0
 custom_constants/vseparation = 10
 custom_constants/hseparation = 10
 columns = 2
@@ -519,20 +532,36 @@ custom_colors/font_color_disabled = Color( 1, 1, 1, 1 )
 disabled = true
 text = "Autorun"
 
+[node name="RollMode" type="VBoxContainer" parent="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer/ExecInfo"]
+margin_top = 104.0
+margin_right = 114.0
+margin_bottom = 142.0
+
+[node name="Label" type="Label" parent="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer/ExecInfo/RollMode"]
+margin_right = 114.0
+margin_bottom = 14.0
+text = "Roll Mode:"
+
+[node name="OptionButton" type="OptionButton" parent="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer/ExecInfo/RollMode"]
+margin_top = 18.0
+margin_right = 114.0
+margin_bottom = 38.0
+script = SubResource( 8 )
+
 [node name="Label" type="Label" parent="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer"]
-margin_top = 128.0
+margin_top = 176.0
 margin_right = 255.0
-margin_bottom = 152.0
-custom_styles/normal = SubResource( 7 )
+margin_bottom = 200.0
+custom_styles/normal = SubResource( 9 )
 text = "Execution Stack:"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="EntryList" type="VBoxContainer" parent="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer"]
-margin_top = 157.0
+margin_top = 205.0
 margin_right = 255.0
-margin_bottom = 178.0
+margin_bottom = 226.0
 rect_clip_content = true
 mouse_filter = 2
 __meta__ = {
@@ -549,3 +578,4 @@ anchor_right = 0.5
 [connection signal="value_changed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/StoreStackLength/SpinBox" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/StoreStackLength/SpinBox" method="_on_value_changed"]
 [connection signal="value_changed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/CurrentState/SpinBox" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/CurrentState/SpinBox" method="_on_value_changed"]
 [connection signal="pressed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/Button" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/ScrollContainer/StoreTree" method="_on_pressed"]
+[connection signal="item_selected" from="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer/ExecInfo/RollMode/OptionButton" to="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer/ExecInfo/RollMode/OptionButton" method="_on_item_selected"]
