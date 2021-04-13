@@ -28,28 +28,28 @@ vertical = true
 
 [sub_resource type="ButtonGroup" id=5]
 
-[sub_resource type="OpenSimplexNoise" id=7]
+[sub_resource type="OpenSimplexNoise" id=6]
 
-[sub_resource type="NoiseTexture" id=8]
+[sub_resource type="NoiseTexture" id=7]
 width = 256
 height = 144
-noise = SubResource( 7 )
+noise = SubResource( 6 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=8]
 size = 22
 outline_size = 1
 outline_color = Color( 0, 0, 0, 0.333333 )
 use_filter = true
 font_data = ExtResource( 2 )
 
-[sub_resource type="StyleBoxEmpty" id=10]
+[sub_resource type="StyleBoxEmpty" id=9]
 
-[sub_resource type="DynamicFont" id=11]
+[sub_resource type="DynamicFont" id=10]
 size = 17
 use_filter = true
 font_data = ExtResource( 1 )
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="DynamicFont" id=11]
 size = 17
 use_filter = true
 font_data = ExtResource( 1 )
@@ -77,7 +77,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_bottom = -70.0
 mouse_filter = 2
-texture = SubResource( 8 )
+texture = SubResource( 7 )
 expand = true
 stretch_mode = 6
 __meta__ = {
@@ -90,7 +90,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_vertical = 0
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 custom_colors/font_color = Color( 0.890196, 0.223529, 0.152941, 1 )
 text = "Incompatible"
 align = 1
@@ -115,10 +115,10 @@ __meta__ = {
 margin_top = 9.0
 margin_right = 1280.0
 margin_bottom = 33.0
-custom_styles/read_only = SubResource( 10 )
-custom_styles/focus = SubResource( 10 )
-custom_styles/normal = SubResource( 10 )
-custom_fonts/font = SubResource( 11 )
+custom_styles/read_only = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 10 )
 custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
 align = 1
 placeholder_text = "Untitled"
@@ -127,7 +127,7 @@ placeholder_text = "Untitled"
 margin_top = 37.0
 margin_right = 1280.0
 margin_bottom = 61.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 11 )
 text = "01/01/2021 01:01"
 align = 1
 valign = 1

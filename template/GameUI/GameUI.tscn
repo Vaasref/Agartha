@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://template/GameUI/MenuEntry.tscn" type="PackedScene" id=1]
 [ext_resource path="res://template/DebugTool/DebugTool.tscn" type="PackedScene" id=2]
@@ -109,7 +109,7 @@ func _unhandled_input(event):
 		_pressed()
 "
 
-[sub_resource type="GDScript" id=10]
+[sub_resource type="GDScript" id=8]
 script/source = "extends BaseButton
 
 
@@ -122,7 +122,7 @@ func _unhandled_input(event):
 		_pressed()
 "
 
-[sub_resource type="GDScript" id=8]
+[sub_resource type="GDScript" id=9]
 script/source = "extends BaseButton
 
 
@@ -150,7 +150,7 @@ func _unhandled_input(event):
 		_toggled(false)
 "
 
-[sub_resource type="GDScript" id=9]
+[sub_resource type="GDScript" id=10]
 script/source = "extends Button
 
 
@@ -167,8 +167,49 @@ script/source = "extends Button
 
 func _pressed():
 	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = true
+	get_tree().get_nodes_in_group(\"screen_container\")[0].current_tab = 1
+	pass
+
+func _unhandled_input(event):
+	if event.is_action_pressed(\"agartha_return\"):
+		_pressed()
+"
+
+[sub_resource type="GDScript" id=12]
+script/source = "extends Button
+
+
+
+func _pressed():
+	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = true
 	get_tree().get_nodes_in_group(\"screen_container\")[0].current_tab = 2
 	pass
+"
+
+[sub_resource type="GDScript" id=13]
+script/source = "extends Button
+
+
+
+func _pressed():
+	Agartha.Saver.quick_save()
+
+func _unhandled_input(event):
+	if event.is_action_pressed(\"agartha_quick_save\"):
+		_pressed()
+"
+
+[sub_resource type="GDScript" id=14]
+script/source = "extends Button
+
+
+
+func _pressed():
+	Agartha.Saver.quick_load()
+
+func _unhandled_input(event):
+	if event.is_action_pressed(\"agartha_quick_load\"):
+		_pressed()
 "
 
 [node name="GameUI" type="Control"]
@@ -280,7 +321,7 @@ margin_bottom = 68.0
 focus_mode = 0
 enabled_focus_mode = 0
 text = "Roll forward"
-script = SubResource( 10 )
+script = SubResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -292,7 +333,7 @@ margin_bottom = 112.0
 focus_mode = 0
 enabled_focus_mode = 0
 text = "Skip"
-script = SubResource( 8 )
+script = SubResource( 9 )
 
 [node name="Menu" type="Button" parent="ControlButtons"]
 visible = false
@@ -302,7 +343,7 @@ margin_bottom = 136.0
 focus_mode = 0
 enabled_focus_mode = 0
 text = "Menu"
-script = SubResource( 9 )
+script = SubResource( 10 )
 
 [node name="Save" type="Button" parent="ControlButtons"]
 margin_top = 116.0
@@ -320,6 +361,29 @@ margin_bottom = 160.0
 focus_mode = 0
 enabled_focus_mode = 0
 text = "Load"
-script = SubResource( 11 )
+script = SubResource( 12 )
+
+[node name="QuickSave" type="Button" parent="ControlButtons"]
+margin_top = 164.0
+margin_right = 106.0
+margin_bottom = 184.0
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Q. Save"
+script = SubResource( 13 )
+
+[node name="QuickLoad" type="Button" parent="ControlButtons"]
+margin_top = 188.0
+margin_right = 106.0
+margin_bottom = 208.0
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Q. Load"
+script = SubResource( 14 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="DebugTool" parent="." instance=ExtResource( 2 )]
+margin_left = 0.41418
+margin_right = 0.414185

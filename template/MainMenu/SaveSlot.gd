@@ -4,24 +4,23 @@ class_name SaveSlot
 
 export var image_background_color:Color = Color.gray
 var save:Resource = null
-var path
+var save_filename
 var save_mode
 
 const date_format:String = "{day}/{month}/{year} {hour}:{minute}"
 
-signal saved()
-
-func init(_path, _save, error, _save_mode):
-	path = _path
+func init(_save_filename, _save, _save_mode):
+	save_filename = _save_filename
 	save_mode = _save_mode
-	if _save and _save is StoreSave:
-		save = _save
-		if error and error == Agartha.Store.COMPATIBILITY_ERROR.DIFF_SCRIPT_COMP_CODE:
+	save = _save
+	var error = Agartha.Saver.check_save_compatibility(save, false)
+	if save and save is StoreSave:
+		if error and error == Agartha.Saver.COMPATIBILITY_ERROR.DIFF_SCRIPT_COMP_CODE:
 			init_default_screenshot()
 			$Labels/Name.visible = false
 			$Labels/Name.editable = false
 			var file:File = File.new()
-			init_date(OS.get_datetime_from_unix_time(file.get_modified_time(path)))
+			init_date(OS.get_datetime_from_unix_time(file.get_modified_time(Agartha.Saver.get_save_path(save_filename))))
 		else:
 			$Screenshot.texture = save.get_screenshot_texture()
 			$Labels/Name.text = save.name
@@ -58,13 +57,8 @@ func init_date(date:Dictionary):
 var name_changed = false
 
 func _on_name_entered(new_text):
-	if save:
-		save.name = new_text
-		var flag = 0
-		if Agartha.Settings.get("agartha/saves/compress_savefiles"):
-			flag = ResourceSaver.FLAG_COMPRESS
-		var _o = ResourceSaver.save(path, save, flag)
-		emit_signal("saved")
+	if save and name_changed:
+		Agartha.Saver.rename(save, new_text)
 	else:
 		_on_pressed()
 	if self.is_inside_tree():
@@ -82,11 +76,10 @@ func _on_name_edit_exited():
 
 func _on_pressed():
 	if save_mode:
-		Agartha.Store.save_store(path.get_file(), $Labels/Name.text)
-		emit_signal("saved")
+		Agartha.Saver.save(save_filename, $Labels/Name.text)
 	else:
-		Agartha.Store.load_store(save)
-		#print("Loading save names '%s' at path %s" % [$Labels/Name.text, path])
+		Agartha.Saver.load(save)
+		Agartha.get_tree().get_nodes_in_group("main_menu")[0].visible = false
 
 
 func _on_mouse_entered():
