@@ -136,7 +136,6 @@ __meta__ = {
 }
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
-[connection signal="pressed" from="." to="." method="_on_pressed"]
 [connection signal="focus_exited" from="Labels/Name" to="." method="_on_name_edit_exited"]
 [connection signal="text_changed" from="Labels/Name" to="." method="_on_name_changed"]
 [connection signal="text_entered" from="Labels/Name" to="." method="_on_name_entered"]

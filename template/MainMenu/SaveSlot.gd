@@ -60,7 +60,7 @@ func _on_name_entered(new_text):
 	if save and name_changed:
 		Agartha.Saver.rename(save, new_text)
 	else:
-		_on_pressed()
+		_pressed()
 	if self.is_inside_tree():
 		$Labels/Name.release_focus()
 
@@ -74,7 +74,7 @@ func _on_name_edit_exited():
 		_on_name_entered($Labels/Name.text)
 
 
-func _on_pressed():
+func _pressed():
 	if save_mode:
 		Agartha.Saver.save(save_filename, $Labels/Name.text)
 	else:

@@ -1,10 +1,24 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://template/MainMenu/SideMenuTheme.tres" type="Theme" id=1]
 [ext_resource path="res://addons/Agartha/fonts/NotoSans/NotoSans-Regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://addons/Agartha/fonts/NotoSans/NotoSans-Bold.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://addons/Agartha/icon.svg" type="Texture" id=4]
 [ext_resource path="res://template/MainMenu/SaveSlot.tscn" type="PackedScene" id=5]
+
+[sub_resource type="GDScript" id=31]
+script/source = "extends Control
+
+signal menu_opened(context)# 0: main menu, 1:game started
+
+
+func _on_visibility_changed():
+	if visible:
+		if not Agartha.stage or Agartha.stage.get_child_count() == 0:
+			emit_signal(\"menu_opened\", 0)
+		else:
+			emit_signal(\"menu_opened\", 1)
+"
 
 [sub_resource type="DynamicFont" id=1]
 size = 35
@@ -56,25 +70,99 @@ func _on_screen_changed(tab):
 [sub_resource type="GDScript" id=6]
 script/source = "extends Button
 
+func _pressed():
+	Agartha.StageManager.change_scene(\"SceneSelection\")# Change that scene to your first scene.
+	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = false
+
+
+func _on_menu_opened(context):
+	self.visible = context == 0
+"
+
+[sub_resource type="GDScript" id=30]
+script/source = "extends Button
+
+var save_to_load = null
+
+
+func _on_menu_opened(context):
+	if context == 0:
+		self.visible = true
+		update_last_save()
+		if save_to_load:
+			self.disabled = false
+		else:
+			self.disabled = true
+	else:
+		self.visible = false
 
 func _pressed():
+	Agartha.Saver.load(save_to_load)
 	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = false
+
+
+func update_last_save():
+	var latest_save_path = Agartha.Persistent.get_value(\"_latest_save\")
+	var latest_save = null
+	if latest_save_path:
+		latest_save_path = Agartha.Saver.get_save_path(latest_save_path)
+		if ResourceLoader.exists(latest_save_path):
+			latest_save = ResourceLoader.load(latest_save_path, \"Resource\", true) as StoreSave
+			if Agartha.Saver.check_save_compatibility(latest_save, false) != Agartha.Saver.COMPATIBILITY_ERROR.NO_ERROR:
+				latest_save = null
+		
+		
+	var last_auto_save_path = Agartha.Saver.get_save_path(\"auto_0\")
+	var last_auto_save = null
+	if ResourceLoader.exists(last_auto_save_path):
+		last_auto_save = ResourceLoader.load(last_auto_save_path, \"Resource\", true) as StoreSave
+		if Agartha.Saver.check_save_compatibility(last_auto_save, false) != Agartha.Saver.COMPATIBILITY_ERROR.NO_ERROR:
+			last_auto_save = null
+	
+	if latest_save:
+		save_to_load = latest_save_path
+	if last_auto_save:
+		if save_to_load:
+			if save_to_load.date < last_auto_save.date:
+				save_to_load = last_auto_save_path
+		else:
+			save_to_load = last_auto_save_path
 "
 
 [sub_resource type="GDScript" id=7]
 script/source = "extends Button
 
 
-func _on_pressed():
+func _pressed():
 	get_tree().get_nodes_in_group(\"screen_container\")[0].current_tab = 1
+
+
+func _on_menu_opened(context):
+	self.visible = context == 1
 "
 
 [sub_resource type="GDScript" id=8]
 script/source = "extends Button
 
 
-func _on_pressed():
+func _pressed():
 	get_tree().get_nodes_in_group(\"screen_container\")[0].current_tab = 2
+"
+
+[sub_resource type="GDScript" id=32]
+script/source = "extends Button
+
+func _ready():
+	self.visible = false
+
+func _pressed():
+	Agartha.StageManager.change_scene(null)
+	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = false
+	get_tree().get_nodes_in_group(\"screen_container\")[0].current_tab = 0
+	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = true
+
+func _on_menu_opened(context):
+	self.visible = context == 1
 "
 
 [sub_resource type="GDScript" id=9]
@@ -83,12 +171,20 @@ script/source = "extends Button
 export var mode:int = 0
 
 
-func _on_pressed():
+func _pressed():
 	match mode:
 		1:
 			get_tree().get_nodes_in_group(\"main_menu\")[0].visible = false
 		_:
 			get_tree().get_nodes_in_group(\"screen_container\")[0].current_tab = 0
+
+
+func _on_menu_opened(context):
+	if context == 1:
+		self.visible = true
+		mode = 1
+	else:
+		mode = 0
 "
 
 [sub_resource type="StyleBoxEmpty" id=10]
@@ -365,6 +461,7 @@ func _on_page_change(page):
 ]]
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = SubResource( 31 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -434,9 +531,9 @@ __meta__ = {
 }
 
 [node name="StartButton" type="Button" parent="SideMenu/ScreenList"]
-margin_top = 257.0
+margin_top = 239.0
 margin_right = 279.0
-margin_bottom = 288.0
+margin_bottom = 270.0
 focus_mode = 0
 enabled_focus_mode = 0
 group = SubResource( 5 )
@@ -446,20 +543,21 @@ align = 0
 script = SubResource( 6 )
 
 [node name="ContinueButton" type="Button" parent="SideMenu/ScreenList"]
-margin_top = 292.0
+margin_top = 274.0
 margin_right = 279.0
-margin_bottom = 323.0
+margin_bottom = 305.0
 disabled = true
 enabled_focus_mode = 0
 group = SubResource( 5 )
 text = "Continue"
 flat = true
 align = 0
+script = SubResource( 30 )
 
 [node name="SaveButton" type="Button" parent="SideMenu/ScreenList"]
-margin_top = 327.0
+margin_top = 309.0
 margin_right = 279.0
-margin_bottom = 358.0
+margin_bottom = 340.0
 focus_mode = 0
 toggle_mode = true
 enabled_focus_mode = 0
@@ -470,9 +568,9 @@ align = 0
 script = SubResource( 7 )
 
 [node name="LoadButton" type="Button" parent="SideMenu/ScreenList"]
-margin_top = 362.0
+margin_top = 344.0
 margin_right = 279.0
-margin_bottom = 393.0
+margin_bottom = 375.0
 focus_mode = 0
 toggle_mode = true
 enabled_focus_mode = 0
@@ -483,9 +581,9 @@ align = 0
 script = SubResource( 8 )
 
 [node name="PreferencesButton" type="Button" parent="SideMenu/ScreenList"]
-margin_top = 397.0
+margin_top = 379.0
 margin_right = 279.0
-margin_bottom = 428.0
+margin_bottom = 410.0
 focus_mode = 0
 toggle_mode = true
 enabled_focus_mode = 0
@@ -494,10 +592,22 @@ text = "Preferences"
 flat = true
 align = 0
 
-[node name="QuitButton" type="Button" parent="SideMenu/ScreenList"]
-margin_top = 432.0
+[node name="MainMenuButton" type="Button" parent="SideMenu/ScreenList"]
+margin_top = 414.0
 margin_right = 279.0
-margin_bottom = 463.0
+margin_bottom = 445.0
+focus_mode = 0
+enabled_focus_mode = 0
+group = SubResource( 5 )
+text = "Main Menu"
+flat = true
+align = 0
+script = SubResource( 32 )
+
+[node name="QuitButton" type="Button" parent="SideMenu/ScreenList"]
+margin_top = 449.0
+margin_right = 279.0
+margin_bottom = 480.0
 focus_mode = 0
 enabled_focus_mode = 0
 group = SubResource( 5 )
@@ -965,9 +1075,12 @@ text = ">"
 script = SubResource( 28 )
 page_increment = 1
 page_number = 1
-[connection signal="pressed" from="SideMenu/ScreenList/SaveButton" to="SideMenu/ScreenList/SaveButton" method="_on_pressed"]
-[connection signal="pressed" from="SideMenu/ScreenList/LoadButton" to="SideMenu/ScreenList/LoadButton" method="_on_pressed"]
-[connection signal="pressed" from="SideMenu/ReturnButton" to="SideMenu/ReturnButton" method="_on_pressed"]
+[connection signal="menu_opened" from="." to="SideMenu/ReturnButton" method="_on_menu_opened"]
+[connection signal="menu_opened" from="." to="SideMenu/ScreenList/StartButton" method="_on_menu_opened"]
+[connection signal="menu_opened" from="." to="SideMenu/ScreenList/SaveButton" method="_on_menu_opened"]
+[connection signal="menu_opened" from="." to="SideMenu/ScreenList/ContinueButton" method="_on_menu_opened"]
+[connection signal="menu_opened" from="." to="SideMenu/ScreenList/MainMenuButton" method="_on_menu_opened"]
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
 [connection signal="tab_changed" from="ScreenContainer" to="SideMenu/ScreenTitle" method="_on_screen_changed"]
 [connection signal="tab_changed" from="ScreenContainer" to="SideMenu/SeparationBar" method="_on_screen_changed"]
 [connection signal="visibility_changed" from="ScreenContainer/TitleScreen" to="ScreenContainer/TitleScreen" method="_on_visibility_changed"]
