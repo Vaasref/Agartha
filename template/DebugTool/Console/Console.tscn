@@ -172,6 +172,7 @@ focus_neighbour_bottom = NodePath(".")
 custom_styles/focus = SubResource( 4 )
 custom_styles/normal = SubResource( 5 )
 custom_fonts/font = SubResource( 7 )
+context_menu_enabled = false
 script = SubResource( 6 )
 [connection signal="eval" from="VBoxContainer/VBoxContainer/LineInput" to="VBoxContainer/MarginContainer/RichTextLabel" method="_on_eval"]
 [connection signal="gui_input" from="VBoxContainer/VBoxContainer/LineInput" to="VBoxContainer/VBoxContainer/LineInput" method="_on_gui_input"]

@@ -121,6 +121,7 @@ custom_styles/normal = SubResource( 9 )
 custom_fonts/font = SubResource( 10 )
 custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
 align = 1
+context_menu_enabled = false
 placeholder_text = "Untitled"
 
 [node name="Date" type="Label" parent="Labels"]
