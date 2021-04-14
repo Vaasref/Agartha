@@ -6,6 +6,8 @@ script/source = "extends Dialogue
 
 func test_fragment():
 	shard(\"test_show_hide\")
+	start_dialogue(\"\", \"\", \"SceneSelection\")
+	
 "
 
 [node name="ShowHideTest" type="Control"]
@@ -45,6 +47,9 @@ margin_top = 150.346
 margin_right = 329.782
 margin_bottom = 190.346
 color = Color( 0.556863, 0.0313726, 0.0313726, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Green" type="ColorRect" parent="." groups=[
 "# $",

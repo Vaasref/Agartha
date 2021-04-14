@@ -1,0 +1,88 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Dialogue
+
+var button_result:int = 0
+
+func _on_LeftButton_pressed():
+	button_result = 1
+	Agartha.step()
+
+
+func _on_RightButton_pressed():
+	button_result = 2
+	Agartha.step()
+
+
+func test_fragment():
+	shard(\"test_menu_branching_0\")
+	if cond(button_result == 1):
+		shard(\"test_menu_branching_0_left\")
+	elif cond(button_result == 2):
+		shard(\"test_menu_branching_0_right\")
+	else:
+		shard(\"test_menu_branching_0_none\")
+	
+	shard(\"test_menu_branching_1\")
+	
+	say(\"\", \"Chose an option.\")
+	var result = menu([\"Option A\", \"Option B\"])
+	
+	if cond(result == 0):
+		shard(\"test_menu_branching_1_a\")
+	else:
+		shard(\"test_menu_branching_1_b\")
+		
+	shard(\"test_menu_branching_2\")
+	
+	self.start_dialogue(\"\", \"\", \"SceneSelection\")
+"
+
+[node name="MenuAndBranchingTest" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TestDialogue" type="Node" parent="."]
+script = SubResource( 1 )
+default_fragment = "test_fragment"
+auto_start = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.304
+anchor_right = 0.5
+anchor_bottom = 0.304
+margin_bottom = 30.0
+grow_horizontal = 2
+mouse_filter = 2
+custom_constants/separation = 50
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LeftButton" type="Button" parent="HBoxContainer" groups=[
+"# button left",
+"tagged",
+]]
+visible = false
+margin_right = 36.0
+margin_bottom = 30.0
+text = "Left"
+
+[node name="RightButton" type="Button" parent="HBoxContainer" groups=[
+"# button right",
+"tagged",
+]]
+visible = false
+margin_left = 43.0
+margin_right = 87.0
+margin_bottom = 30.0
+text = "Right"
+[connection signal="pressed" from="HBoxContainer/LeftButton" to="TestDialogue" method="_on_LeftButton_pressed"]
+[connection signal="pressed" from="HBoxContainer/RightButton" to="TestDialogue" method="_on_RightButton_pressed"]

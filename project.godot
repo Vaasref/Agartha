@@ -61,11 +61,21 @@ dialogues/actions_default_parameters/menu={
 }
 paths/scenes/scene_aliases={
 "DialogueJumpTest": "res://scenes/DialogueJumpTest.tscn",
+"MenuAndBranchingTest": "res://scenes/MenuAndBranchingTest.tscn",
 "SceneSelection": "res://scenes/SceneSelection.tscn",
 "ShowHideTest": "res://scenes/ShowHideTest.tscn"
 }
 saves/compatibility/compatibility_code="8950d"
 saves/compress_savefiles=false
+dialogues/actions_default_parameters/show={
+
+}
+dialogues/actions_default_parameters/hide={
+
+}
+dialogues/actions_default_parameters/play={
+
+}
 
 [application]
 
