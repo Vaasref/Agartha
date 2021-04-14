@@ -180,11 +180,18 @@ func _pressed():
 
 
 func _on_menu_opened(context):
+	$Timer.start()#This timer prevents this button to trigger at the same time the menu is shown.
 	if context == 1:
 		self.visible = true
 		mode = 1
 	else:
 		mode = 0
+
+func _process(_delta):
+	if is_visible_in_tree() and $Timer.time_left == 0:
+		if Input.is_action_just_pressed(\"agartha_return\"):
+			_pressed()
+	pass
 "
 
 [sub_resource type="StyleBoxEmpty" id=10]
@@ -635,6 +642,10 @@ script = SubResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Timer" type="Timer" parent="SideMenu/ReturnButton"]
+wait_time = 0.05
+one_shot = true
 
 [node name="ScreenContainer" type="TabContainer" parent="." groups=[
 "screen_container",
