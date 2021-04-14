@@ -5,19 +5,20 @@
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 0.533333 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=7]
 font_data = ExtResource( 2 )
 
-[sub_resource type="GDScript" id=2]
+[sub_resource type="GDScript" id=3]
 script/source = "extends RichTextLabel
 
 
 func _ready():
-	pass
+	self.text = Agartha.Persistent.get_value(\"_console_output_history\", \"\")
 
 
-func _on_eval(input, output):
-	self.text = \"%s\\n%s\\n> %s\" % [self.text, input, output]
+func _on_eval(_input, _output):
+	self.text = Agartha.Persistent.get_value(\"_console_output_history\", \"\")
+	
 
 "
 
@@ -45,13 +46,21 @@ onready var expr = Expression.new()
 
 signal eval(input, output)
 
+var context
 
 func _ready():
 	init_singletons()
+	context = Agartha.store
+	pass
+
+func _store(state):
+	#Adding console history to save is quite useful when trying to pinpoint why a dishonest player is encountering bugs.
+	state.set(\"_console_history\", [Agartha.Persistent.get_value(\"_console_output_history\", \"\"), Agartha.Persistent.get_value(\"_console_input_history\", [])])
 
 const singletons:Dictionary = {}
 
 func init_singletons():
+	singletons[\"Console\"] = self
 	for p in ProjectSettings.get_property_list():
 		if p.name.begins_with(\"autoload/\"):
 			var singleton = p.name.trim_prefix(\"autoload/\")
@@ -64,9 +73,53 @@ func _on_text_entered(new_text):
 	if error != OK:
 		emit_signal(\"eval\", new_text, \"Error: %s\"%expr.get_error_text())
 		return
-	var result = expr.execute(singletons.values(), Agartha.store, true)
+	var result = expr.execute(singletons.values(), context, true)
 	if not expr.has_execute_failed():
+		var console_output_history = Agartha.Persistent.get_value(\"_console_output_history\", \"\")
+		
+		if result is String:
+			Agartha.Persistent.set_value(\"_console_output_history\", \"%s\\n> %s\\n\\\"%s\\\"\" % [console_output_history, new_text, result])
+		else:
+			Agartha.Persistent.set_value(\"_console_output_history\", \"%s\\n> %s\\n%s\" % [console_output_history, new_text, result])
+		
+		var console_input_history = Agartha.Persistent.get_value(\"_console_input_history\", [])
+		console_input_history.push_front(new_text)
+		Agartha.Persistent.set_value(\"_console_input_history\", console_input_history)
+		
+		input_history_index = 0
+		temp_input = \"\"
+		
 		emit_signal(\"eval\", new_text, result)
+	self.text = \"\"
+
+
+var input_history_index = 0
+var temp_input:String = \"\"
+
+func _on_gui_input(event):
+	var input_history_index_changed = false
+	if event.is_action_pressed(\"ui_up\"):
+		var console_input_history = Agartha.Persistent.get_value(\"_console_input_history\", [])
+		if input_history_index < console_input_history.size() - 1:
+			input_history_index += 1
+			input_history_index_changed = true
+	elif event.is_action_pressed(\"ui_down\"):
+		if input_history_index > 0:
+			input_history_index -= 1
+			input_history_index_changed = true
+	if input_history_index_changed:
+		var console_input_history = Agartha.Persistent.get_value(\"_console_input_history\", [])
+		if input_history_index == 0:
+			self.text = temp_input
+		else:
+			temp_input = self.text
+			self.text = console_input_history[input_history_index - 1]
+
+
+# Console \"commands\" I guess
+
+func clear():
+	Agartha.Persistent.set_value(\"_console_output_history\", null)
 "
 
 [node name="Console" type="PanelContainer"]
@@ -100,19 +153,26 @@ margin_top = 10.0
 margin_right = 1275.0
 margin_bottom = 674.0
 size_flags_vertical = 3
-custom_fonts/normal_font = SubResource( 3 )
+custom_fonts/normal_font = SubResource( 7 )
 custom_colors/default_color = Color( 0.862745, 0.862745, 0.862745, 1 )
 text = "If you don't know what to type here, that means you should probably not use the console."
 scroll_following = true
-script = SubResource( 2 )
+script = SubResource( 3 )
 
-[node name="LineInput" type="LineEdit" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
 margin_top = 691.0
 margin_right = 1280.0
 margin_bottom = 720.0
+
+[node name="LineInput" type="LineEdit" parent="VBoxContainer/VBoxContainer"]
+margin_right = 1280.0
+margin_bottom = 29.0
+focus_neighbour_top = NodePath(".")
+focus_neighbour_bottom = NodePath(".")
 custom_styles/focus = SubResource( 4 )
 custom_styles/normal = SubResource( 5 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 7 )
 script = SubResource( 6 )
-[connection signal="eval" from="VBoxContainer/LineInput" to="VBoxContainer/MarginContainer/RichTextLabel" method="_on_eval"]
-[connection signal="text_entered" from="VBoxContainer/LineInput" to="VBoxContainer/LineInput" method="_on_text_entered"]
+[connection signal="eval" from="VBoxContainer/VBoxContainer/LineInput" to="VBoxContainer/MarginContainer/RichTextLabel" method="_on_eval"]
+[connection signal="gui_input" from="VBoxContainer/VBoxContainer/LineInput" to="VBoxContainer/VBoxContainer/LineInput" method="_on_gui_input"]
+[connection signal="text_entered" from="VBoxContainer/VBoxContainer/LineInput" to="VBoxContainer/VBoxContainer/LineInput" method="_on_text_entered"]
