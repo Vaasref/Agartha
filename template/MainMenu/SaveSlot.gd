@@ -8,6 +8,7 @@ var save_filename
 var save_mode
 
 const date_format:String = "{day}/{month}/{year} {hour}:{minute}"
+const return_on_save:bool = false # not returning on save will make the main menu blink in order to take a screenshot 
 
 func init(_save_filename, _save, _save_mode):
 	save_filename = _save_filename
@@ -76,7 +77,18 @@ func _on_name_edit_exited():
 
 func _pressed():
 	if save_mode:
-		Agartha.Saver.save(save_filename, $Labels/Name.text)
+		var screenshot
+		if return_on_save:
+			Agartha.get_tree().get_nodes_in_group("main_menu")[0].visible = false
+			yield(VisualServer, "frame_post_draw")
+			screenshot = get_tree().get_root().get_texture().get_data()
+		else: # das blinken menu (cf line 11)
+			Agartha.get_tree().get_nodes_in_group("main_menu")[0].modulate = Color.transparent
+			yield(VisualServer, "frame_post_draw")
+			screenshot = get_tree().get_root().get_texture().get_data()
+			Agartha.get_tree().get_nodes_in_group("main_menu")[0].modulate = Color.white
+		screenshot.flip_y()
+		Agartha.Saver.save(save_filename, $Labels/Name.text, screenshot)
 	else:
 		Agartha.Saver.load(save)
 		Agartha.get_tree().get_nodes_in_group("main_menu")[0].visible = false
