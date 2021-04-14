@@ -38,7 +38,7 @@ script/source = "extends Dialogue
 func test_fragment():
 	say(\"\", \"Dialogue 3.\\nStarting Dialogue 1.\")
 	step()
-	start_dialogue(\"Dialogue1\")
+	start_dialogue(\"\", \"\")
 "
 
 [node name="DialogueJumpTest" type="Control"]
@@ -52,7 +52,7 @@ __meta__ = {
 [node name="Dialogue1" type="Node" parent="."]
 script = SubResource( 1 )
 default_fragment = "test_fragment"
-autorun = true
+auto_start = true
 
 [node name="Dialogue2" type="Node" parent="."]
 script = SubResource( 2 )

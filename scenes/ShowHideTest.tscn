@@ -21,7 +21,7 @@ __meta__ = {
 [node name="DialogueTestShowHide" type="Node" parent="."]
 script = SubResource( 1 )
 default_fragment = "test_fragment"
-autorun = true
+auto_start = true
 
 [node name="Blue" type="ColorRect" parent="." groups=[
 "# blue",
