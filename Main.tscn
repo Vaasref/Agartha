@@ -36,7 +36,7 @@ func _unhandled_input(event):
 		self.pressed = false
 "
 
-[sub_resource type="GDScript" id=4]
+[sub_resource type="GDScript" id=3]
 script/source = "extends ColorRect
 
 
@@ -44,7 +44,7 @@ func _on_QuitConfirm_visibility_changed():
 	self.visible = get_child(0).visible
 "
 
-[sub_resource type="GDScript" id=3]
+[sub_resource type="GDScript" id=4]
 script/source = "extends ConfirmationDialog
 
 export var exit_when_tried_twice:bool = true
@@ -119,7 +119,7 @@ one_shot = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0, 0, 0.623529 )
-script = SubResource( 4 )
+script = SubResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -139,7 +139,7 @@ popup_exclusive = true
 window_title = ""
 dialog_text = "Do you really want to quit ?"
 dialog_hide_on_ok = false
-script = SubResource( 3 )
+script = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
