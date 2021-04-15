@@ -17,6 +17,7 @@ func _on_RightButton_pressed():
 
 func test_fragment():
 	shard(\"test_menu_branching_0\")
+	
 	if cond(button_result == 1):
 		shard(\"test_menu_branching_0_left\")
 	elif cond(button_result == 2):
@@ -36,7 +37,7 @@ func test_fragment():
 		
 	shard(\"test_menu_branching_2\")
 	
-	self.start_dialogue(\"\", \"\", \"SceneSelection\")
+	self.jump(\"\", \"\", \"SceneSelection\")
 "
 
 [node name="MenuAndBranchingTest" type="Control"]

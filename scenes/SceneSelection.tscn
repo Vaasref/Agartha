@@ -20,7 +20,7 @@ func _pressed():
 	
 func change_scene():
 	if not Engine.editor_hint:
-		Agartha.StageManager.change_scene(scene.resource_path)
+		Agartha.change_scene(scene.resource_path)
 "
 
 [node name="SceneSelection" type="Control"]

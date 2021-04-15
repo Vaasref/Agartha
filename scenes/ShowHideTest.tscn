@@ -6,7 +6,7 @@ script/source = "extends Dialogue
 
 func test_fragment():
 	shard(\"test_show_hide\")
-	start_dialogue(\"\", \"\", \"SceneSelection\")
+	jump(\"\", \"\", \"SceneSelection\")
 	
 "
 
