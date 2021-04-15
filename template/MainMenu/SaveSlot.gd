@@ -26,6 +26,8 @@ func init(_save_filename, _save, _save_mode):
 			$Screenshot.texture = save.get_screenshot_texture()
 			$Labels/Name.text = save.name
 			init_date(save.date)
+			if Agartha.Persistent.get_value("_latest_save", "") == _save_filename:
+				$Labels/Date.set("custom_colors/font_color", Color("#98eb7a"))
 		if error:
 			$Screenshot/Error.visible = true
 		
