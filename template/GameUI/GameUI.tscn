@@ -45,13 +45,20 @@ script/source = "extends PanelContainer
 
 func _ready():
 	var _o = Agartha.connect(\"say\", self, \"_on_say\")
+	_o = Agartha.connect(\"scene_changed\", self, \"_on_scene_changed\")
+
+func clear():
+	self.visible = false
 
 func _on_say(_character, _text, _params):
 	print(\"say %s :   '%s'\" % [_character, _text])
 	self.visible = true
 
+func _on_scene_changed(_scene_name):
+	clear()
+
 func _step():
-	self.visible = false
+	clear()
 "
 
 [sub_resource type="GDScript" id=4]
