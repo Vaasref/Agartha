@@ -13,6 +13,8 @@ script/source = "extends RichTextLabel
 
 
 func _ready():
+	if not Agartha.Persistent.has_value(\"_console_output_history\"):
+		Agartha.Persistent.set_value(\"_console_output_history\", \"If you don't know what to type here, that means you should probably not use the console.\")
 	self.text = Agartha.Persistent.get_value(\"_console_output_history\", \"\")
 
 
@@ -51,7 +53,7 @@ var context
 func _ready():
 	init_singletons()
 	context = Agartha.store
-	pass
+
 
 func _store(state):
 	#Adding console history to save is quite useful when trying to pinpoint why a dishonest player is encountering bugs.
