@@ -85,6 +85,25 @@ script/source = "extends Tree
 
 func _ready():
 	init_tree()
+#	if true: # This is a self contained piece of hatred toward the GDScript interpreter.
+#		var a = [1, 0]
+#		var b = [1, 0]
+#		print(\"a == b  %s\" % (a == b))
+#		var c = {}
+#		c[a] = 0
+#		print(\"c   %s\" % [c])
+#		c[b] = 1
+#		print(\"c   %s\" % [c])
+#		b.push_front(null)
+#		c[b] = 2
+#		print(\"c   %s\" % [c])
+#		b.pop_front()
+#		print(\"c   %s\" % [c])
+#		c[b] = 3
+#		print(\"c   %s\" % [c])
+#		var d = c.duplicate()
+#		print(\"d   %s\" % [d])
+	
 
 func _step():
 	if visible:
@@ -132,6 +151,7 @@ func clear_store_tree():
 
 func build_store_tree():
 	clear_store_tree()
+	temp_ids_list = []
 	var current_pre_state = create_item(current_state)
 	var current_post_state = create_item(current_state)
 	current_pre_state.set_text(0, \"pre\")
@@ -162,7 +182,8 @@ func build_state_item(state_item, state):
 
 func build_recursive_item(parent_item, object):
 	if object is Dictionary:
-		parent_item.set_text(1, \"{Dictionary}\")
+		var id = _get_temp_id(object)
+		parent_item.set_text(1, \"{Dictionary:%d}\" % id)
 		for k in object.keys():
 			var entry_item = create_item(parent_item)
 			entry_item.set_text(0, str(k))
@@ -170,15 +191,39 @@ func build_recursive_item(parent_item, object):
 			entry_item.set_collapsed(true)
 			build_recursive_item(entry_item, object[k])
 	elif object is Array:
-		parent_item.set_text(1, \"[Array]\")
+		var id = _get_temp_id(object)
+		parent_item.set_text(1, \"[Array:%d]\" % id)
 		for i in object.size():
 			var entry_item = create_item(parent_item)
 			entry_item.set_text(0, str(i))
 			entry_item.set_text(1, str(object[i]))
 			entry_item.set_collapsed(true)
 			build_recursive_item(entry_item, object[i])
-	
-	
+
+
+var temp_ids_list:Array
+
+func _get_temp_id(entry):
+	if entry in temp_ids_list:
+		for i in temp_ids_list.size():
+			var e = temp_ids_list[i]
+			if typeof(e) == typeof(entry) and e == entry:
+				if entry is Array:
+					entry.push_front(null)
+					if entry == e:
+						entry.pop_front()
+						return i
+				elif entry is Dictionary:
+					var rand = 0
+					while rand in entry:
+						rand = randi()
+					entry[rand] = null
+					if entry == e:
+						entry.erase(rand)
+						return i
+	var i = temp_ids_list.size()
+	temp_ids_list.append(entry) 
+	return i
 "
 
 [sub_resource type="GDScript" id=7]
