@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://template/GameUI/GameUI.tscn" type="PackedScene" id=1]
 [ext_resource path="res://template/MainMenu/MainMenu.tscn" type="PackedScene" id=2]
+[ext_resource path="res://template/MainMenu/QuitConfirmTheme.tres" type="Theme" id=3]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
@@ -33,6 +34,40 @@ func _unhandled_input(event):
 			$HoldTimer.start()
 	if $HoldTimer.time_left == 0 and event.is_action_released(\"agartha_hide_gui\"):
 		self.pressed = false
+"
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends ColorRect
+
+
+func _on_QuitConfirm_visibility_changed():
+	self.visible = get_child(0).visible
+"
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends ConfirmationDialog
+
+export var exit_when_tried_twice:bool = true
+
+func _ready():
+	get_tree().set_auto_accept_quit(false)
+	remove_child(get_child(0))
+	pass
+
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+		if visible:
+			if exit_when_tried_twice:
+				get_tree().quit()
+		else:
+				self.call_deferred('popup_centered')
+
+func _input(event):
+	if event.is_action_pressed(\"agartha_return\"):
+		hide()
+
+func _on_confirmed():
+	get_tree().quit()
 "
 
 [node name="Main" type="Control"]
@@ -79,3 +114,34 @@ wait_time = 0.1
 one_shot = true
 
 [node name="MainMenu" parent="." instance=ExtResource( 2 )]
+
+[node name="QuitConfirmShade" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.623529 )
+script = SubResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="QuitConfirm" type="ConfirmationDialog" parent="QuitConfirmShade" groups=[
+"quit_confirm",
+]]
+visible = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource( 3 )
+popup_exclusive = true
+window_title = ""
+dialog_text = "Do you really want to quit ?"
+dialog_hide_on_ok = false
+script = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="confirmed" from="QuitConfirmShade/QuitConfirm" to="QuitConfirmShade/QuitConfirm" method="_on_confirmed"]
+[connection signal="visibility_changed" from="QuitConfirmShade/QuitConfirm" to="QuitConfirmShade" method="_on_QuitConfirm_visibility_changed"]

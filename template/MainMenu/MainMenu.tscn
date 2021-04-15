@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://template/MainMenu/SideMenuTheme.tres" type="Theme" id=1]
 [ext_resource path="res://addons/Agartha/fonts/NotoSans/NotoSans-Regular.ttf" type="DynamicFontData" id=2]
@@ -163,6 +163,14 @@ func _pressed():
 
 func _on_menu_opened(context):
 	self.visible = context == 1
+"
+
+[sub_resource type="GDScript" id=56]
+script/source = "extends Button
+
+
+func _pressed():
+	get_tree().get_nodes_in_group(\"quit_confirm\")[0].visible = true
 "
 
 [sub_resource type="GDScript" id=44]
@@ -621,6 +629,7 @@ group = SubResource( 38 )
 text = "Quit"
 flat = true
 align = 0
+script = SubResource( 56 )
 
 [node name="ReturnButton" type="Button" parent="SideMenu" groups=[
 "return_button",
@@ -746,10 +755,7 @@ script = SubResource( 55 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-save_mode = true
-page = 1
 save_slot = ExtResource( 5 )
-rows = 2
 
 [node name="PageList" type="HBoxContainer" parent="ScreenContainer/SaveScreen"]
 anchor_left = 0.5
@@ -938,9 +944,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 save_mode = false
-page = 1
 save_slot = ExtResource( 5 )
-rows = 2
 
 [node name="PageList" type="HBoxContainer" parent="ScreenContainer/LoadScreen"]
 anchor_left = 0.5
@@ -1094,28 +1098,28 @@ script = SubResource( 31 )
 page_increment = 1
 page_number = 1
 [connection signal="menu_opened" from="." to="SideMenu/ScreenList/StartButton" method="_on_menu_opened"]
-[connection signal="menu_opened" from="." to="SideMenu/ScreenList/MainMenuButton" method="_on_menu_opened"]
-[connection signal="menu_opened" from="." to="SideMenu/ScreenList/ContinueButton" method="_on_menu_opened"]
-[connection signal="menu_opened" from="." to="SideMenu/ReturnButton" method="_on_menu_opened"]
 [connection signal="menu_opened" from="." to="SideMenu/ScreenList/SaveButton" method="_on_menu_opened"]
+[connection signal="menu_opened" from="." to="SideMenu/ReturnButton" method="_on_menu_opened"]
+[connection signal="menu_opened" from="." to="SideMenu/ScreenList/ContinueButton" method="_on_menu_opened"]
+[connection signal="menu_opened" from="." to="SideMenu/ScreenList/MainMenuButton" method="_on_menu_opened"]
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
-[connection signal="tab_changed" from="ScreenContainer" to="SideMenu/SeparationBar" method="_on_screen_changed"]
 [connection signal="tab_changed" from="ScreenContainer" to="SideMenu/ScreenTitle" method="_on_screen_changed"]
+[connection signal="tab_changed" from="ScreenContainer" to="SideMenu/SeparationBar" method="_on_screen_changed"]
 [connection signal="visibility_changed" from="ScreenContainer/TitleScreen" to="ScreenContainer/TitleScreen" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="ScreenContainer/SaveScreen" to="ScreenContainer/SaveScreen" method="_on_visibility_changed"]
 [connection signal="text_changed" from="ScreenContainer/SaveScreen/PageLabel" to="ScreenContainer/SaveScreen/PageLabel" method="_on_text_changed"]
-[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage8" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/PreviousPage" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage5" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage6" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage3" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/QuickPage" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage1" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage6" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage2" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage5" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage4" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage7" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/PreviousPage" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage8" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage9" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NextPage" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage7" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageList/NumberPage3" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/SaveSlotsGrid" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/PageLabel" method="_on_page_change"]
 [connection signal="visibility_changed" from="ScreenContainer/SaveScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/SaveSlotsGrid" method="_on_visibility_changed"]
@@ -1157,19 +1161,19 @@ page_number = 1
 [connection signal="set_page" from="ScreenContainer/SaveScreen/PageList/NextPage" to="ScreenContainer/SaveScreen/SaveSlotsGrid" method="_on_set_page"]
 [connection signal="visibility_changed" from="ScreenContainer/LoadScreen" to="ScreenContainer/LoadScreen" method="_on_visibility_changed"]
 [connection signal="text_changed" from="ScreenContainer/LoadScreen/PageLabel" to="ScreenContainer/LoadScreen/PageLabel" method="_on_text_changed"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/PreviousPage" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage1" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage3" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/PreviousPage" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/QuickPage" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage6" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage5" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/AutoPage" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage2" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage3" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage4" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage9" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NextPage" method="_on_page_change"]
-[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage8" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage6" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage7" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage8" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage5" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NextPage" method="_on_page_change"]
+[connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageList/NumberPage9" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/SaveScreen/SaveSlotsGrid" method="_on_page_change"]
 [connection signal="page_change" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/PageLabel" method="_on_page_change"]
 [connection signal="visibility_changed" from="ScreenContainer/LoadScreen/SaveSlotsGrid" to="ScreenContainer/LoadScreen/SaveSlotsGrid" method="_on_visibility_changed"]
