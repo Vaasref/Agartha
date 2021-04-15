@@ -102,7 +102,7 @@ func _on_gui_input(event):
 	var input_history_index_changed = false
 	if event.is_action_pressed(\"ui_up\"):
 		var console_input_history = Agartha.Persistent.get_value(\"_console_input_history\", [])
-		if input_history_index < console_input_history.size() - 1:
+		if input_history_index < console_input_history.size():
 			input_history_index += 1
 			input_history_index_changed = true
 	elif event.is_action_pressed(\"ui_down\"):
