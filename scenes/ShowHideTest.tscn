@@ -3,11 +3,10 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Dialogue
 
-
+#@fragment
 func test_fragment():
 	shard(\"test_show_hide\")
 	jump(\"\", \"\", \"SceneSelection\")
-	
 "
 
 [node name="ShowHideTest" type="Control"]

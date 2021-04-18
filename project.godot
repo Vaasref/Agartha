@@ -19,6 +19,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/Agartha/nodes/Dialogue.gd"
 }, {
+"base": "Node",
+"class": "Director",
+"language": "GDScript",
+"path": "res://addons/Agartha/systems/Director.gd"
+}, {
+"base": "Node",
+"class": "ProcessedDialogue",
+"language": "GDScript",
+"path": "res://addons/Agartha/nodes/ProcessedDialogue.gd"
+}, {
 "base": "Button",
 "class": "SaveSlot",
 "language": "GDScript",
@@ -42,6 +52,8 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "Character": "",
 "Dialogue": "",
+"Director": "",
+"ProcessedDialogue": "",
 "SaveSlot": "",
 "ShardLibrary": "",
 "StoreSave": "",

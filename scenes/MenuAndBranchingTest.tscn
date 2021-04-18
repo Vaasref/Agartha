@@ -15,6 +15,7 @@ func _on_RightButton_pressed():
 	Agartha.step()
 
 
+#@fragment
 func test_fragment():
 	shard(\"test_menu_branching_0\")
 	
