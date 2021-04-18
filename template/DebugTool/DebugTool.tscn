@@ -113,8 +113,12 @@ func _restore(_state):
 	if visible:
 		build_store_tree()
 
-func _on_pressed():
+func _on_update_pressed():
 	build_store_tree()
+
+func _on_visibility_changed():
+	build_store_tree()
+
 
 
 var root:TreeItem
@@ -138,15 +142,15 @@ func init_tree():
 
 
 func clear_store_tree():
-	var child = current_state.get_children()
+	clear_store_tree_r(current_state)
+	clear_store_tree_r(state_stack)
+
+func clear_store_tree_r(item:TreeItem):
+	var child = item.get_children()
 	while child:
+		clear_store_tree_r(child)
 		child.free()
-		child = current_state.get_children()
-	
-	child = state_stack.get_children()
-	while child:
-		child.free()
-		child = state_stack.get_children()
+		child = item.get_children()
 
 
 func build_store_tree():
@@ -213,6 +217,7 @@ func _get_temp_id(entry):
 					if entry == e:
 						entry.pop_front()
 						return i
+					entry.pop_front()
 				elif entry is Dictionary:
 					var rand = 0
 					while rand in entry:
@@ -221,9 +226,11 @@ func _get_temp_id(entry):
 					if entry == e:
 						entry.erase(rand)
 						return i
+					entry.erase(rand)
 	var i = temp_ids_list.size()
 	temp_ids_list.append(entry) 
 	return i
+	
 "
 
 [sub_resource type="GDScript" id=7]
@@ -234,54 +241,40 @@ export var stack_entry_blank:PackedScene
 
 var dialogue:Dialogue
 func _ready():
-	var _o = Agartha.connect(\"start_dialogue\", self, '_on_start_dialogue')
-	_o = Agartha.connect(\"scene_changed\", self, '_on_scene_changed')
-	call_deferred(\"get_dialogue\")
+	var _o = Agartha.connect(\"scene_changed\", self, '_on_scene_changed')
 
 func _process(_delta):
-	update_dialogue()
+	if visible:
+		update_dialogue()
 
 func _on_scene_changed(scene_name):
 	$VBoxContainer/ExecInfo/SceneName/Value.text = scene_name
 
-func _on_start_dialogue(_dialogue_name, _fragment_name):
-	call_deferred(\"get_dialogue\")
 
-func get_dialogue():
-	for d in get_tree().get_nodes_in_group(\"dialogues\"):
-		if d is Dialogue:
-			if d.execution_mode == Dialogue.ExecMode.Regular:
-				dialogue = d
-				break
-	update_dialogue()
-
-func update_dialogue(clear:bool=false):
-	if dialogue:
-		$VBoxContainer/ExecInfo/DialogueName/Value.text = dialogue.name
-		$VBoxContainer/ExecInfo/DefaultFragment/Value.text = dialogue.default_fragment
-		$VBoxContainer/ExecInfo/AutoStart.pressed = dialogue.auto_start
+func update_dialogue():
+	var thread = Agartha.Director.current_dialogue_thread
+	if thread:
+		$VBoxContainer/ExecInfo/DialogueName/Value.text = thread.get_meta(\"dialogue_name\")
+		$VBoxContainer/ExecInfo/DefaultFragment/Value.text = thread.get_meta(\"dialogue\").default_fragment
+		$VBoxContainer/ExecInfo/AutoStart.pressed = thread.get_meta(\"dialogue\").auto_start
 		var entry_list = $VBoxContainer/EntryList
-		var tmp_exec_stack = dialogue.execution_stack.duplicate(true)
-		if clear:
-			clear_stack()
-			for i in tmp_exec_stack.size():
-				var entry = stack_entry_blank.instance().init(i, tmp_exec_stack[i])
-				entry_list.add_child(entry)
-		else:
-			while entry_list.get_children().size() < tmp_exec_stack.size():
-				var entry = stack_entry_blank.instance()
-				entry_list.add_child(entry)
-			while entry_list.get_children().size() > tmp_exec_stack.size():
-				entry_list.remove_child(entry_list.get_children()[0])
-			
-			for i in tmp_exec_stack.size():
-				entry_list.get_child(i).init(i, tmp_exec_stack[i])
+		var tmp_exec_stack = thread.get_meta(\"execution_stack\").duplicate(true)
+		match_stack(entry_list, tmp_exec_stack)
+
+		for i in tmp_exec_stack.size():
+			var j = tmp_exec_stack.size() - i - 1
+			entry_list.get_child(i).init(j, tmp_exec_stack[j])
+	pass
 
 
-func clear_stack():
-	var entry_list = $VBoxContainer/EntryList
-	for c in entry_list.get_children():
+func match_stack(entry_list, exec_stack):
+	while entry_list.get_children().size() < exec_stack.size():
+		var entry = stack_entry_blank.instance()
+		entry_list.add_child(entry)
+	while entry_list.get_children().size() > exec_stack.size():
+		var c = entry_list.get_children()[0]
 		entry_list.remove_child(c)
+		c.queue_free()
 "
 
 [sub_resource type="GDScript" id=8]
@@ -374,8 +367,9 @@ __meta__ = {
 
 [node name="StoreBrowser" type="PanelContainer" parent="ScrollContainer/HBoxContainer"]
 visible = false
-margin_right = 500.0
-margin_bottom = 432.0
+margin_left = 140.0
+margin_right = 640.0
+margin_bottom = 431.0
 rect_min_size = Vector2( 500, 0 )
 mouse_filter = 2
 custom_styles/panel = SubResource( 2 )
@@ -384,7 +378,7 @@ custom_styles/panel = SubResource( 2 )
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 490.0
-margin_bottom = 422.0
+margin_bottom = 421.0
 custom_constants/separation = 5
 __meta__ = {
 "_edit_use_anchors_": false
@@ -460,13 +454,13 @@ text = "Update Tree"
 [node name="ScrollContainer" type="ScrollContainer" parent="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer"]
 margin_top = 101.0
 margin_right = 480.0
-margin_bottom = 412.0
+margin_bottom = 411.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="StoreTree" type="Tree" parent="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/ScrollContainer"]
 margin_right = 480.0
-margin_bottom = 311.0
+margin_bottom = 310.0
 rect_clip_content = false
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -622,5 +616,6 @@ visible = false
 anchor_right = 0.5
 [connection signal="value_changed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/StoreStackLength/SpinBox" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/StoreStackLength/SpinBox" method="_on_value_changed"]
 [connection signal="value_changed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/CurrentState/SpinBox" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/CurrentState/SpinBox" method="_on_value_changed"]
-[connection signal="pressed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/Button" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/ScrollContainer/StoreTree" method="_on_pressed"]
+[connection signal="pressed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/Button" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/ScrollContainer/StoreTree" method="_on_update_pressed"]
+[connection signal="visibility_changed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/ScrollContainer/StoreTree" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/ScrollContainer/StoreTree" method="_on_visibility_changed"]
 [connection signal="item_selected" from="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer/ExecInfo/RollMode/OptionButton" to="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer/ExecInfo/RollMode/OptionButton" method="_on_item_selected"]
