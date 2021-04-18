@@ -51,7 +51,11 @@ export var exit_when_tried_twice:bool = true
 
 func _ready():
 	get_tree().set_auto_accept_quit(false)
-	remove_child(get_child(0))
+	remove_child(get_close_button())
+	get_close_button().queue_free()
+	get_label().align = Label.ALIGN_CENTER
+	get_ok().text = \"Yes\"
+	get_cancel().text = \"No\"
 	pass
 
 func _notification(what):
@@ -125,6 +129,7 @@ __meta__ = {
 }
 
 [node name="QuitConfirm" type="ConfirmationDialog" parent="QuitConfirmShade" groups=[
+"popup",
 "quit_confirm",
 ]]
 visible = true
@@ -132,6 +137,8 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+margin_left = -150.0
+margin_right = 150.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource( 3 )

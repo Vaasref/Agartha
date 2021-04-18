@@ -67,6 +67,9 @@ func _on_name_entered(new_text):
 	if self.is_inside_tree():
 		$Labels/Name.release_focus()
 
+func _gui_input(event):
+	if event.is_action_pressed("agartha_delete_save"):
+		get_tree().get_nodes_in_group("save_confirm")[0].delete_confirm(save_filename)
 
 func _on_name_changed(_new_text):
 	name_changed = true
@@ -79,18 +82,21 @@ func _on_name_edit_exited():
 
 func _pressed():
 	if save_mode:
-		var screenshot
-		if return_on_save:
-			Agartha.get_tree().get_nodes_in_group("main_menu")[0].visible = false
-			yield(VisualServer, "frame_post_draw")
-			screenshot = get_tree().get_root().get_texture().get_data()
-		else: # das blinken menu (cf line 11)
-			Agartha.get_tree().get_nodes_in_group("main_menu")[0].modulate = Color.transparent
-			yield(VisualServer, "frame_post_draw")
-			screenshot = get_tree().get_root().get_texture().get_data()
-			Agartha.get_tree().get_nodes_in_group("main_menu")[0].modulate = Color.white
-		screenshot.flip_y()
-		Agartha.Saver.save(save_filename, $Labels/Name.text, screenshot)
+		if save:
+			get_tree().get_nodes_in_group("save_confirm")[0].overwrite_confirm(save_filename, $Labels/Name.text)
+		else:
+			var screenshot
+			if return_on_save:
+				Agartha.get_tree().get_nodes_in_group("main_menu")[0].visible = false
+				yield(VisualServer, "frame_post_draw")
+				screenshot = get_tree().get_root().get_texture().get_data()
+			else: # das blinken menu (cf line 11)
+				Agartha.get_tree().get_nodes_in_group("main_menu")[0].modulate = Color.transparent
+				yield(VisualServer, "frame_post_draw")
+				screenshot = get_tree().get_root().get_texture().get_data()
+				Agartha.get_tree().get_nodes_in_group("main_menu")[0].modulate = Color.white
+			screenshot.flip_y()
+			Agartha.Saver.save(save_filename, $Labels/Name.text, screenshot)
 	else:
 		Agartha.Saver.load(save)
 		Agartha.get_tree().get_nodes_in_group("main_menu")[0].visible = false

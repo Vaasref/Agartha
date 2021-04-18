@@ -171,14 +171,21 @@ func _pressed():
 script/source = "extends Button
 
 
+func _ready():
+	for p in get_tree().get_nodes_in_group(\"popup\"):
+		p.connect(\"popup_hide\", self, \"_on_popup_hide\")
+
+func _on_popup_hide():
+	$Timer.start()
 
 func _pressed():
 	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = true
 	get_tree().get_nodes_in_group(\"screen_container\")[0].current_tab = 1
-	pass
+	$Timer.start()
+
 
 func _unhandled_input(event):
-	if event.is_action_pressed(\"agartha_return\"):
+	if event.is_action_pressed(\"agartha_return\") and $Timer.time_left == 0:
 		_pressed()
 "
 
@@ -360,6 +367,10 @@ focus_mode = 0
 enabled_focus_mode = 0
 text = "Save"
 script = SubResource( 11 )
+
+[node name="Timer" type="Timer" parent="ControlButtons/Save"]
+wait_time = 0.05
+one_shot = true
 
 [node name="Load" type="Button" parent="ControlButtons"]
 margin_top = 140.0
