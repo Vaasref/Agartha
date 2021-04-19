@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://template/DebugTool/StackEntry.tscn" type="PackedScene" id=1]
 [ext_resource path="res://template/DebugTool/Console/Console.tscn" type="PackedScene" id=2]
@@ -255,8 +255,13 @@ func update_dialogue():
 	var thread = Agartha.Director.current_dialogue_thread
 	if thread:
 		$VBoxContainer/ExecInfo/DialogueName/Value.text = thread.get_meta(\"dialogue_name\")
-		$VBoxContainer/ExecInfo/DefaultFragment/Value.text = thread.get_meta(\"dialogue\").default_fragment
-		$VBoxContainer/ExecInfo/AutoStart.pressed = thread.get_meta(\"dialogue\").auto_start
+		var dialogue = thread.get_meta(\"dialogue\")
+		if dialogue:
+			$VBoxContainer/ExecInfo/DefaultFragment/Value.text = dialogue.default_fragment
+			$VBoxContainer/ExecInfo/AutoStart.pressed = dialogue.auto_start
+		else:
+			$VBoxContainer/ExecInfo/DefaultFragment/Value.text = \"\"
+			$VBoxContainer/ExecInfo/AutoStart.pressed = false
 		var entry_list = $VBoxContainer/EntryList
 		var tmp_exec_stack = thread.get_meta(\"execution_stack\").duplicate(true)
 		match_stack(entry_list, tmp_exec_stack)
@@ -277,20 +282,7 @@ func match_stack(entry_list, exec_stack):
 		c.queue_free()
 "
 
-[sub_resource type="GDScript" id=8]
-script/source = "extends OptionButton
-
-
-func _ready():
-	add_item(\"Pre-step\")
-	add_item(\"Post-step\")
-	select(Agartha.Timeline.roll_mode)
-
-func _on_item_selected(index):
-	Agartha.Timeline.roll_mode = index
-"
-
-[sub_resource type="StyleBoxEmpty" id=9]
+[sub_resource type="StyleBoxEmpty" id=8]
 content_margin_top = 10.0
 
 [node name="DebugTool" type="Control"]
@@ -571,27 +563,11 @@ custom_colors/font_color_disabled = Color( 1, 1, 1, 1 )
 disabled = true
 text = "Auto Start"
 
-[node name="RollMode" type="VBoxContainer" parent="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer/ExecInfo"]
-margin_top = 104.0
-margin_right = 114.0
-margin_bottom = 142.0
-
-[node name="Label" type="Label" parent="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer/ExecInfo/RollMode"]
-margin_right = 114.0
-margin_bottom = 14.0
-text = "Roll Mode:"
-
-[node name="OptionButton" type="OptionButton" parent="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer/ExecInfo/RollMode"]
-margin_top = 18.0
-margin_right = 114.0
-margin_bottom = 38.0
-script = SubResource( 8 )
-
 [node name="Label" type="Label" parent="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer"]
 margin_top = 176.0
 margin_right = 255.0
 margin_bottom = 200.0
-custom_styles/normal = SubResource( 9 )
+custom_styles/normal = SubResource( 8 )
 text = "Execution Stack:"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -618,4 +594,3 @@ anchor_right = 0.5
 [connection signal="value_changed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/CurrentState/SpinBox" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/CurrentState/SpinBox" method="_on_value_changed"]
 [connection signal="pressed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/Button" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/ScrollContainer/StoreTree" method="_on_update_pressed"]
 [connection signal="visibility_changed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/ScrollContainer/StoreTree" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/ScrollContainer/StoreTree" method="_on_visibility_changed"]
-[connection signal="item_selected" from="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer/ExecInfo/RollMode/OptionButton" to="ScrollContainer/HBoxContainer/DialogueExecTool/VBoxContainer/ExecInfo/RollMode/OptionButton" method="_on_item_selected"]
