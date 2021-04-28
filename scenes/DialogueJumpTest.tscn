@@ -4,7 +4,7 @@
 script/source = "extends Dialogue
 
 
-#@fragment
+
 func test_fragment():
 	say(\"\", \"Dialogue 1.\")
 	step()
@@ -19,7 +19,7 @@ func test_fragment():
 script/source = "extends Dialogue
 
 
-#@fragment
+
 func test_fragment():
 	say(\"\", \"Dialogue 2.\")
 	step()
@@ -27,7 +27,7 @@ func test_fragment():
 	step()
 	call_fragment(\"second_test_fragment\")
 
-#@fragment
+
 func second_test_fragment():
 	say(\"\", \"Starting Dialogue 3.\")
 	step()
@@ -38,7 +38,7 @@ func second_test_fragment():
 script/source = "extends Dialogue
 
 
-#@fragment
+
 func test_fragment():
 	say(\"\", \"Dialogue 3.\\nStarting Dialogue 1.\")
 	step()
