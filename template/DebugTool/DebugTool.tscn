@@ -255,7 +255,7 @@ func update_dialogue():
 	var thread = Agartha.Director.current_dialogue_thread
 	if thread:
 		$VBoxContainer/ExecInfo/DialogueName/Value.text = thread.get_meta(\"dialogue_name\")
-		var dialogue = thread.get_meta(\"dialogue\")
+		dialogue = thread.get_meta(\"dialogue\")
 		if dialogue:
 			$VBoxContainer/ExecInfo/DefaultFragment/Value.text = dialogue.default_fragment
 			$VBoxContainer/ExecInfo/AutoStart.pressed = dialogue.auto_start
@@ -590,6 +590,7 @@ margin_bottom = 21.0
 [node name="Console" parent="." instance=ExtResource( 2 )]
 visible = false
 anchor_right = 0.5
+
 [connection signal="value_changed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/StoreStackLength/SpinBox" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/StoreStackLength/SpinBox" method="_on_value_changed"]
 [connection signal="value_changed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/CurrentState/SpinBox" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/StoreInfo/CurrentState/SpinBox" method="_on_value_changed"]
 [connection signal="pressed" from="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/Button" to="ScrollContainer/HBoxContainer/StoreBrowser/VBoxContainer/ScrollContainer/StoreTree" method="_on_update_pressed"]
