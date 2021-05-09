@@ -67,8 +67,10 @@ func _on_screen_changed(tab):
 [sub_resource type="GDScript" id=7]
 script/source = "extends Button
 
+export var first_scene:String = \"\"
+
 func _pressed():
-	Agartha.StageManager.change_scene(\"SceneSelection\")# Change that scene to your first scene.
+	Agartha.StageManager.change_scene(first_scene)# Change that scene to your first scene.
 	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = false
 
 
@@ -275,6 +277,7 @@ text = "Start"
 flat = true
 align = 0
 script = SubResource( 7 )
+first_scene = "SceneSelection"
 
 [node name="ContinueButton" type="Button" parent="ScreenList"]
 use_parent_material = true
@@ -382,12 +385,12 @@ __meta__ = {
 wait_time = 0.05
 one_shot = true
 
-[connection signal="_menu_opened" from="." to="ReturnButton" method="_on_menu_opened"]
-[connection signal="_menu_opened" from="." to="ScreenList/StartButton" method="_on_menu_opened"]
 [connection signal="_menu_opened" from="." to="ScreenList/MainMenuButton" method="_on_menu_opened"]
+[connection signal="_menu_opened" from="." to="ScreenList/StartButton" method="_on_menu_opened"]
+[connection signal="_menu_opened" from="." to="ReturnButton" method="_on_menu_opened"]
 [connection signal="_menu_opened" from="." to="ScreenList/ContinueButton" method="_on_menu_opened"]
 [connection signal="_menu_opened" from="." to="ScreenList/SaveButton" method="_on_menu_opened"]
 [connection signal="_screen_changed" from="." to="SeparationBar" method="_on_screen_changed"]
-[connection signal="_screen_changed" from="." to="ScreenTitle" method="_on_screen_changed"]
 [connection signal="_screen_changed" from="." to="ScreenList/LoadButton" method="_on_screen_changed"]
 [connection signal="_screen_changed" from="." to="ScreenList/SaveButton" method="_on_screen_changed"]
+[connection signal="_screen_changed" from="." to="ScreenTitle" method="_on_screen_changed"]
