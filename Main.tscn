@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://template/GameUI/GameUI.tscn" type="PackedScene" id=1]
 [ext_resource path="res://template/MainMenu/MainMenu.tscn" type="PackedScene" id=2]
-[ext_resource path="res://template/MainMenu/QuitConfirmTheme.tres" type="Theme" id=3]
+[ext_resource path="res://template/HideUIButton.tscn" type="PackedScene" id=3]
+[ext_resource path="res://template/QuitConfirmShade.tscn" type="PackedScene" id=4]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
@@ -10,68 +11,6 @@ script/source = "extends Control
 
 func _ready():
 	Agartha.stage = self
-"
-
-[sub_resource type="GDScript" id=2]
-script/source = "extends Button
-
-
-func _toggled(button_pressed):
-	for n in get_tree().get_nodes_in_group(\"hideable_gui\"):
-		if n is CanvasItem:
-			if button_pressed:
-				n.set_meta(\"previous_visibility\", n.visible)
-				n.visible = false
-			elif n.has_meta(\"previous_visibility\"):
-				n.visible = n.get_meta(\"previous_visibility\")
-			else:
-				n.visible = true
-
-func _unhandled_input(event):
-	if event.is_action_pressed(\"agartha_hide_gui\"):
-		self.pressed = not self.pressed
-		if self.pressed:
-			$HoldTimer.start()
-	if $HoldTimer.time_left == 0 and event.is_action_released(\"agartha_hide_gui\"):
-		self.pressed = false
-"
-
-[sub_resource type="GDScript" id=3]
-script/source = "extends ColorRect
-
-
-func _on_QuitConfirm_visibility_changed():
-	self.visible = get_child(0).visible
-"
-
-[sub_resource type="GDScript" id=4]
-script/source = "extends ConfirmationDialog
-
-export var exit_when_tried_twice:bool = true
-
-func _ready():
-	get_tree().set_auto_accept_quit(false)
-	remove_child(get_close_button())
-	get_close_button().queue_free()
-	get_label().align = Label.ALIGN_CENTER
-	get_ok().text = \"Yes\"
-	get_cancel().text = \"No\"
-	pass
-
-func _notification(what):
-	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
-		if visible:
-			if exit_when_tried_twice:
-				get_tree().quit()
-		else:
-				self.call_deferred('popup_centered')
-
-func _input(event):
-	if event.is_action_pressed(\"agartha_return\"):
-		hide()
-
-func _on_confirmed():
-	get_tree().quit()
 "
 
 [node name="Main" type="Control"]
@@ -95,61 +34,14 @@ __meta__ = {
 "hideable_gui",
 ] instance=ExtResource( 1 )]
 
-[node name="HideUI" type="Button" parent="."]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -71.0
-margin_top = -30.0
-grow_horizontal = 0
-grow_vertical = 0
-rect_min_size = Vector2( 0, 30 )
-toggle_mode = true
-text = "Hide GUI"
-flat = true
-script = SubResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HoldTimer" type="Timer" parent="HideUI"]
-wait_time = 0.1
-one_shot = true
+[node name="HideUIButton" parent="." instance=ExtResource( 3 )]
+anchor_left = 0.0
+anchor_right = 0.0
+margin_left = 0.0
+margin_top = 0.0
+grow_horizontal = 1
 
 [node name="MainMenu" parent="." instance=ExtResource( 2 )]
 
-[node name="QuitConfirmShade" type="ColorRect" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0, 0, 0, 0.623529 )
-script = SubResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="QuitConfirm" type="ConfirmationDialog" parent="QuitConfirmShade" groups=[
-"popup",
-"quit_confirm",
-]]
-visible = true
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -150.0
-margin_right = 150.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource( 3 )
-popup_exclusive = true
-window_title = ""
-dialog_text = "Do you really want to quit ?"
-dialog_hide_on_ok = false
-script = SubResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[connection signal="confirmed" from="QuitConfirmShade/QuitConfirm" to="QuitConfirmShade/QuitConfirm" method="_on_confirmed"]
-[connection signal="visibility_changed" from="QuitConfirmShade/QuitConfirm" to="QuitConfirmShade" method="_on_QuitConfirm_visibility_changed"]
+[node name="QuitConfirmShade" parent="." instance=ExtResource( 4 )]
+visible = false

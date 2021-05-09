@@ -2,7 +2,6 @@ tool
 extends Button
 class_name SaveSlot
 
-export var image_background_color:Color = Color.gray
 var save:Resource = null
 var save_filename
 var save_mode
@@ -17,22 +16,20 @@ func init(_save_filename, _save, _save_mode):
 	var error = Agartha.Saver.check_save_compatibility(save, false)
 	if save and save is StoreSave:
 		if error and error == Agartha.Saver.COMPATIBILITY_ERROR.DIFF_SCRIPT_COMP_CODE:
-			init_default_screenshot()
 			$Labels/Name.visible = false
 			$Labels/Name.editable = false
 			var file:File = File.new()
 			init_date(OS.get_datetime_from_unix_time(file.get_modified_time(Agartha.Saver.get_save_path(save_filename))))
 		else:
-			$Screenshot.texture = save.get_screenshot_texture()
+			$ScreenshotContainer/Screenshot.texture = save.get_screenshot_texture()
 			$Labels/Name.text = save.name
 			init_date(save.date)
 			if Agartha.Persistent.get_value("_latest_save", "") == _save_filename:
 				$Labels/Date.set("custom_colors/font_color", Color("#98eb7a"))
 		if error:
-			$Screenshot/Error.visible = true
+			$ScreenshotContainer/Screenshot/Error.visible = true
 		
 	else:
-		init_default_screenshot()
 		$Labels/Name.placeholder_text = "Empty Slot"
 		$Labels/Date.visible = false
 	
@@ -40,15 +37,6 @@ func init(_save_filename, _save, _save_mode):
 		$Labels/Name.editable = false
 		if error:
 			self.disabled = true
-
-
-func init_default_screenshot():
-	var image = Image.new()
-	image.create(16, 9, false, Image.FORMAT_RGB8)
-	image.fill(image_background_color)
-	$Screenshot.texture = ImageTexture.new()
-	$Screenshot.texture.create_from_image(image, Image.FORMAT_RGB8)
-
 
 func init_date(date:Dictionary):
 	var formatted_date = {}

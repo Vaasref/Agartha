@@ -1,0 +1,468 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://template/MainMenu/SaveSlot.tscn" type="PackedScene" id=1]
+[ext_resource path="res://addons/Agartha/fonts/NotoSans/NotoSans-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://template/GlobalColorModulate.tres" type="Material" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "tool
+extends Control
+
+
+func _on_visibility_changed():
+	if visible:
+		var shade:Control = get_tree().get_nodes_in_group(\"background_shade\")[0] as Control
+		shade.anchor_right = 1
+		
+		var return_button:Control = get_tree().get_nodes_in_group(\"return_button\")[0] as Control
+		return_button.visible = true
+"
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+[sub_resource type="DynamicFont" id=3]
+size = 24
+outline_size = 1
+outline_color = Color( 0, 0, 0, 0.333333 )
+use_filter = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="GDScript" id=4]
+script/source = "tool
+extends LineEdit
+
+
+var page:int
+
+
+func _on_page_change(_page):
+	page = _page
+	if page == 0:
+		self.text = \"Quick Saves\"
+		self.editable = false
+	elif page < 0:
+		page = -1
+		self.text = \"Auto Saves\"
+		self.editable = false
+	else:
+		self.placeholder_text = \"Page %d\" % page
+		self.text = Agartha.Persistent.get_value(\"save_page_%d\" % page, self.placeholder_text)
+		self.editable = true
+		if Engine.editor_hint:
+			print(\"page change in editor\")
+
+
+func _on_text_changed(new_text):
+	if page > 0 and not Engine.editor_hint:
+		if new_text:
+			Agartha.Persistent.set_value(\"save_page_%d\" % page, new_text)
+		else:
+			Agartha.Persistent.set_value(\"save_page_%d\" % page, null)
+"
+
+[sub_resource type="GDScript" id=5]
+script/source = "tool
+extends GridContainer
+
+export var save_mode:bool = true
+export var page:int = 1 setget update_page
+export var save_slot:PackedScene
+export var rows:int = 2
+
+signal page_change(page)
+
+
+func _ready():
+	if not Engine.editor_hint:
+		var _o = Agartha.connect(\"saved\", self, \"_on_saved\")
+
+
+func update_page(_page_number, emit_sig:bool=true):
+	if _page_number < 0 and save_mode:
+		_page_number = 0
+	if _page_number == 0:
+		page = 0
+		_page_number = \"quick_\"
+	elif _page_number < 0:
+		page = -1
+		_page_number = \"auto_\"
+	elif _page_number is int:
+		page = _page_number
+		_page_number = str(_page_number) + \"_\"
+	else:
+		page = 1
+		_page_number = \"1_\"
+	if emit_sig:
+		emit_signal(\"page_change\", page)
+	if not self.is_visible_in_tree():
+		return
+
+	var pattern = _page_number + \"%d\"
+	var saves = Agartha.Saver.get_save_array(pattern, self.columns * self.rows)
+
+	var slots:Array = []
+	
+	for i in self.columns * self.rows:
+		var slot = null
+		if saves[i]:
+			slot = get_save_slot(pattern % i, saves[i])
+		else:
+			if save_mode:
+				slot = get_empty_slot(pattern % i)
+			else:
+				slot = get_placeholder()
+		slots.append(slot)
+
+
+	clear_children()
+	for slot in slots:
+		self.add_child(slot)
+
+
+func get_save_slot(save_path, save):
+	var output = save_slot.instance()
+	
+	output.init(save_path, save, save_mode)
+	
+	return output
+
+
+func get_empty_slot(save_filename):
+	var output = save_slot.instance()
+	output.init(save_filename, null, save_mode)
+	return output
+
+
+func get_placeholder(colored:int=0):
+	var placeholder:ColorRect = ColorRect.new()
+	placeholder.size_flags_horizontal = SIZE_EXPAND_FILL
+	placeholder.size_flags_vertical = SIZE_EXPAND_FILL
+	if colored:
+		placeholder.color = str(colored).md5_text().substr(0, 6)
+	else:
+		placeholder.color = Color(0,0,0,0)
+
+	return placeholder
+
+
+func clear_children():
+	for c in get_children():
+		self.remove_child(c)
+
+
+func _on_visibility_changed():
+	update_page(page)
+
+
+func _on_increment_page(increment):
+	self.page = page + increment
+
+
+func _on_set_page(_page):
+	self.page = _page
+
+func _on_saved():
+	update_page(page)
+
+
+func _on_page_change(_page):#This func is to be used for synching the load and save screens pages, it would loop otherwhise.
+	update_page(_page, false)
+"
+
+[sub_resource type="StyleBoxEmpty" id=6]
+
+[sub_resource type="StyleBoxEmpty" id=7]
+
+[sub_resource type="StyleBoxEmpty" id=8]
+
+[sub_resource type="StyleBoxEmpty" id=9]
+
+[sub_resource type="StyleBoxEmpty" id=10]
+
+[sub_resource type="DynamicFont" id=11]
+size = 22
+outline_size = 1
+outline_color = Color( 0, 0, 0, 0.4 )
+use_filter = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="Theme" id=12]
+default_font = SubResource( 11 )
+Button/colors/font_color = Color( 0.5184, 0.72, 0.4176, 1 )
+Button/colors/font_color_disabled = Color( 0.645, 0.75, 0.5925, 0.266667 )
+Button/colors/font_color_hover = Color( 0.654902, 0.788235, 0.584314, 1 )
+Button/colors/font_color_pressed = Color( 0.966667, 1, 0.95, 1 )
+Button/constants/hseparation = 2
+Button/fonts/font = null
+Button/styles/disabled = SubResource( 6 )
+Button/styles/focus = SubResource( 7 )
+Button/styles/hover = SubResource( 8 )
+Button/styles/normal = SubResource( 9 )
+Button/styles/pressed = SubResource( 10 )
+
+[sub_resource type="GDScript" id=13]
+script/source = "tool
+extends Button
+
+export var page_increment:int = 0
+export var page_number:int = 1
+
+signal set_page(page)
+signal increment_page(increment)
+
+func _on_pressed():
+	if page_increment < 0:
+		emit_signal(\"increment_page\", -1)
+	elif page_increment > 0:
+		emit_signal(\"increment_page\", 1)
+	else:
+		emit_signal(\"set_page\", page_number)
+
+func _on_page_change(page):
+	if page_increment == 0 and page_number == page:
+		self.pressed = true
+	else:
+		self.pressed = false
+"
+
+[sub_resource type="ButtonGroup" id=14]
+
+[node name="SaveScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = SubResource( 1 )
+
+[node name="PageLabel" type="LineEdit" parent="."]
+material = ExtResource( 3 )
+anchor_left = 0.5
+anchor_top = 0.15
+anchor_right = 0.5
+anchor_bottom = 0.15
+margin_top = -10.0
+grow_horizontal = 2
+focus_mode = 1
+custom_styles/read_only = SubResource( 2 )
+custom_styles/focus = SubResource( 2 )
+custom_styles/normal = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 0.756863, 0.878431, 0.694118, 1 )
+custom_colors/font_color_uneditable = Color( 0.756863, 0.878431, 0.694118, 1 )
+text = "Page 1"
+align = 1
+expand_to_text_length = true
+context_menu_enabled = false
+placeholder_text = "Page 1"
+placeholder_alpha = 1.0
+script = SubResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SaveSlotsGrid" type="GridContainer" parent="."]
+anchor_top = 0.2
+anchor_right = 1.0
+anchor_bottom = 0.85
+margin_left = 10.0
+margin_right = -10.0
+custom_constants/vseparation = 20
+custom_constants/hseparation = 10
+columns = 3
+script = SubResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+save_slot = ExtResource( 1 )
+
+[node name="PageList" type="HBoxContainer" parent="."]
+material = ExtResource( 3 )
+anchor_left = 0.5
+anchor_top = 0.85
+anchor_right = 0.5
+anchor_bottom = 0.85
+margin_top = 10.0
+grow_horizontal = 2
+theme = SubResource( 12 )
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PreviousPage" type="Button" parent="PageList"]
+use_parent_material = true
+margin_right = 12.0
+margin_bottom = 31.0
+text = "<"
+script = SubResource( 13 )
+page_increment = -1
+
+[node name="QuickPage" type="Button" parent="PageList"]
+use_parent_material = true
+margin_left = 16.0
+margin_right = 33.0
+margin_bottom = 31.0
+toggle_mode = true
+group = SubResource( 14 )
+text = "Q"
+script = SubResource( 13 )
+page_number = 0
+
+[node name="NumberPage1" type="Button" parent="PageList"]
+use_parent_material = true
+margin_left = 37.0
+margin_right = 49.0
+margin_bottom = 31.0
+toggle_mode = true
+pressed = true
+group = SubResource( 14 )
+text = "1"
+script = SubResource( 13 )
+
+[node name="NumberPage2" type="Button" parent="PageList"]
+use_parent_material = true
+margin_left = 53.0
+margin_right = 65.0
+margin_bottom = 31.0
+toggle_mode = true
+group = SubResource( 14 )
+text = "2"
+script = SubResource( 13 )
+page_number = 2
+
+[node name="NumberPage3" type="Button" parent="PageList"]
+use_parent_material = true
+margin_left = 69.0
+margin_right = 81.0
+margin_bottom = 31.0
+toggle_mode = true
+group = SubResource( 14 )
+text = "3"
+script = SubResource( 13 )
+page_number = 3
+
+[node name="NumberPage4" type="Button" parent="PageList"]
+use_parent_material = true
+margin_left = 85.0
+margin_right = 97.0
+margin_bottom = 31.0
+toggle_mode = true
+group = SubResource( 14 )
+text = "4"
+script = SubResource( 13 )
+page_number = 4
+
+[node name="NumberPage5" type="Button" parent="PageList"]
+use_parent_material = true
+margin_left = 101.0
+margin_right = 113.0
+margin_bottom = 31.0
+toggle_mode = true
+group = SubResource( 14 )
+text = "5"
+script = SubResource( 13 )
+page_number = 5
+
+[node name="NumberPage6" type="Button" parent="PageList"]
+use_parent_material = true
+margin_left = 117.0
+margin_right = 129.0
+margin_bottom = 31.0
+toggle_mode = true
+group = SubResource( 14 )
+text = "6"
+script = SubResource( 13 )
+page_number = 6
+
+[node name="NumberPage7" type="Button" parent="PageList"]
+use_parent_material = true
+margin_left = 133.0
+margin_right = 145.0
+margin_bottom = 31.0
+toggle_mode = true
+group = SubResource( 14 )
+text = "7"
+script = SubResource( 13 )
+page_number = 7
+
+[node name="NumberPage8" type="Button" parent="PageList"]
+use_parent_material = true
+margin_left = 149.0
+margin_right = 161.0
+margin_bottom = 31.0
+toggle_mode = true
+group = SubResource( 14 )
+text = "8"
+script = SubResource( 13 )
+page_number = 8
+
+[node name="NumberPage9" type="Button" parent="PageList"]
+use_parent_material = true
+margin_left = 165.0
+margin_right = 177.0
+margin_bottom = 31.0
+toggle_mode = true
+group = SubResource( 14 )
+text = "9"
+script = SubResource( 13 )
+page_number = 9
+
+[node name="NextPage" type="Button" parent="PageList"]
+use_parent_material = true
+margin_left = 181.0
+margin_right = 193.0
+margin_bottom = 31.0
+text = ">"
+script = SubResource( 13 )
+page_increment = 1
+
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
+[connection signal="text_changed" from="PageLabel" to="PageLabel" method="_on_text_changed"]
+[connection signal="page_change" from="SaveSlotsGrid" to="PageList/NumberPage8" method="_on_page_change"]
+[connection signal="page_change" from="SaveSlotsGrid" to="PageList/NumberPage7" method="_on_page_change"]
+[connection signal="page_change" from="SaveSlotsGrid" to="PageList/PreviousPage" method="_on_page_change"]
+[connection signal="page_change" from="SaveSlotsGrid" to="PageList/NumberPage4" method="_on_page_change"]
+[connection signal="page_change" from="SaveSlotsGrid" to="PageList/NextPage" method="_on_page_change"]
+[connection signal="page_change" from="SaveSlotsGrid" to="PageList/NumberPage2" method="_on_page_change"]
+[connection signal="page_change" from="SaveSlotsGrid" to="PageList/QuickPage" method="_on_page_change"]
+[connection signal="page_change" from="SaveSlotsGrid" to="PageList/NumberPage5" method="_on_page_change"]
+[connection signal="page_change" from="SaveSlotsGrid" to="PageList/NumberPage9" method="_on_page_change"]
+[connection signal="page_change" from="SaveSlotsGrid" to="PageList/NumberPage3" method="_on_page_change"]
+[connection signal="page_change" from="SaveSlotsGrid" to="PageList/NumberPage6" method="_on_page_change"]
+[connection signal="page_change" from="SaveSlotsGrid" to="PageList/NumberPage1" method="_on_page_change"]
+[connection signal="page_change" from="SaveSlotsGrid" to="PageLabel" method="_on_page_change"]
+[connection signal="visibility_changed" from="SaveSlotsGrid" to="SaveSlotsGrid" method="_on_visibility_changed"]
+[connection signal="increment_page" from="PageList/PreviousPage" to="SaveSlotsGrid" method="_on_increment_page"]
+[connection signal="pressed" from="PageList/PreviousPage" to="PageList/PreviousPage" method="_on_pressed"]
+[connection signal="set_page" from="PageList/PreviousPage" to="SaveSlotsGrid" method="_on_set_page"]
+[connection signal="increment_page" from="PageList/QuickPage" to="SaveSlotsGrid" method="_on_increment_page"]
+[connection signal="pressed" from="PageList/QuickPage" to="PageList/QuickPage" method="_on_pressed"]
+[connection signal="set_page" from="PageList/QuickPage" to="SaveSlotsGrid" method="_on_set_page"]
+[connection signal="increment_page" from="PageList/NumberPage1" to="SaveSlotsGrid" method="_on_increment_page"]
+[connection signal="pressed" from="PageList/NumberPage1" to="PageList/NumberPage1" method="_on_pressed"]
+[connection signal="set_page" from="PageList/NumberPage1" to="SaveSlotsGrid" method="_on_set_page"]
+[connection signal="increment_page" from="PageList/NumberPage2" to="SaveSlotsGrid" method="_on_increment_page"]
+[connection signal="pressed" from="PageList/NumberPage2" to="PageList/NumberPage2" method="_on_pressed"]
+[connection signal="set_page" from="PageList/NumberPage2" to="SaveSlotsGrid" method="_on_set_page"]
+[connection signal="increment_page" from="PageList/NumberPage3" to="SaveSlotsGrid" method="_on_increment_page"]
+[connection signal="pressed" from="PageList/NumberPage3" to="PageList/NumberPage3" method="_on_pressed"]
+[connection signal="set_page" from="PageList/NumberPage3" to="SaveSlotsGrid" method="_on_set_page"]
+[connection signal="increment_page" from="PageList/NumberPage4" to="SaveSlotsGrid" method="_on_increment_page"]
+[connection signal="pressed" from="PageList/NumberPage4" to="PageList/NumberPage4" method="_on_pressed"]
+[connection signal="set_page" from="PageList/NumberPage4" to="SaveSlotsGrid" method="_on_set_page"]
+[connection signal="increment_page" from="PageList/NumberPage5" to="SaveSlotsGrid" method="_on_increment_page"]
+[connection signal="pressed" from="PageList/NumberPage5" to="PageList/NumberPage5" method="_on_pressed"]
+[connection signal="set_page" from="PageList/NumberPage5" to="SaveSlotsGrid" method="_on_set_page"]
+[connection signal="increment_page" from="PageList/NumberPage6" to="SaveSlotsGrid" method="_on_increment_page"]
+[connection signal="pressed" from="PageList/NumberPage6" to="PageList/NumberPage6" method="_on_pressed"]
+[connection signal="set_page" from="PageList/NumberPage6" to="SaveSlotsGrid" method="_on_set_page"]
+[connection signal="increment_page" from="PageList/NumberPage7" to="SaveSlotsGrid" method="_on_increment_page"]
+[connection signal="pressed" from="PageList/NumberPage7" to="PageList/NumberPage7" method="_on_pressed"]
+[connection signal="set_page" from="PageList/NumberPage7" to="SaveSlotsGrid" method="_on_set_page"]
+[connection signal="increment_page" from="PageList/NumberPage8" to="SaveSlotsGrid" method="_on_increment_page"]
+[connection signal="pressed" from="PageList/NumberPage8" to="PageList/NumberPage8" method="_on_pressed"]
+[connection signal="set_page" from="PageList/NumberPage8" to="SaveSlotsGrid" method="_on_set_page"]
+[connection signal="increment_page" from="PageList/NumberPage9" to="SaveSlotsGrid" method="_on_increment_page"]
+[connection signal="pressed" from="PageList/NumberPage9" to="PageList/NumberPage9" method="_on_pressed"]
+[connection signal="set_page" from="PageList/NumberPage9" to="SaveSlotsGrid" method="_on_set_page"]
+[connection signal="increment_page" from="PageList/NextPage" to="SaveSlotsGrid" method="_on_increment_page"]
+[connection signal="pressed" from="PageList/NextPage" to="PageList/NextPage" method="_on_pressed"]
+[connection signal="set_page" from="PageList/NextPage" to="SaveSlotsGrid" method="_on_set_page"]

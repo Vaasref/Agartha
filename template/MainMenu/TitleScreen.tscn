@@ -1,0 +1,92 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://template/GlobalColorModulate.tres" type="Material" id=1]
+[ext_resource path="res://addons/Agartha/fonts/NotoSans/NotoSans-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://addons/Agartha/fonts/NotoSans/NotoSans-Bold.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="GDScript" id=15]
+script/source = "tool
+extends Control
+
+
+func _on_visibility_changed():
+	if visible:
+		var shade:Control = get_tree().get_nodes_in_group(\"background_shade\")[0] as Control
+		shade.anchor_right = 0.25
+		
+		var return_button:Control = get_tree().get_nodes_in_group(\"return_button\")[0] as Control
+		return_button.visible = false
+"
+
+[sub_resource type="DynamicFont" id=16]
+size = 30
+outline_size = 1
+outline_color = Color( 0, 0, 0, 0.333333 )
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="GDScript" id=17]
+script/source = "extends Label
+
+
+func _ready():
+	self.text = Agartha.Settings.get(\"application/config/name\")
+"
+
+[sub_resource type="DynamicFont" id=18]
+size = 22
+outline_size = 1
+outline_color = Color( 0, 0, 0, 0.333333 )
+use_filter = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="GDScript" id=19]
+script/source = "extends Label
+
+
+func _ready():
+	self.text = Agartha.Settings.get(\"agartha/application/game_version\")
+"
+
+[node name="TitleScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = SubResource( 15 )
+
+[node name="TitleBox" type="VBoxContainer" parent="."]
+material = ExtResource( 1 )
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -30.0
+margin_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TitleLabel" type="Label" parent="TitleBox"]
+use_parent_material = true
+margin_right = 161.0
+margin_bottom = 42.0
+custom_fonts/font = SubResource( 16 )
+custom_colors/font_color = Color( 0.756863, 0.878431, 0.694118, 1 )
+text = "Game Title"
+align = 1
+script = SubResource( 17 )
+
+[node name="VersionLabel" type="Label" parent="TitleBox"]
+use_parent_material = true
+margin_top = 42.0
+margin_right = 161.0
+margin_bottom = 73.0
+custom_fonts/font = SubResource( 18 )
+custom_colors/font_color = Color( 0.756863, 0.878431, 0.694118, 1 )
+text = "0.0.0"
+align = 1
+script = SubResource( 19 )
+
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]

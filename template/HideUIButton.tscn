@@ -1,0 +1,47 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Button
+
+
+func _toggled(button_pressed):
+	for n in get_tree().get_nodes_in_group(\"hideable_gui\"):
+		if n is CanvasItem:
+			if button_pressed:
+				n.set_meta(\"previous_visibility\", n.visible)
+				n.visible = false
+			elif n.has_meta(\"previous_visibility\"):
+				n.visible = n.get_meta(\"previous_visibility\")
+			else:
+				n.visible = true
+
+func _unhandled_input(event):
+	if event.is_action_pressed(\"agartha_hide_gui\"):
+		self.pressed = not self.pressed
+		if self.pressed:
+			$HoldTimer.start()
+	if $HoldTimer.time_left == 0 and event.is_action_released(\"agartha_hide_gui\"):
+		self.pressed = false
+"
+
+[node name="HideUIButton" type="Button"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -71.0
+margin_top = -30.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 0, 30 )
+toggle_mode = true
+text = "Hide GUI"
+flat = true
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HoldTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true

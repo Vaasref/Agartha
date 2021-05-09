@@ -1,0 +1,246 @@
+[gd_scene load_steps=10 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Button
+
+
+
+func _pressed():
+	Agartha.step()
+
+func _unhandled_input(event):
+	if event.is_action_pressed(\"agartha_step\"):
+		_pressed()
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Button
+
+
+
+func _pressed():
+	Agartha.Timeline.roll(1)
+
+func _unhandled_input(event):
+	if event.is_action_pressed(\"agartha_roll_back\"):
+		_pressed()
+"
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends BaseButton
+
+
+
+func _pressed():
+	Agartha.Timeline.roll(-1)
+
+func _unhandled_input(event):
+	if event.is_action_pressed(\"agartha_roll_forward\"):
+		_pressed()
+"
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends BaseButton
+
+
+func _ready():
+	self.call_deferred(\"connect_to_timeline\")
+
+func connect_to_timeline():
+	var _o = Agartha.Timeline.connect(\"skip_change\", self, \"_on_skip_change\")
+
+func _on_skip_change(active, _priority):
+	self.pressed = active
+
+func _toggled(button_pressed):
+	if button_pressed:
+		Agartha.Timeline.start_skipping(0)
+	else:
+		Agartha.Timeline.end_skipping()
+	
+func _unhandled_input(event):
+	if event.is_action_pressed(\"agartha_skip_toggle\"):
+		_toggled(not self.pressed)
+	elif event.is_action_pressed(\"agartha_skip\"):
+		_toggled(true)
+	elif event.is_action_released(\"agartha_skip\"):
+		_toggled(false)
+"
+
+[sub_resource type="GDScript" id=5]
+script/source = "extends Button
+
+
+
+func _pressed():
+	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = true
+	pass
+"
+
+[sub_resource type="GDScript" id=6]
+script/source = "extends Button
+
+
+func _ready():
+	for p in get_tree().get_nodes_in_group(\"popup\"):
+		p.connect(\"popup_hide\", self, \"_on_popup_hide\")
+
+func _on_popup_hide():
+	$Timer.start()
+
+func _pressed():
+	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = true
+	get_tree().get_nodes_in_group(\"screen_container\")[0].current_tab = 1
+	$Timer.start()
+
+
+func _unhandled_input(event):
+	if event.is_action_pressed(\"agartha_return\") and $Timer.time_left == 0:
+		_pressed()
+"
+
+[sub_resource type="GDScript" id=7]
+script/source = "extends Button
+
+
+
+func _pressed():
+	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = true
+	get_tree().get_nodes_in_group(\"screen_container\")[0].current_tab = 2
+	pass
+"
+
+[sub_resource type="GDScript" id=8]
+script/source = "extends Button
+
+
+
+func _pressed():
+	Agartha.Saver.quick_save()
+
+func _unhandled_input(event):
+	if event.is_action_pressed(\"agartha_quick_save\"):
+		_pressed()
+"
+
+[sub_resource type="GDScript" id=9]
+script/source = "extends Button
+
+
+
+func _pressed():
+	Agartha.Saver.quick_load()
+
+func _unhandled_input(event):
+	if event.is_action_pressed(\"agartha_quick_load\"):
+		_pressed()
+"
+
+[node name="ControlButtons" type="VBoxContainer"]
+margin_left = 50.0
+margin_top = 200.0
+margin_right = 156.0
+margin_bottom = 360.0
+mouse_filter = 2
+alignment = 1
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="StepButton" type="Button" parent="."]
+margin_right = 106.0
+margin_bottom = 20.0
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Step"
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RollbackButton" type="Button" parent="."]
+margin_top = 24.0
+margin_right = 106.0
+margin_bottom = 44.0
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Roll back"
+script = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RollforwardButton" type="Button" parent="."]
+margin_top = 48.0
+margin_right = 106.0
+margin_bottom = 68.0
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Roll forward"
+script = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SkipButton" type="CheckButton" parent="."]
+margin_top = 72.0
+margin_right = 106.0
+margin_bottom = 112.0
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Skip"
+script = SubResource( 4 )
+
+[node name="Menu" type="Button" parent="."]
+visible = false
+margin_top = 116.0
+margin_right = 106.0
+margin_bottom = 136.0
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Menu"
+script = SubResource( 5 )
+
+[node name="Save" type="Button" parent="."]
+margin_top = 116.0
+margin_right = 106.0
+margin_bottom = 136.0
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Save"
+script = SubResource( 6 )
+
+[node name="Timer" type="Timer" parent="Save"]
+wait_time = 0.05
+one_shot = true
+
+[node name="Load" type="Button" parent="."]
+margin_top = 140.0
+margin_right = 106.0
+margin_bottom = 160.0
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Load"
+script = SubResource( 7 )
+
+[node name="QuickSave" type="Button" parent="."]
+margin_top = 164.0
+margin_right = 106.0
+margin_bottom = 184.0
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Q. Save"
+script = SubResource( 8 )
+
+[node name="QuickLoad" type="Button" parent="."]
+margin_top = 188.0
+margin_right = 106.0
+margin_bottom = 208.0
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Q. Load"
+script = SubResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

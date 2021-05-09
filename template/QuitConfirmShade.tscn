@@ -1,0 +1,73 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://template/MainMenu/QuitConfirmTheme.tres" type="Theme" id=1]
+[ext_resource path="res://template/GlobalColorModulate.tres" type="Material" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends ColorRect
+
+
+func _on_QuitConfirm_visibility_changed():
+	self.visible = get_child(0).visible
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends CleanDialog
+
+export var exit_when_tried_twice:bool = true
+
+func _ready():
+	get_tree().set_auto_accept_quit(false)
+
+
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+		if visible:
+			if exit_when_tried_twice:
+				get_tree().quit()
+		else:
+				self.call_deferred('popup_centered')
+
+func _input(event):
+	if event.is_action_pressed(\"agartha_return\"):
+		hide()
+
+func _on_confirmed():
+	get_tree().quit()
+"
+
+[node name="QuitConfirmShade" type="ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.623529 )
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="QuitConfirm" type="ConfirmationDialog" parent="." groups=[
+"popup",
+"quit_confirm",
+]]
+visible = true
+material = ExtResource( 2 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -150.0
+margin_right = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource( 1 )
+popup_exclusive = true
+window_title = ""
+dialog_text = "Do you really want to quit ?"
+dialog_hide_on_ok = false
+script = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="confirmed" from="QuitConfirm" to="QuitConfirm" method="_on_confirmed"]
+[connection signal="visibility_changed" from="QuitConfirm" to="." method="_on_QuitConfirm_visibility_changed"]

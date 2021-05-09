@@ -1,0 +1,100 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://template/GlobalColorModulate.tres" type="Material" id=1]
+[ext_resource path="res://template/MainMenu/QuitConfirmTheme.tres" type="Theme" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends ColorRect
+
+
+func _on_SaveConfirm_visibility_changed():
+	self.visible = get_child(0).visible
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends ConfirmationDialog
+
+var mode
+
+func _ready():
+	get_tree().set_auto_accept_quit(false)
+	remove_child(get_close_button())
+	get_close_button().queue_free()
+	
+	get_label().align = Label.ALIGN_CENTER
+	get_label().use_parent_material = true
+	
+	get_ok().text = \"Yes\"
+	get_ok().use_parent_material = true
+	
+	get_cancel().text = \"No\"
+	get_cancel().use_parent_material = true
+
+
+func overwrite_confirm(filename, name):
+	mode = \"overwrite\"
+	self.dialog_text = \"Are you sure you want to overwrite this save ?\"
+	popup_centered()
+	set_meta('save_filename', filename)
+	set_meta('save_name', name)
+
+func delete_confirm(filename):
+	mode = \"delete\"
+	self.dialog_text = \"Are you sure you want to delete this save ?\"
+	popup_centered()
+	set_meta('save_filename', filename)
+
+func _input(event):
+	if event.is_action_pressed(\"agartha_return\"):
+		hide()
+
+func _on_confirmed():
+	if mode == \"overwrite\":
+		var screenshot
+		if get_meta('return_on_save'):
+			Agartha.get_tree().get_nodes_in_group(\"main_menu\")[0].visible = false
+			yield(VisualServer, \"frame_post_draw\")
+			screenshot = get_tree().get_root().get_texture().get_data()
+		else: # das blinken menu (cf SaveSlot.gd:11)
+			Agartha.get_tree().get_nodes_in_group(\"main_menu\")[0].modulate = Color.transparent
+			yield(VisualServer, \"frame_post_draw\")
+			screenshot = get_tree().get_root().get_texture().get_data()
+			Agartha.get_tree().get_nodes_in_group(\"main_menu\")[0].modulate = Color.white
+		screenshot.flip_y()
+		Agartha.Saver.save(get_meta('save_filename'), get_meta('save_name'), screenshot)
+	elif mode == \"delete\":
+		Agartha.Saver.delete(get_meta('save_filename'))
+	hide()
+"
+
+[node name="ConfirmShade" type="ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.623529 )
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SaveConfirm" type="ConfirmationDialog" parent="." groups=[
+"popup",
+"save_confirm",
+]]
+visible = true
+material = ExtResource( 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -250.0
+margin_right = 250.0
+theme = ExtResource( 2 )
+window_title = ""
+dialog_autowrap = true
+script = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="confirmed" from="SaveConfirm" to="SaveConfirm" method="_on_confirmed"]
+[connection signal="visibility_changed" from="SaveConfirm" to="." method="_on_SaveConfirm_visibility_changed"]

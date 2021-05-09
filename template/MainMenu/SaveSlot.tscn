@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://addons/Agartha/fonts/NotoSans/NotoSans-Regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://addons/Agartha/fonts/NotoSans/NotoSans-Bold.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://template/MainMenu/SaveSlot.gd" type="Script" id=3]
+[ext_resource path="res://template/GlobalColorModulate.tres" type="Material" id=4]
 
 [sub_resource type="StyleBoxLine" id=1]
 color = Color( 0.596078, 0.921569, 0.478431, 1 )
@@ -28,13 +29,6 @@ vertical = true
 
 [sub_resource type="ButtonGroup" id=5]
 
-[sub_resource type="OpenSimplexNoise" id=6]
-
-[sub_resource type="NoiseTexture" id=7]
-width = 256
-height = 144
-noise = SubResource( 6 )
-
 [sub_resource type="DynamicFont" id=8]
 size = 22
 outline_size = 1
@@ -55,6 +49,7 @@ use_filter = true
 font_data = ExtResource( 1 )
 
 [node name="SaveSlot" type="Button"]
+material = ExtResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
@@ -70,21 +65,36 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-image_background_color = Color( 0.317647, 0.639216, 0.2, 1 )
 
-[node name="Screenshot" type="TextureRect" parent="."]
+[node name="ScreenshotContainer" type="AspectRatioContainer" parent="."]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_bottom = -70.0
-mouse_filter = 2
-texture = SubResource( 7 )
-expand = true
-stretch_mode = 6
+ratio = 1.777
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Error" type="Label" parent="Screenshot"]
+[node name="Background" type="ColorRect" parent="ScreenshotContainer"]
+use_parent_material = true
+margin_left = 62.475
+margin_right = 1217.52
+margin_bottom = 650.0
+color = Color( 0.317647, 0.639216, 0.2, 1 )
+
+[node name="Screenshot" type="TextureRect" parent="ScreenshotContainer"]
+margin_left = 62.475
+margin_right = 1217.52
+margin_bottom = 650.0
+mouse_filter = 2
+expand = true
+stretch_mode = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Error" type="Label" parent="ScreenshotContainer/Screenshot"]
 visible = false
 anchor_top = 1.0
 anchor_right = 1.0
@@ -100,6 +110,7 @@ __meta__ = {
 }
 
 [node name="Labels" type="VBoxContainer" parent="."]
+use_parent_material = true
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -125,6 +136,7 @@ context_menu_enabled = false
 placeholder_text = "Untitled"
 
 [node name="Date" type="Label" parent="Labels"]
+use_parent_material = true
 margin_top = 37.0
 margin_right = 1280.0
 margin_bottom = 61.0
@@ -135,6 +147,7 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
 [connection signal="focus_exited" from="Labels/Name" to="." method="_on_name_edit_exited"]

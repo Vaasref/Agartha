@@ -1,0 +1,393 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://template/GlobalColorModulate.tres" type="Material" id=1]
+[ext_resource path="res://addons/Agartha/fonts/NotoSans/NotoSans-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://template/MainMenu/SideMenuTheme.tres" type="Theme" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Control
+
+# Passtrhough signals
+signal _screen_changed(tab)
+signal _menu_opened(context)
+
+func _on_tab_changed(tab):
+	emit_signal(\"_screen_changed\", tab)
+
+
+func _on_menu_opened(context):
+	emit_signal(\"_menu_opened\", context)
+"
+
+[sub_resource type="DynamicFont" id=2]
+size = 35
+use_filter = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="GDScript" id=3]
+script/source = "tool
+extends Label
+
+
+func _on_screen_changed(tab):
+	match tab:
+		1:
+			self.text = \"Save\"
+		2:
+			self.text = \"Load\"
+		3:
+			self.text = \"Preferences\"
+		_:
+			self.text = \"\"
+"
+
+[sub_resource type="StyleBoxLine" id=4]
+color = Color( 0.219608, 0.368627, 0.164706, 1 )
+thickness = 4
+vertical = true
+
+[sub_resource type="GDScript" id=5]
+script/source = "tool
+extends Panel
+
+
+func _on_screen_changed(tab):
+	var style = self.get(\"custom_styles/panel\") as StyleBoxLine
+	match tab:
+		0:
+			style.grow_begin = 1
+			style.grow_end = 1
+		_:
+			style.grow_begin = -100
+			style.grow_end = -30
+"
+
+[sub_resource type="ButtonGroup" id=6]
+
+[sub_resource type="GDScript" id=7]
+script/source = "extends Button
+
+func _pressed():
+	Agartha.StageManager.change_scene(\"SceneSelection\")# Change that scene to your first scene.
+	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = false
+
+
+func _on_menu_opened(context):
+	self.visible = context == 0
+"
+
+[sub_resource type="GDScript" id=8]
+script/source = "extends Button
+
+var save_to_load = null
+
+
+func _on_menu_opened(context):
+	if context == 0:
+		self.visible = true
+		update_last_save()
+		if save_to_load:
+			self.disabled = false
+		else:
+			self.disabled = true
+	else:
+		self.visible = false
+
+func _pressed():
+	Agartha.Saver.load(save_to_load)
+	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = false
+
+
+func update_last_save():
+	var latest_save_path = Agartha.Persistent.get_value(\"_latest_save\")
+	var latest_save = null
+	if latest_save_path:
+		latest_save_path = Agartha.Saver.get_save_path(latest_save_path)
+		if ResourceLoader.exists(latest_save_path):
+			latest_save = ResourceLoader.load(latest_save_path, \"Resource\", true) as StoreSave
+			if Agartha.Saver.check_save_compatibility(latest_save, false) != Agartha.Saver.COMPATIBILITY_ERROR.NO_ERROR:
+				latest_save = null
+		
+		
+	var last_auto_save_path = Agartha.Saver.get_save_path(\"auto_0\")
+	var last_auto_save = null
+	if ResourceLoader.exists(last_auto_save_path):
+		last_auto_save = ResourceLoader.load(last_auto_save_path, \"Resource\", true) as StoreSave
+		if Agartha.Saver.check_save_compatibility(last_auto_save, false) != Agartha.Saver.COMPATIBILITY_ERROR.NO_ERROR:
+			last_auto_save = null
+	
+	if latest_save:
+		save_to_load = latest_save_path
+	if last_auto_save:
+		if save_to_load:
+			if save_to_load.date < last_auto_save.date:
+				save_to_load = last_auto_save_path
+		else:
+			save_to_load = last_auto_save_path
+"
+
+[sub_resource type="GDScript" id=9]
+script/source = "extends Button
+
+
+func _pressed():
+	get_tree().get_nodes_in_group(\"screen_container\")[0].current_tab = 1
+
+
+func _on_menu_opened(context):
+	self.visible = context == 1
+
+
+func _on_screen_changed(tab):
+	self.pressed = tab == 1
+"
+
+[sub_resource type="GDScript" id=10]
+script/source = "extends Button
+
+
+func _pressed():
+	get_tree().get_nodes_in_group(\"screen_container\")[0].current_tab = 2
+
+
+func _on_screen_changed(tab):
+	self.pressed = tab == 2
+"
+
+[sub_resource type="GDScript" id=11]
+script/source = "extends Button
+
+func _ready():
+	self.visible = false
+
+func _pressed():
+	Agartha.reset()
+	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = false
+	get_tree().get_nodes_in_group(\"screen_container\")[0].current_tab = 0
+	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = true
+
+func _on_menu_opened(context):
+	self.visible = context == 1
+"
+
+[sub_resource type="GDScript" id=12]
+script/source = "extends Button
+
+
+func _pressed():
+	get_tree().get_nodes_in_group(\"quit_confirm\")[0].visible = true
+"
+
+[sub_resource type="GDScript" id=13]
+script/source = "extends Button
+
+export var mode:int = 0
+
+
+func _ready():
+	for p in get_tree().get_nodes_in_group(\"popup\"):
+		p.connect(\"popup_hide\", self, \"_on_popup_hide\")
+
+
+func _pressed():
+	match mode:
+		1:
+			get_tree().get_nodes_in_group(\"main_menu\")[0].visible = false
+		_:
+			get_tree().get_nodes_in_group(\"screen_container\")[0].current_tab = 0
+	$Timer.start()
+
+
+func _on_menu_opened(context):
+	$Timer.start()#This timer prevents this button to trigger at the same time the menu is shown.
+	if context == 1:
+		self.visible = true
+		mode = 1
+	else:
+		mode = 0
+
+func _on_popup_hide():
+	 $Timer.start()
+
+func _process(_delta):
+	if is_visible_in_tree() and $Timer.time_left == 0:
+		if Input.is_action_just_pressed(\"agartha_return\"):
+			_pressed()
+	pass
+"
+
+[node name="SideMenu" type="Control"]
+material = ExtResource( 1 )
+anchor_right = 0.25
+anchor_bottom = 1.0
+theme = ExtResource( 3 )
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScreenTitle" type="Label" parent="."]
+use_parent_material = true
+margin_left = 40.0
+margin_top = 24.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.317647, 0.639216, 0.2, 1 )
+script = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SeparationBar" type="Panel" parent="." groups=[
+"separation_bar",
+]]
+use_parent_material = true
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+custom_styles/panel = SubResource( 4 )
+script = SubResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScreenList" type="VBoxContainer" parent="."]
+use_parent_material = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 40.0
+margin_right = -0.793701
+rect_clip_content = true
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StartButton" type="Button" parent="ScreenList"]
+use_parent_material = true
+margin_top = 239.0
+margin_right = 279.0
+margin_bottom = 270.0
+focus_mode = 0
+enabled_focus_mode = 0
+group = SubResource( 6 )
+text = "Start"
+flat = true
+align = 0
+script = SubResource( 7 )
+
+[node name="ContinueButton" type="Button" parent="ScreenList"]
+use_parent_material = true
+margin_top = 274.0
+margin_right = 279.0
+margin_bottom = 305.0
+disabled = true
+enabled_focus_mode = 0
+group = SubResource( 6 )
+text = "Continue"
+flat = true
+align = 0
+script = SubResource( 8 )
+
+[node name="SaveButton" type="Button" parent="ScreenList"]
+use_parent_material = true
+margin_top = 309.0
+margin_right = 279.0
+margin_bottom = 340.0
+focus_mode = 0
+toggle_mode = true
+enabled_focus_mode = 0
+group = SubResource( 6 )
+text = "Save"
+flat = true
+align = 0
+script = SubResource( 9 )
+
+[node name="LoadButton" type="Button" parent="ScreenList"]
+use_parent_material = true
+margin_top = 344.0
+margin_right = 279.0
+margin_bottom = 375.0
+focus_mode = 0
+toggle_mode = true
+enabled_focus_mode = 0
+group = SubResource( 6 )
+text = "Load"
+flat = true
+align = 0
+script = SubResource( 10 )
+
+[node name="PreferencesButton" type="Button" parent="ScreenList"]
+use_parent_material = true
+margin_top = 379.0
+margin_right = 279.0
+margin_bottom = 410.0
+focus_mode = 0
+toggle_mode = true
+enabled_focus_mode = 0
+group = SubResource( 6 )
+text = "Preferences"
+flat = true
+align = 0
+
+[node name="MainMenuButton" type="Button" parent="ScreenList"]
+use_parent_material = true
+margin_top = 414.0
+margin_right = 279.0
+margin_bottom = 445.0
+focus_mode = 0
+enabled_focus_mode = 0
+group = SubResource( 6 )
+text = "Main Menu"
+flat = true
+align = 0
+script = SubResource( 11 )
+
+[node name="QuitButton" type="Button" parent="ScreenList"]
+use_parent_material = true
+margin_top = 449.0
+margin_right = 279.0
+margin_bottom = 480.0
+focus_mode = 0
+enabled_focus_mode = 0
+group = SubResource( 6 )
+text = "Quit"
+flat = true
+align = 0
+script = SubResource( 12 )
+
+[node name="ReturnButton" type="Button" parent="." groups=[
+"return_button",
+]]
+visible = false
+use_parent_material = true
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 40.0
+margin_bottom = -30.0
+grow_vertical = 0
+focus_mode = 0
+enabled_focus_mode = 0
+group = SubResource( 6 )
+text = "Return"
+flat = true
+align = 0
+script = SubResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="ReturnButton"]
+wait_time = 0.05
+one_shot = true
+
+[connection signal="_menu_opened" from="." to="ReturnButton" method="_on_menu_opened"]
+[connection signal="_menu_opened" from="." to="ScreenList/StartButton" method="_on_menu_opened"]
+[connection signal="_menu_opened" from="." to="ScreenList/MainMenuButton" method="_on_menu_opened"]
+[connection signal="_menu_opened" from="." to="ScreenList/ContinueButton" method="_on_menu_opened"]
+[connection signal="_menu_opened" from="." to="ScreenList/SaveButton" method="_on_menu_opened"]
+[connection signal="_screen_changed" from="." to="SeparationBar" method="_on_screen_changed"]
+[connection signal="_screen_changed" from="." to="ScreenTitle" method="_on_screen_changed"]
+[connection signal="_screen_changed" from="." to="ScreenList/LoadButton" method="_on_screen_changed"]
+[connection signal="_screen_changed" from="." to="ScreenList/SaveButton" method="_on_screen_changed"]

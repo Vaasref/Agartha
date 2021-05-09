@@ -1,0 +1,99 @@
+[gd_scene load_steps=5 format=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 0.333333 )
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends PanelContainer
+
+
+func _ready():
+	var _o = Agartha.connect(\"say\", self, \"_on_say\")
+	_o = Agartha.connect(\"scene_changed\", self, \"_on_scene_changed\")
+
+func clear():
+	self.visible = false
+
+func _on_say(_character, _text, _params):
+	print(\"say %s :   '%s'\" % [_character, _text])
+	self.visible = true
+
+func _on_scene_changed(_scene_name):
+	clear()
+
+func _step():
+	clear()
+"
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Label
+
+
+
+func _ready():
+	var _o = Agartha.connect(\"say\", self, \"_on_say\")
+	self.visible = false
+
+func _on_say(character, _text, _params):
+	if character:
+		self.text = character
+		self.visible = true
+	else:
+		self.visible = false
+"
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends RichTextLabel
+
+
+
+func _ready():
+	var _o = Agartha.connect(\"say\", self, \"_on_say\")
+
+func _on_say(_character, text, _params):
+	self.text = text
+"
+
+[node name="DialogueLinePanel" type="PanelContainer"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+mouse_filter = 2
+custom_styles/panel = SubResource( 1 )
+script = SubResource( 2 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+margin_right = 1280.0
+margin_bottom = 140.0
+mouse_filter = 2
+custom_constants/margin_right = 200
+custom_constants/margin_top = 20
+custom_constants/margin_left = 200
+custom_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+margin_left = 200.0
+margin_top = 20.0
+margin_right = 1080.0
+margin_bottom = 120.0
+mouse_filter = 2
+
+[node name="Speaker" type="Label" parent="MarginContainer/VBoxContainer"]
+visible = false
+margin_right = 1010.0
+margin_bottom = 14.0
+text = "Character"
+script = SubResource( 3 )
+
+[node name="DialogueLine" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
+margin_right = 880.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 0, 100 )
+mouse_filter = 2
+script = SubResource( 4 )

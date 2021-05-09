@@ -1,0 +1,51 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://template/GameUI/MenuEntry.tscn" type="PackedScene" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends VBoxContainer
+
+export var menu_entry:PackedScene
+
+func _ready():
+	var _o = Agartha.connect(\"menu\", self, \"_on_menu\")
+
+func _step():
+	clear_children()
+
+func _restore(_state):
+	clear_children()
+
+func _on_menu(choices, _params):
+	clear_children()
+	var i = 0
+	for e in choices:
+		var entry = menu_entry.instance()
+		entry.set_text(e)
+		entry.choice = i
+		self.add_child(entry)
+		i += 1
+
+func clear_children():
+	for c in self.get_children():
+		self.call_deferred('remove_child', c)
+
+func remove_child(node):
+	if node in self.get_children():
+		.remove_child(node)
+"
+
+[node name="ChoiceMenu" type="VBoxContainer"]
+anchor_left = 0.2
+anchor_top = 0.15
+anchor_right = 0.8
+anchor_bottom = 0.7
+mouse_filter = 2
+alignment = 1
+script = SubResource( 1 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+menu_entry = ExtResource( 1 )
