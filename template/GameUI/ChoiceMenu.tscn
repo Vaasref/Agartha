@@ -18,21 +18,33 @@ func _restore(_state):
 
 func _on_menu(choices, _params):
 	clear_children()
-	var i = 0
-	for e in choices:
-		var entry = menu_entry.instance()
-		entry.set_text(e)
-		entry.choice = i
-		self.add_child(entry)
-		i += 1
+	if choices is Dictionary:
+		for k in choices.keys():
+			add_choice(k, choices[k])
+	elif choices is Array:
+		for k in choices.size():
+			add_choice(k, choices[k])
+
+func add_choice(id, choice):
+	var entry = menu_entry.instance()
+	if choice is Array:
+		entry.set_text(choice[0])
+		entry.set_meta('parameters', choice[1])
+	elif choice is String:
+		entry.set_text(choice)
+	else:
+		entry.set_text(str(id).capitalize())
+	entry.choice = id
+	self.add_child(entry)
 
 func clear_children():
 	for c in self.get_children():
 		self.call_deferred('remove_child', c)
 
 func remove_child(node):
-	if node in self.get_children():
+	if node and node in self.get_children():
 		.remove_child(node)
+		node.queue_free()
 "
 
 [node name="ChoiceMenu" type="VBoxContainer"]
