@@ -25,13 +25,8 @@ func _unhandled_input(event):
 "
 
 [node name="HideUIButton" type="Button"]
-anchor_left = 1.0
 anchor_top = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -71.0
-margin_top = -30.0
-grow_horizontal = 0
 grow_vertical = 0
 rect_min_size = Vector2( 0, 30 )
 toggle_mode = true
