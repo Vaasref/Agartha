@@ -1,8 +1,11 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://template/GameUI/ControlButtonsTheme.tres" type="Theme" id=1]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Button
 
+export var visible_only_when_ui_hiden = true
 
 func _toggled(button_pressed):
 	for n in get_tree().get_nodes_in_group(\"hideable_gui\"):
@@ -14,29 +17,42 @@ func _toggled(button_pressed):
 				n.visible = n.get_meta(\"previous_visibility\")
 			else:
 				n.visible = true
+	if button_pressed:
+		self.text = \"Show UI\"
+	else:
+		self.text = \"Hide UI\"
+		if visible_only_when_ui_hiden:
+			self.visible = false
 
 func _unhandled_input(event):
 	if event.is_action_pressed(\"agartha_hide_gui\"):
 		self.pressed = not self.pressed
 		if self.pressed:
 			$HoldTimer.start()
-	if $HoldTimer.time_left == 0 and event.is_action_released(\"agartha_hide_gui\"):
-		self.pressed = false
+	if event.is_action_released(\"agartha_hide_gui\"):
+		if $HoldTimer.time_left == 0:
+			self.pressed = false
+		else:
+			self.visible = true
 "
 
-[node name="HideUIButton" type="Button"]
+[node name="HideUIButton" type="Button" groups=[
+"hide_ui_button",
+]]
+visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
+margin_left = 5.0
 grow_vertical = 0
 rect_min_size = Vector2( 0, 30 )
+theme = ExtResource( 1 )
 toggle_mode = true
 text = "Hide GUI"
-flat = true
 script = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HoldTimer" type="Timer" parent="."]
-wait_time = 0.1
+wait_time = 0.2
 one_shot = true

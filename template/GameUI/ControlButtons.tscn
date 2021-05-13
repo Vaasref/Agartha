@@ -1,4 +1,6 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://template/GameUI/ControlButtonsTheme.tres" type="Theme" id=1]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Button
@@ -45,9 +47,11 @@ script/source = "extends BaseButton
 
 func _ready():
 	self.call_deferred(\"connect_to_timeline\")
+	
 
 func connect_to_timeline():
 	var _o = Agartha.Timeline.connect(\"skip_change\", self, \"_on_skip_change\")
+	_o = get_tree().get_nodes_in_group(\"main_menu\")[0].connect(\"visibility_changed\", Agartha.Timeline, \"end_skipping\")
 
 func _on_skip_change(active, _priority):
 	self.pressed = active
@@ -57,7 +61,7 @@ func _toggled(button_pressed):
 		Agartha.Timeline.start_skipping(0)
 	else:
 		Agartha.Timeline.end_skipping()
-	
+
 func _unhandled_input(event):
 	if event.is_action_pressed(\"agartha_skip_toggle\"):
 		_toggled(not self.pressed)
@@ -65,6 +69,7 @@ func _unhandled_input(event):
 		_toggled(true)
 	elif event.is_action_released(\"agartha_skip\"):
 		_toggled(false)
+
 "
 
 [sub_resource type="GDScript" id=5]
@@ -75,6 +80,16 @@ script/source = "extends Button
 func _pressed():
 	get_tree().get_nodes_in_group(\"main_menu\")[0].visible = true
 	pass
+"
+
+[sub_resource type="GDScript" id=10]
+script/source = "extends BaseButton
+
+
+func _pressed():
+	var hide_ui_button = get_tree().get_nodes_in_group(\"hide_ui_button\")[0]
+	hide_ui_button.pressed = true
+	hide_ui_button.visible = true
 "
 
 [sub_resource type="GDScript" id=6]
@@ -136,12 +151,9 @@ func _unhandled_input(event):
 		_pressed()
 "
 
-[node name="ControlButtons" type="VBoxContainer"]
-margin_left = 50.0
-margin_top = 200.0
-margin_right = 156.0
-margin_bottom = 360.0
+[node name="ControlButtons" type="HBoxContainer"]
 mouse_filter = 2
+theme = ExtResource( 1 )
 alignment = 1
 __meta__ = {
 "_edit_group_": true,
@@ -149,10 +161,9 @@ __meta__ = {
 }
 
 [node name="StepButton" type="Button" parent="."]
-margin_right = 106.0
-margin_bottom = 20.0
+margin_right = 32.0
+margin_bottom = 16.0
 focus_mode = 0
-enabled_focus_mode = 0
 text = "Step"
 script = SubResource( 1 )
 __meta__ = {
@@ -160,35 +171,34 @@ __meta__ = {
 }
 
 [node name="RollbackButton" type="Button" parent="."]
-margin_top = 24.0
-margin_right = 106.0
-margin_bottom = 44.0
+margin_left = 36.0
+margin_right = 93.0
+margin_bottom = 16.0
 focus_mode = 0
-enabled_focus_mode = 0
-text = "Roll back"
+text = "Rollback"
 script = SubResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="RollforwardButton" type="Button" parent="."]
-margin_top = 48.0
-margin_right = 106.0
-margin_bottom = 68.0
+visible = false
+margin_left = 135.0
+margin_right = 214.0
+margin_bottom = 34.0
 focus_mode = 0
-enabled_focus_mode = 0
 text = "Roll forward"
 script = SubResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SkipButton" type="CheckButton" parent="."]
-margin_top = 72.0
-margin_right = 106.0
-margin_bottom = 112.0
+[node name="SkipButton" type="Button" parent="."]
+margin_left = 97.0
+margin_right = 127.0
+margin_bottom = 16.0
 focus_mode = 0
-enabled_focus_mode = 0
+toggle_mode = true
 text = "Skip"
 script = SubResource( 4 )
 
@@ -198,16 +208,24 @@ margin_top = 116.0
 margin_right = 106.0
 margin_bottom = 136.0
 focus_mode = 0
-enabled_focus_mode = 0
 text = "Menu"
 script = SubResource( 5 )
 
+[node name="HideUIProxy" type="Button" parent="."]
+margin_left = 131.0
+margin_right = 165.0
+margin_bottom = 16.0
+text = "Hide"
+script = SubResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Save" type="Button" parent="."]
-margin_top = 116.0
-margin_right = 106.0
-margin_bottom = 136.0
+margin_left = 169.0
+margin_right = 202.0
+margin_bottom = 16.0
 focus_mode = 0
-enabled_focus_mode = 0
 text = "Save"
 script = SubResource( 6 )
 
@@ -216,29 +234,26 @@ wait_time = 0.05
 one_shot = true
 
 [node name="Load" type="Button" parent="."]
-margin_top = 140.0
-margin_right = 106.0
-margin_bottom = 160.0
+margin_left = 206.0
+margin_right = 240.0
+margin_bottom = 16.0
 focus_mode = 0
-enabled_focus_mode = 0
 text = "Load"
 script = SubResource( 7 )
 
 [node name="QuickSave" type="Button" parent="."]
-margin_top = 164.0
-margin_right = 106.0
-margin_bottom = 184.0
+margin_left = 244.0
+margin_right = 296.0
+margin_bottom = 16.0
 focus_mode = 0
-enabled_focus_mode = 0
 text = "Q. Save"
 script = SubResource( 8 )
 
 [node name="QuickLoad" type="Button" parent="."]
-margin_top = 188.0
-margin_right = 106.0
-margin_bottom = 208.0
+margin_left = 300.0
+margin_right = 353.0
+margin_bottom = 16.0
 focus_mode = 0
-enabled_focus_mode = 0
 text = "Q. Load"
 script = SubResource( 9 )
 __meta__ = {

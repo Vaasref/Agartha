@@ -17,3 +17,7 @@ __meta__ = {
 [node name="DialogueLinePanel" parent="." instance=ExtResource( 4 )]
 
 [node name="ControlButtons" parent="." instance=ExtResource( 3 )]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
