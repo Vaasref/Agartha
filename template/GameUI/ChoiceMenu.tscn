@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://template/GameUI/MenuEntry.tscn" type="PackedScene" id=1]
+[ext_resource path="res://template/GameUI/ChoiceMenuEntry.tscn" type="PackedScene" id=1]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends VBoxContainer
@@ -27,19 +27,13 @@ func _on_menu(choices, _params):
 
 func add_choice(id, choice):
 	var entry = menu_entry.instance()
-	if choice is Array:
-		entry.set_text(choice[0])
-		entry.set_meta('parameters', choice[1])
-	elif choice is String:
-		entry.set_text(choice)
-	else:
-		entry.set_text(str(id).capitalize())
-	entry.choice = id
+	entry.init(id, choice)
 	self.add_child(entry)
 
 func clear_children():
 	for c in self.get_children():
 		self.call_deferred('remove_child', c)
+		#This is structured this way to allow to add new children without needing to wait for previous children to be discarded
 
 func remove_child(node):
 	if node and node in self.get_children():
@@ -53,6 +47,7 @@ anchor_top = 0.15
 anchor_right = 0.8
 anchor_bottom = 0.7
 mouse_filter = 2
+custom_constants/separation = 10
 alignment = 1
 script = SubResource( 1 )
 __meta__ = {

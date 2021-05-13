@@ -1,0 +1,60 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://template/GameUI/ChoiceMenuTheme.tres" type="Theme" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends PanelContainer
+
+var parameters
+
+func init(id, entry):
+	var entry_text = \"\"
+	if entry is Array:
+		entry_text = entry[0]
+		parameters = entry[1]
+	elif entry is String:
+		entry_text = entry
+	else:
+		entry_text = str(id).capitalize()
+	$Label.bbcode_text = \"[center]%s[/center]\" % Agartha.MarkupParser.parse_text(entry_text)
+	$Button.choice = id
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Button
+
+var choice = -1
+
+func _pressed():
+	Agartha.Menu.return(choice)
+"
+
+[node name="ChoiceMenuEntry" type="PanelContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
+script = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="RichTextLabel" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
+mouse_filter = 2
+theme = ExtResource( 1 )
+bbcode_enabled = true
+bbcode_text = "Some text"
+text = "Some text"
+fit_content_height = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
