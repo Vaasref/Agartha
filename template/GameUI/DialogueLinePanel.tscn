@@ -1,4 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://template/GameUI/LineLabelTheme.tres" type="Theme" id=1]
+[ext_resource path="res://template/GameUI/SpeakerLabelTheme.tres" type="Theme" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 0.333333 )
@@ -12,21 +15,26 @@ func _ready():
 	_o = Agartha.connect(\"scene_changed\", self, \"_on_scene_changed\")
 
 func clear():
-	self.visible = false
+	$HideTimer.start()
 
 func _on_say(_character, _text, _params):
 	print(\"say %s :   '%s'\" % [_character, _text])
 	self.visible = true
+	$HideTimer.stop()
 
 func _on_scene_changed(_scene_name):
 	clear()
 
 func _step():
 	clear()
+
+
+func _on_HideTimer_timeout():
+	self.visible = false
 "
 
 [sub_resource type="GDScript" id=3]
-script/source = "extends Label
+script/source = "extends RichTextLabel
 
 
 
@@ -36,7 +44,7 @@ func _ready():
 
 func _on_say(character, _text, _params):
 	if character:
-		self.text = character
+		self.bbcode_text = character.bbcode
 		self.visible = true
 	else:
 		self.visible = false
@@ -51,7 +59,7 @@ func _ready():
 	var _o = Agartha.connect(\"say\", self, \"_on_say\")
 
 func _on_say(_character, text, _params):
-	self.text = text
+	self.bbcode_text = Agartha.MarkupParser.parse_text(text)
 "
 
 [node name="DialogueLinePanel" type="PanelContainer"]
@@ -68,9 +76,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="HideTimer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
 [node name="MarginContainer" type="MarginContainer" parent="."]
 margin_right = 1280.0
-margin_bottom = 140.0
+margin_bottom = 144.0
 mouse_filter = 2
 custom_constants/margin_right = 200
 custom_constants/margin_top = 20
@@ -81,19 +93,33 @@ custom_constants/margin_bottom = 20
 margin_left = 200.0
 margin_top = 20.0
 margin_right = 1080.0
-margin_bottom = 120.0
+margin_bottom = 124.0
 mouse_filter = 2
 
-[node name="Speaker" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Indent" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+margin_right = 880.0
+mouse_filter = 2
+
+[node name="Speaker" type="RichTextLabel" parent="MarginContainer/VBoxContainer/Indent"]
 visible = false
-margin_right = 1010.0
-margin_bottom = 14.0
-text = "Character"
+margin_right = 880.0
+margin_bottom = 35.0
+mouse_filter = 2
+theme = ExtResource( 2 )
+bbcode_enabled = true
+bbcode_text = "Speaker"
+text = "Speaker"
+fit_content_height = true
 script = SubResource( 3 )
 
 [node name="DialogueLine" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
+margin_top = 4.0
 margin_right = 880.0
-margin_bottom = 100.0
+margin_bottom = 104.0
 rect_min_size = Vector2( 0, 100 )
 mouse_filter = 2
+theme = ExtResource( 1 )
+bbcode_enabled = true
 script = SubResource( 4 )
+
+[connection signal="timeout" from="HideTimer" to="." method="_on_HideTimer_timeout"]
