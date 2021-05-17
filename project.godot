@@ -74,7 +74,7 @@ paths/scenes/scene_aliases={
 "SceneSelection": "res://scenes/SceneSelection.tscn",
 "ShowHideTest": "res://scenes/ShowHideTest.tscn"
 }
-saves/compatibility/compatibility_code="8950d"
+saves/compatibility/compatibility_code="668e6"
 saves/compress_savefiles=false
 dialogues/actions_default_parameters/show={
 }
