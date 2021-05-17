@@ -50,19 +50,9 @@ expand_margin_top = 10.0
 script/source = "extends SpinBox
 
 
-func _ready():
-	update_value()
-
-func _step():
+func _process(_delta):
 	if visible:
-		update_value()
-
-func _restore(_state):
-	if visible:
-		update_value()
-
-func update_value():
-	self.value = Agartha.Store.stack_size_max
+		value = Agartha.Store.stack_size_max
 
 
 func _on_value_changed(value):
@@ -73,21 +63,10 @@ func _on_value_changed(value):
 script/source = "extends SpinBox
 
 
-func _ready():
-	update_value()
-
-func _step():
+func _process(_delta):
 	if visible:
-		update_value()
-
-func _restore(_state):
-	if visible:
-		update_value()
-
-func update_value():
-	self.min_value = 0
-	self.max_value = Agartha.Store.state_stack.size()-1
-	self.value = Agartha.Store.current_state_id
+		value = Agartha.Store.current_state_id
+		self.max_value = Agartha.Store.state_stack.size()-1
 
 
 func _on_value_changed(value):
@@ -172,12 +151,7 @@ func clear_store_tree_r(item:TreeItem):
 func build_store_tree():
 	clear_store_tree()
 	temp_ids_list = []
-	var current_pre_state = create_item(current_state)
-	var current_post_state = create_item(current_state)
-	current_pre_state.set_text(0, \"pre\")
-	current_post_state.set_text(0, \"post\")
-	build_state_item(current_pre_state, Agartha.Store.current_state[0])
-	build_state_item(current_post_state, Agartha.Store.current_state[1])
+	build_state_item(current_state, Agartha.Store.current_state)
 	
 	var s = Agartha.Store.state_stack
 	for i in s.size():
@@ -187,12 +161,7 @@ func build_store_tree():
 		else:
 			state.set_text(0, \"%d\" % i)
 		state.set_collapsed(true)
-		var pre_state = create_item(state)
-		var post_state = create_item(state)
-		pre_state.set_text(0, \"pre\")
-		post_state.set_text(0, \"post\")
-		build_state_item(pre_state, s[i][0])
-		build_state_item(post_state, s[i][1])
+		build_state_item(state, s[i])
 
 
 func build_state_item(state_item, state):
