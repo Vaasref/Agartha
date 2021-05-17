@@ -51,7 +51,7 @@ func _input(event):
 func _on_confirmed():
 	if mode == \"overwrite\":
 		var screenshot
-		if get_meta('return_on_save'):
+		if has_meta('return_on_save') and get_meta('return_on_save'):
 			Agartha.get_tree().get_nodes_in_group(\"main_menu\")[0].visible = false
 			yield(VisualServer, \"frame_post_draw\")
 			screenshot = get_tree().get_root().get_texture().get_data()
