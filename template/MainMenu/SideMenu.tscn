@@ -271,7 +271,6 @@ margin_top = 239.0
 margin_right = 279.0
 margin_bottom = 270.0
 focus_mode = 0
-enabled_focus_mode = 0
 group = SubResource( 6 )
 text = "Start"
 flat = true
@@ -284,8 +283,8 @@ use_parent_material = true
 margin_top = 274.0
 margin_right = 279.0
 margin_bottom = 305.0
+focus_mode = 0
 disabled = true
-enabled_focus_mode = 0
 group = SubResource( 6 )
 text = "Continue"
 flat = true
@@ -299,7 +298,6 @@ margin_right = 279.0
 margin_bottom = 340.0
 focus_mode = 0
 toggle_mode = true
-enabled_focus_mode = 0
 group = SubResource( 6 )
 text = "Save"
 flat = true
@@ -313,7 +311,6 @@ margin_right = 279.0
 margin_bottom = 375.0
 focus_mode = 0
 toggle_mode = true
-enabled_focus_mode = 0
 group = SubResource( 6 )
 text = "Load"
 flat = true
@@ -327,7 +324,6 @@ margin_right = 279.0
 margin_bottom = 410.0
 focus_mode = 0
 toggle_mode = true
-enabled_focus_mode = 0
 group = SubResource( 6 )
 text = "Preferences"
 flat = true
@@ -339,7 +335,6 @@ margin_top = 414.0
 margin_right = 279.0
 margin_bottom = 445.0
 focus_mode = 0
-enabled_focus_mode = 0
 group = SubResource( 6 )
 text = "Main Menu"
 flat = true
@@ -352,7 +347,6 @@ margin_top = 449.0
 margin_right = 279.0
 margin_bottom = 480.0
 focus_mode = 0
-enabled_focus_mode = 0
 group = SubResource( 6 )
 text = "Quit"
 flat = true
@@ -370,8 +364,6 @@ anchor_bottom = 1.0
 margin_left = 40.0
 margin_bottom = -30.0
 grow_vertical = 0
-focus_mode = 0
-enabled_focus_mode = 0
 group = SubResource( 6 )
 text = "Return"
 flat = true
@@ -385,12 +377,12 @@ __meta__ = {
 wait_time = 0.05
 one_shot = true
 
-[connection signal="_menu_opened" from="." to="ScreenList/MainMenuButton" method="_on_menu_opened"]
 [connection signal="_menu_opened" from="." to="ScreenList/StartButton" method="_on_menu_opened"]
+[connection signal="_menu_opened" from="." to="ScreenList/MainMenuButton" method="_on_menu_opened"]
 [connection signal="_menu_opened" from="." to="ReturnButton" method="_on_menu_opened"]
 [connection signal="_menu_opened" from="." to="ScreenList/ContinueButton" method="_on_menu_opened"]
 [connection signal="_menu_opened" from="." to="ScreenList/SaveButton" method="_on_menu_opened"]
-[connection signal="_screen_changed" from="." to="SeparationBar" method="_on_screen_changed"]
 [connection signal="_screen_changed" from="." to="ScreenList/LoadButton" method="_on_screen_changed"]
 [connection signal="_screen_changed" from="." to="ScreenList/SaveButton" method="_on_screen_changed"]
 [connection signal="_screen_changed" from="." to="ScreenTitle" method="_on_screen_changed"]
+[connection signal="_screen_changed" from="." to="SeparationBar" method="_on_screen_changed"]
