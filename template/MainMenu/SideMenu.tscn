@@ -374,15 +374,15 @@ __meta__ = {
 }
 
 [node name="Timer" type="Timer" parent="ReturnButton"]
-wait_time = 0.05
+wait_time = 0.2
 one_shot = true
 
+[connection signal="_menu_opened" from="." to="ReturnButton" method="_on_menu_opened"]
+[connection signal="_menu_opened" from="." to="ScreenList/SaveButton" method="_on_menu_opened"]
 [connection signal="_menu_opened" from="." to="ScreenList/StartButton" method="_on_menu_opened"]
 [connection signal="_menu_opened" from="." to="ScreenList/MainMenuButton" method="_on_menu_opened"]
-[connection signal="_menu_opened" from="." to="ReturnButton" method="_on_menu_opened"]
 [connection signal="_menu_opened" from="." to="ScreenList/ContinueButton" method="_on_menu_opened"]
-[connection signal="_menu_opened" from="." to="ScreenList/SaveButton" method="_on_menu_opened"]
+[connection signal="_screen_changed" from="." to="SeparationBar" method="_on_screen_changed"]
 [connection signal="_screen_changed" from="." to="ScreenList/LoadButton" method="_on_screen_changed"]
 [connection signal="_screen_changed" from="." to="ScreenList/SaveButton" method="_on_screen_changed"]
 [connection signal="_screen_changed" from="." to="ScreenTitle" method="_on_screen_changed"]
-[connection signal="_screen_changed" from="." to="SeparationBar" method="_on_screen_changed"]

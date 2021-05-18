@@ -82,7 +82,7 @@ func _pressed():
 	pass
 "
 
-[sub_resource type="GDScript" id=10]
+[sub_resource type="GDScript" id=6]
 script/source = "extends BaseButton
 
 
@@ -92,7 +92,7 @@ func _pressed():
 	hide_ui_button.visible = true
 "
 
-[sub_resource type="GDScript" id=6]
+[sub_resource type="GDScript" id=7]
 script/source = "extends Button
 
 
@@ -114,7 +114,7 @@ func _unhandled_input(event):
 		_pressed()
 "
 
-[sub_resource type="GDScript" id=7]
+[sub_resource type="GDScript" id=8]
 script/source = "extends Button
 
 
@@ -125,7 +125,7 @@ func _pressed():
 	pass
 "
 
-[sub_resource type="GDScript" id=8]
+[sub_resource type="GDScript" id=9]
 script/source = "extends Button
 
 
@@ -138,7 +138,7 @@ func _unhandled_input(event):
 		_pressed()
 "
 
-[sub_resource type="GDScript" id=9]
+[sub_resource type="GDScript" id=10]
 script/source = "extends Button
 
 
@@ -161,8 +161,8 @@ __meta__ = {
 }
 
 [node name="StepButton" type="Button" parent="."]
-margin_right = 32.0
-margin_bottom = 16.0
+margin_right = 38.0
+margin_bottom = 25.0
 focus_mode = 0
 text = "Step"
 script = SubResource( 1 )
@@ -171,9 +171,9 @@ __meta__ = {
 }
 
 [node name="RollbackButton" type="Button" parent="."]
-margin_left = 36.0
-margin_right = 93.0
-margin_bottom = 16.0
+margin_left = 42.0
+margin_right = 110.0
+margin_bottom = 25.0
 focus_mode = 0
 text = "Rollback"
 script = SubResource( 2 )
@@ -194,9 +194,9 @@ __meta__ = {
 }
 
 [node name="SkipButton" type="Button" parent="."]
-margin_left = 97.0
-margin_right = 127.0
-margin_bottom = 16.0
+margin_left = 114.0
+margin_right = 150.0
+margin_bottom = 25.0
 focus_mode = 0
 toggle_mode = true
 text = "Skip"
@@ -212,50 +212,50 @@ text = "Menu"
 script = SubResource( 5 )
 
 [node name="HideUIProxy" type="Button" parent="."]
-margin_left = 131.0
-margin_right = 165.0
-margin_bottom = 16.0
+margin_left = 154.0
+margin_right = 193.0
+margin_bottom = 25.0
 text = "Hide"
-script = SubResource( 10 )
+script = SubResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Save" type="Button" parent="."]
-margin_left = 169.0
-margin_right = 202.0
-margin_bottom = 16.0
+margin_left = 197.0
+margin_right = 236.0
+margin_bottom = 25.0
 focus_mode = 0
 text = "Save"
-script = SubResource( 6 )
+script = SubResource( 7 )
 
 [node name="Timer" type="Timer" parent="Save"]
-wait_time = 0.05
+wait_time = 0.2
 one_shot = true
 
 [node name="Load" type="Button" parent="."]
-margin_left = 206.0
-margin_right = 240.0
-margin_bottom = 16.0
+margin_left = 240.0
+margin_right = 281.0
+margin_bottom = 25.0
 focus_mode = 0
 text = "Load"
-script = SubResource( 7 )
-
-[node name="QuickSave" type="Button" parent="."]
-margin_left = 244.0
-margin_right = 296.0
-margin_bottom = 16.0
-focus_mode = 0
-text = "Q. Save"
 script = SubResource( 8 )
 
+[node name="QuickSave" type="Button" parent="."]
+margin_left = 285.0
+margin_right = 345.0
+margin_bottom = 25.0
+focus_mode = 0
+text = "Q. Save"
+script = SubResource( 9 )
+
 [node name="QuickLoad" type="Button" parent="."]
-margin_left = 300.0
-margin_right = 353.0
-margin_bottom = 16.0
+margin_left = 349.0
+margin_right = 411.0
+margin_bottom = 25.0
 focus_mode = 0
 text = "Q. Load"
-script = SubResource( 9 )
+script = SubResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
