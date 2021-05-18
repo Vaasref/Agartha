@@ -12,24 +12,9 @@ func _on_SaveConfirm_visibility_changed():
 "
 
 [sub_resource type="GDScript" id=2]
-script/source = "extends ConfirmationDialog
+script/source = "extends CleanDialog
 
 var mode
-
-func _ready():
-	get_tree().set_auto_accept_quit(false)
-	remove_child(get_close_button())
-	get_close_button().queue_free()
-	
-	get_label().align = Label.ALIGN_CENTER
-	get_label().use_parent_material = true
-	
-	get_ok().text = \"Yes\"
-	get_ok().use_parent_material = true
-	
-	get_cancel().text = \"No\"
-	get_cancel().use_parent_material = true
-
 
 func overwrite_confirm(filename, name):
 	mode = \"overwrite\"
