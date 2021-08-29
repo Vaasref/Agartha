@@ -25,6 +25,9 @@ func _on_say(_character, _text, _params):
 func _on_scene_changed(_scene_name):
 	clear()
 
+func _restore(_state):
+	clear()
+
 func _step():
 	clear()
 
