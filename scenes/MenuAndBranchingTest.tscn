@@ -44,9 +44,6 @@ func test_fragment():
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TestDialogue" type="Node" parent="."]
 script = SubResource( 1 )
@@ -67,19 +64,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LeftButton" type="Button" parent="HBoxContainer" groups=[
-"# button left",
-"tagged",
-]]
+[node name="LeftButton" type="Button" parent="HBoxContainer" groups=["# button left", "tagged"]]
 visible = false
 margin_right = 36.0
 margin_bottom = 30.0
 text = "Left"
 
-[node name="RightButton" type="Button" parent="HBoxContainer" groups=[
-"# button right",
-"tagged",
-]]
+[node name="RightButton" type="Button" parent="HBoxContainer" groups=["# button right", "tagged"]]
 visible = false
 margin_left = 43.0
 margin_right = 87.0
