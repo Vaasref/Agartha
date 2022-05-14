@@ -1,0 +1,945 @@
+[gd_resource type="Resource" load_steps=7 format=2]
+
+[ext_resource path="res://addons/Agartha/resources/Codex.gd" type="Script" id=1]
+[ext_resource path="res://addons/Agartha/resources/CodexEntry.gd" type="Script" id=2]
+
+[sub_resource type="Resource" id=15]
+script = ExtResource( 2 )
+id = "direction"
+substitution_format = "[b]{matched}[/b]"
+keywords = {
+"left": {
+"": "direction"
+},
+"right": {
+"": "direction"
+}
+}
+digest = "That entry is used in MenuAndBranchingTest.tscn"
+description = ""
+
+[sub_resource type="Resource" id=14]
+script = ExtResource( 2 )
+id = "test_entry_0"
+substitution_format = "[i]{matched}[/i]"
+keywords = {
+"amet": {
+"": "test_entry_0"
+},
+"test": {
+"entry": {
+"": "test_entry_0"
+}
+},
+"testy": {
+"": "test_entry_0"
+},
+"the": {
+"test": {
+"": "test_entry_0"
+}
+}
+}
+digest = "First entry of the codex."
+description = "This is the description of the first test entry of the codex."
+
+[sub_resource type="Resource" id=13]
+script = ExtResource( 2 )
+id = "test_entry_1"
+substitution_format = "[b]{matched}[/b]"
+keywords = {
+"second": {
+"test": {
+"": "test_entry_1"
+}
+},
+"the": {
+"other": {
+"one": {
+"": "test_entry_1"
+}
+},
+"second": {
+"one": {
+"": "test_entry_1"
+}
+}
+}
+}
+digest = "Second entry of the codex."
+description = "This is the description of the second test entry of the codex."
+
+[sub_resource type="Resource" id=9]
+script = ExtResource( 2 )
+id = "test_hammer"
+substitution_format = "{match}"
+keywords = {
+"z0": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z1": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z10": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z11": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z12": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z13": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z14": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z15": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z16": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z17": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z18": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z19": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z1a": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z1b": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z1c": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z1d": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z1e": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z1f": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z2": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z20": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z21": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z22": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z23": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z24": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z25": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z26": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z27": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z28": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z29": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z2a": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z2b": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z2c": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z2d": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z2e": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z2f": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z3": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z30": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z31": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z32": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z33": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+}
+},
+"z34": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+}
+},
+"z35": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+}
+},
+"z36": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+}
+},
+"z37": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+}
+},
+"z38": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+}
+},
+"z39": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+}
+},
+"z3a": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+}
+},
+"z3b": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+}
+},
+"z3c": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+}
+},
+"z3d": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+}
+},
+"z3e": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+}
+},
+"z3f": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+}
+},
+"z4": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z5": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z6": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z7": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z8": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"z9": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"za": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"zb": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"zc": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"zd": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"ze": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+},
+"zf": {
+"0": {
+"": "test_hammer"
+},
+"1": {
+"": "test_hammer"
+},
+"2": {
+"": "test_hammer"
+},
+"3": {
+"": "test_hammer"
+}
+}
+}
+digest = "Entry with a lot of keywords to test performances."
+description = ""
+
+[resource]
+script = ExtResource( 1 )
+entries = {
+"direction": SubResource( 15 ),
+"test_entry_0": SubResource( 14 ),
+"test_entry_1": SubResource( 13 ),
+"test_hammer": SubResource( 9 )
+}

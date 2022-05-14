@@ -62,7 +62,7 @@ func _ready():
 	var _o = Agartha.connect(\"say\", self, \"_on_say\")
 
 func _on_say(_character, text, _params):
-	self.bbcode_text = Agartha.MarkupParser.parse_text(text)
+	self.bbcode_text = Agartha.Codices.apply_to(Agartha.MarkupParser.parse_text(text))
 "
 
 [node name="DialogueLinePanel" type="PanelContainer"]
